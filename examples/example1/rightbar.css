@@ -1,0 +1,11 @@
+.gridlayout {
+  display: grid;
+  grid-template-rows: 80% 20%;
+}
+
+.leftbar {
+    grid-column: 1;
+}
+.rightbar {
+    grid-column: 2;
+}

@@ -1,0 +1,110 @@
+<html>
+  <head>
+    <title>Ice Cream Picker</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="rightbar.css" />
+  </head>
+  <body>
+
+    <py-config>
+      packages = ["matplotlib", "pandas"]
+    </py-config>
+    <!-- tried to do it as pyscript/examplestoga/static/css but not sure if this is the best idea-->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="background-color: #000000">
+        <div class="container">
+            <a class="navbar-brand">
+              DataFrame Trainer
+            </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler icon"></span>
+          </button>
+        </div>
+    </nav>
+
+    <script>
+      http_call = () => {
+          let req = new XMLHttpRequest();
+          req.open('GET', 'http://127.0.0.1:5000/challenges/1/', false);
+          req.send(null);
+          let k = JSON.parse(req.responseText);
+          let field = document.getElementById("field");
+          let stringified = k.response;
+          field.innerHTML = JSON.stringify(stringified);
+          return stringified
+      };
+      reset_dev_console = () => {
+        document.getElementsByClassName("py-terminal")[0].innerHTML = ''
+      };
+    </script>
+
+    <py-script>
+      import pandas as pd
+      import json
+      from js import http_call 
+
+      def call_http_convert():
+        global df
+        global df_expected
+        dictionary = http_call()
+        response = dictionary.to_py()
+        df = pd.DataFrame(json.loads(response["initial"]))
+        df_expected = pd.DataFrame(json.loads(response["expected"]))
+        display_df(df, "pandas-output-input")
+        display_df(df_expected, "pandas-output-expected")
+
+      def display_df(df_t, element):
+        Element(element + "-inner").element.innerHTML = ""
+        Element(element).element.style.display = "block"
+        display (df_t, target=element + "-inner", append="False")
+      
+      def log(message):
+        # log to pyscript dev console
+        print (message)
+
+        # log to JS console
+        js.console.log (message)
+      
+      def reset_inner_html():
+        Element("pandas-dev-console-inner").element.innerHTML = ""
+
+    </py-script>
+    <div class="gridlayout">
+      <div class="leftbar">
+        <button type="button" id="other2" py-onClick="call_http_convert()">Get Example</button>
+        <button type="button" id="reset" onClick="reset_dev_console()">Reset Console</button>
+
+        <label id="field" for="vname">Vorname:</label> 
+        <div id="pandas-repl">
+            <h3>Python REPL</h3>
+            <py-repl id="pandas-repl-inner">
+              import pandas as pd
+
+              print(df)
+            </py-repl>
+        </div>
+        <div id="pandas-dev-console">
+            <h3>Dev Console</h3>
+            <py-terminal id="pandas-dev-console-inner"></py-terminal>
+        </div>
+      </div>
+
+      <div class="rightbar">
+        <div id="challenge-description">
+          <h3>Challenge Description</h3>
+          <div id="challenge-description"></div>
+        </div>
+        <div id="pandas-output-input">
+            <h3>Input</h3>
+            <div id="pandas-output-input-inner"></div>
+        </div>
+        <div id="pandas-output-expected">
+            <h3>Expected</h3>
+            <div id="pandas-output-expected-inner"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

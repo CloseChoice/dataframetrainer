@@ -1,0 +1,1 @@
+### todo: write a generic script how to test the challenge classes

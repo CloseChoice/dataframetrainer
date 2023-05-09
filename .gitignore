@@ -1,0 +1,5 @@
+**.ipynb
+*/.venv/**
+__pycache__
+hypothesis_example/.hypothesis/**
+.ipynb_checkpoints
