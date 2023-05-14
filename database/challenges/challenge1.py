@@ -1,3 +1,4 @@
+"""Sum the spendings per Customer."""
 import pandas as pd
 import numpy as np
 import hypothesis
@@ -7,9 +8,9 @@ import hypothesis.strategies as st
 
 from BaseChallenge import BaseChallenge
 
-class EndOfMonthChallenge(BaseChallenge):
+class SumSpendings(BaseChallenge):
     @staticmethod
-    def initial():
+    def initial() -> pd.DataFrame:
         return data_frames(columns=[column('Customer', dtype=np.dtype(str)),
                                     column('Spendings', dtype=np.dtype(float)),
                                  ],
@@ -21,9 +22,9 @@ class EndOfMonthChallenge(BaseChallenge):
                                                                                                  width=16,
                                                                                                  exclude_min=True)),
                           index=indexes(min_size=1, elements=st.integers(min_value=1, max_value=20), dtype=int)
-                         )
+                         ).example()
     @staticmethod
-    def transform(df: pd.DataFrame) -> pd.DataFrame:
+    def transform(df: pd.DataFrame) -> pd.Series:
         return df.groupby('Customer').Spendings.sum()
 
 
