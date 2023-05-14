@@ -13,8 +13,9 @@ class AddPseudoTriangularDataFrame(BaseChallenge):
     @staticmethod
     def initial() -> pd.DataFrame:
         # todo: this somehow generates floats in the number column, this should be changed
-        return data_frames(columns=[ column('number', dtype=np.dtype(int)),
-                                 ],
+        return data_frames(columns=[
+                                    column('number', dtype=np.dtype(int)),
+                                    ],
                              rows=st.tuples(st.integers(min_value=1,
                                                         max_value=100,
                                                         )
