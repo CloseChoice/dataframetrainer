@@ -13,6 +13,8 @@ from challenge11 import TransformWithConditions2
 from challenge12 import TransformWithMultipleConditions
 from challenge12 import TransformWithMultipleConditions
 from challenge13 import GroupbyTransform
+from challenge14 import Pivot1
+from challenge15 import Pivot2
 import pandas as pd
 import pandas.testing as tm
 import pytest
@@ -166,3 +168,30 @@ def test_challenge13():
     df_expected = challenge.expected_static()
     df_result = challenge.transform(df)
     tm.assert_frame_equal(df_result, df_expected)
+
+def test_challenge14():
+    challenge = Pivot1()
+    df = challenge.initial()
+    import pdb; pdb.set_trace()
+    df_result = challenge.transform(df)
+    assert isinstance(df, pd.DataFrame)
+    # check that the transform does anything
+    assert isinstance(df_result, (pd.DataFrame, pd.Series))
+    df = challenge.static_example()
+    df_expected = challenge.expected_static()
+    df_result = challenge.transform(df)
+    tm.assert_frame_equal(df_result, df_expected, check_names=False)
+
+
+def test_challenge15():
+    challenge = Pivot2()
+    df = challenge.initial()
+    df_result = challenge.transform(df)
+    assert isinstance(df, pd.DataFrame)
+    # check that the transform does anything
+    assert isinstance(df_result, (pd.DataFrame, pd.Series))
+    df = challenge.static_example()
+    df_expected = challenge.expected_static()
+    import pdb; pdb.set_trace()
+    df_result = challenge.transform(df)
+    tm.assert_frame_equal(df_result, df_expected, check_names=False)
