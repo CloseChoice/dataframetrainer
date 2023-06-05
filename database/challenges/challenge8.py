@@ -1,5 +1,5 @@
-"""Group and count the appearances of the single terms"""
-"""inspired by: https://stackoverflow.com/questions/39132742/groupby-value-counts-on-the-dataframe-pandas"""
+'''Group and count the appearances of the single terms'''
+'''inspired by: https://stackoverflow.com/questions/39132742/groupby-value-counts-on-the-dataframe-pandas'''
 import pandas as pd
 import numpy as np
 import hypothesis
@@ -7,7 +7,7 @@ import hypothesis
 from hypothesis.extra.pandas import data_frames, column, range_indexes
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
+from .BaseChallenge import BaseChallenge
 
 class GroupTerms(BaseChallenge):
     @staticmethod
@@ -52,6 +52,6 @@ class GroupTerms(BaseChallenge):
              [1, 0, 1],
              [1, 0, 0]
              ],
-            columns=pd.Index(["term1", "term2", "term3"], name='term'),
-            index=pd.MultiIndex.from_tuples([(1, 1), (1, 2), (2, 2), (2, 3)], names=["id", "group"])
+            columns=pd.Index(['term1', 'term2', 'term3'], name='term'),
+            index=pd.MultiIndex.from_tuples([(1, 1), (1, 2), (2, 2), (2, 3)], names=['id', 'group'])
         )

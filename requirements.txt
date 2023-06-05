@@ -1,5 +1,10 @@
+# we probably need a c/c++ compiler before installing pandas/numpy
 pandas
 numpy
 matplotlib
+# definitely need a compiler before installing torch
 torch
 jupyter
+# install first
+# sudo apt install libpq-dev python3-dev build-essential
+psycopg2

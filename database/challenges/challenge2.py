@@ -6,7 +6,7 @@ import hypothesis
 from hypothesis.extra.pandas import data_frames, column, indexes
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
+from .BaseChallenge import BaseChallenge
 
 
 class ChangeDependingOfOthers(BaseChallenge):

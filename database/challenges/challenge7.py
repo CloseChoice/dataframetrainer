@@ -1,13 +1,12 @@
-"""Add a pseudo-triangular DataFrame to a given pandas Series"""
-"""inspired by: https://stackoverflow.com/questions/73536536/how-to-generate-a-triangular-data-frame-with-as-many-columns-as-the-row-indica"""
+'''Add a pseudo-triangular DataFrame to a given pandas Series'''
+'''inspired by: https://stackoverflow.com/questions/73536536/how-to-generate-a-triangular-data-frame-with-as-many-columns-as-the-row-indica'''
 import pandas as pd
 import numpy as np
-import hypothesis
 
 from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
+from .BaseChallenge import BaseChallenge
 
 class AddPseudoTriangularDataFrame(BaseChallenge):
     @staticmethod
@@ -41,7 +40,7 @@ class AddPseudoTriangularDataFrame(BaseChallenge):
              [4],
              [6],
             ],
-            columns=["number"]
+            columns=['number']
         )
     
     @staticmethod
@@ -54,5 +53,5 @@ class AddPseudoTriangularDataFrame(BaseChallenge):
              [4, 1, 2, 3, 4, np.nan, np.nan],
              [6, 1, 2, 3, 4, 5, 6],
             ],
-            columns=["number", "C1", "C2", "C3", "C4", "C5", "C6"]
+            columns=['number', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6']
         )

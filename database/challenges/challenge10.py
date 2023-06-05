@@ -7,21 +7,21 @@ from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
+from .BaseChallenge import BaseChallenge
 
 class TransformWithConditions(BaseChallenge):
+    # todo: this is not optimal, but it works for now
+    # things to improve: 
+    #   - use one of the strategies from hypothesis.extra.pandas to generate the whole df, don't use pd.concat
+    #   - length of the df should be variable
+    #   - np.nan should be generated in the value column, but this is not possible if one specifies min and max values
     @staticmethod
     def initial() -> pd.DataFrame:
-        # todo: this is not optimal, but it works for now
-        # things to improve: 
-        #   - use one of the strategies from hypothesis.extra.pandas to generate the whole df, don't use pd.concat
-        #   - length of the df should be variable
-        #   - np.nan should be generated in the value column, but this is not possible if one specifies min and max values
         df = data_frames(columns=[column('group', dtype=np.dtype(str)),
                                   column('value', dtype=np.dtype(float)),
                                  ],
                            rows=st.tuples(
-                                          st.sampled_from(["A", "B"]),
+                                          st.sampled_from(['A', 'B']),
                                           st.floats(min_value=0., max_value=10., width=16)
                                           ),
                            index=range_indexes(min_size=25, max_size=25)
@@ -51,26 +51,26 @@ class TransformWithConditions(BaseChallenge):
     @staticmethod
     def expected_static() -> pd.DataFrame:
         return pd.DataFrame([
-             [1, "A",  4.000000],
-             [2, "A",  6.000000],
-             [3, "A",  6.000000],
-             [4, "A",  9.000000],
-             [5, "A",  7.000000],
-             [6, "A",  5.000000],
-             [7, "A",  5.000000],
-             [8, "A",  9.000000],
-             [9, "A",  8.000000],
-             [10, "A",  9.000000],
-             [11, "B",  3.666667],
-             [12, "B",  4.000000],
-             [13, "B",  5.000000],
-             [14, "B",  6.000000],
-             [15, "B",  6.000000],
-             [16, "B",  6.000000],
-             [17, "B",  3.000000],
-             [18, "B",  4.000000],
-             [19, "B",  4.000000],
-             [20, "B",  6.000000]
+             [1, 'A',  4.000000],
+             [2, 'A',  6.000000],
+             [3, 'A',  6.000000],
+             [4, 'A',  9.000000],
+             [5, 'A',  7.000000],
+             [6, 'A',  5.000000],
+             [7, 'A',  5.000000],
+             [8, 'A',  9.000000],
+             [9, 'A',  8.000000],
+             [10, 'A',  9.000000],
+             [11, 'B',  3.666667],
+             [12, 'B',  4.000000],
+             [13, 'B',  5.000000],
+             [14, 'B',  6.000000],
+             [15, 'B',  6.000000],
+             [16, 'B',  6.000000],
+             [17, 'B',  3.000000],
+             [18, 'B',  4.000000],
+             [19, 'B',  4.000000],
+             [20, 'B',  6.000000]
             ],
             columns=['ID', 'group', 'value']
         )

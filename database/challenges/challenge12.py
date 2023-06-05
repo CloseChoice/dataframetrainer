@@ -1,5 +1,5 @@
-"""Inspired by: https://stackoverflow.com/a/19913845/9534390. Implement the following conditions:
-If Set is Z and Type is A then Color is green, if Set is Z and Type is B then color red, if if Set is not Z and Type is B then color pink, otherwise black"""
+'''Inspired by: https://stackoverflow.com/a/19913845/9534390. Implement the following conditions:
+If Set is Z and Type is A then Color is green, if Set is Z and Type is B then color red, if if Set is not Z and Type is B then color pink, otherwise black'''
 import pandas as pd
 import numpy as np
 import hypothesis
@@ -8,7 +8,7 @@ from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
+from .BaseChallenge import BaseChallenge
 
 class TransformWithMultipleConditions(BaseChallenge):
     @staticmethod
@@ -22,8 +22,8 @@ class TransformWithMultipleConditions(BaseChallenge):
                                   column('Set', dtype=np.dtype(str)),
                                  ],
                            rows=st.tuples(
-                                          st.sampled_from(["A", "B", "C"]),
-                                          st.sampled_from(["X", "Y", "Z"])
+                                          st.sampled_from(['A', 'B', 'C']),
+                                          st.sampled_from(['X', 'Y', 'Z'])
                                           ),
                            index=range_indexes(min_size=3, max_size=8)
                            ).example()
@@ -41,19 +41,19 @@ class TransformWithMultipleConditions(BaseChallenge):
     @staticmethod
     def static_example() -> pd.DataFrame:
         return pd.DataFrame([
-             ["A", "Z"],
-             ["B", "Z"],
-             ["B", "X"],
-             ["C", "Y"],
+             ['A', 'Z'],
+             ['B', 'Z'],
+             ['B', 'X'],
+             ['C', 'Y'],
         ], 
-        columns=["Type", "Set"])
+        columns=['Type', 'Set'])
     
     @staticmethod
     def expected_static() -> pd.DataFrame:
         return pd.DataFrame([
-                    ["A", "Z", "green"],
-                    ["B", "Z", "red"],
-                    ["B", "X", "pink"],
-                    ["C", "Y", "black"],
+                    ['A', 'Z', 'green'],
+                    ['B', 'Z', 'red'],
+                    ['B', 'X', 'pink'],
+                    ['C', 'Y', 'black'],
                 ], 
-        columns=["Type", "Set", "Color"])
+        columns=['Type', 'Set', 'Color'])

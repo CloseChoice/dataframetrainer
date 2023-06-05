@@ -1,5 +1,7 @@
-'''Get the highest expense for each customer-type combination. The types shall be columns, while the customer should be the index. 
-Treat missing values as np.nan. If a Customer does not appear in the initial dataframe, don't add a row for this customer.'''
+'''Get the median expense for each customer-type combination. The types shall be columns, while the customer should be the index. 
+Treat missing values as np.nan. If a Customer does not appear in the initial dataframe, don't add a row for this customer.
+If a customer-type combination appears only 2 times, compute the mean.
+HINT: use the np.median function'''
 import pandas as pd
 import numpy as np
 import hypothesis
@@ -8,9 +10,9 @@ from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
-from .BaseChallenge import BaseChallenge
+from BaseChallenge import BaseChallenge
 
-class Pivot1(BaseChallenge):
+class Pivot2(BaseChallenge):
     @staticmethod
     def initial() -> pd.DataFrame:
         return data_frames(columns=[column('Customer', dtype=np.dtype(str)),
@@ -27,7 +29,7 @@ class Pivot1(BaseChallenge):
                     
     @staticmethod
     def transform(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
-        df = df.pivot_table(index='Customer', columns='Type', values='Expense', aggfunc=np.max)
+        df = df.pivot_table(index='Customer', columns='Type', values='Expense', aggfunc=np.median)
         return df
     
     @staticmethod
@@ -39,6 +41,7 @@ class Pivot1(BaseChallenge):
                 ['Harald', 'Groceries', 1000],
                 ['Harald', 'Electronics', 20],
                 ['Harald', 'Entertainment', 20],
+                ['Harald', 'Entertainment', 400],
                 ['Helga', 'Entertainment', 20],
                 ['Helga', 'Groceries', 4],
                 ['Friedrich', 'Groceries', -1],
@@ -51,8 +54,8 @@ class Pivot1(BaseChallenge):
     def expected_static() -> pd.DataFrame:
         return pd.DataFrame(
              [
-              [np.nan, np.nan, 10.],
-              [20., 20., 1000.],
+              [np.nan, np.nan, -1.],
+              [20., 20., 1.],
               [np.nan, 20., 4.],
             ],
             columns=['Electronics', 'Entertainment', 'Groceries'],

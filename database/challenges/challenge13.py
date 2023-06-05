@@ -1,5 +1,5 @@
-"""Inspired by: https://stackoverflow.com/questions/37189878/pandas-add-column-to-groupby-dataframe.
- The goal is to count values of type for each `value`, and then add a column with the size of `value."""
+'''Inspired by: https://stackoverflow.com/questions/37189878/pandas-add-column-to-groupby-dataframe.
+ The goal is to count values of type for each `value`, and then add a column with the size of `value.'''
 import pandas as pd
 import numpy as np
 import hypothesis
@@ -8,7 +8,7 @@ from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
+from .BaseChallenge import BaseChallenge
 
 class GroupbyTransform(BaseChallenge):
     @staticmethod

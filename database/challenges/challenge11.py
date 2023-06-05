@@ -1,4 +1,4 @@
-"""Inspired by: https://stackoverflow.com/questions/19913659/pandas-conditional-creation-of-a-series-dataframe-column"""
+'''Inspired by: https://stackoverflow.com/questions/19913659/pandas-conditional-creation-of-a-series-dataframe-column'''
 import pandas as pd
 import numpy as np
 import hypothesis
@@ -7,7 +7,7 @@ from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
+from .BaseChallenge import BaseChallenge
 
 class TransformWithConditions2(BaseChallenge):
     @staticmethod
@@ -21,8 +21,8 @@ class TransformWithConditions2(BaseChallenge):
                                   column('Set', dtype=np.dtype(str)),
                                  ],
                            rows=st.tuples(
-                                          st.sampled_from(["A", "B", "C"]),
-                                          st.sampled_from(["X", "Y", "Z"])
+                                          st.sampled_from(['A', 'B', 'C']),
+                                          st.sampled_from(['X', 'Y', 'Z'])
                                           ),
                            index=range_indexes(min_size=3, max_size=8)
                            ).example()
@@ -35,19 +35,19 @@ class TransformWithConditions2(BaseChallenge):
     @staticmethod
     def static_example() -> pd.DataFrame:
         return pd.DataFrame([
-             ["A", "Z"],
-             ["B", "Z"],
-             ["B", "X"],
-             ["C", "Y"],
+             ['A', 'Z'],
+             ['B', 'Z'],
+             ['B', 'X'],
+             ['C', 'Y'],
         ], 
-        columns=["Type", "Set"])
+        columns=['Type', 'Set'])
     
     @staticmethod
     def expected_static() -> pd.DataFrame:
         return pd.DataFrame([
-                    ["A", "Z", "green"],
-                    ["B", "Z", "green"],
-                    ["B", "X", "red"],
-                    ["C", "Y", "red"],
+                    ['A', 'Z', 'green'],
+                    ['B', 'Z', 'green'],
+                    ['B', 'X', 'red'],
+                    ['C', 'Y', 'red'],
                 ], 
-        columns=["Type", "Set", "Color"])
+        columns=['Type', 'Set', 'Color'])

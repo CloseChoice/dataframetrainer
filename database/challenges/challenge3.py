@@ -1,4 +1,4 @@
-"""Change the the Value of the third element (index 2) to -100"""
+'''Change the the Value of the third element (index 2) to -100'''
 import pandas as pd
 import numpy as np
 import hypothesis
@@ -6,7 +6,7 @@ import hypothesis
 from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
+from .BaseChallenge import BaseChallenge
 
 
 class ChangeAtIndex(BaseChallenge):
@@ -23,23 +23,23 @@ class ChangeAtIndex(BaseChallenge):
     
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.DataFrame:
-        df.loc[2, "Value"] = -100
+        df.loc[2, 'Value'] = -100
         return df
     
     @staticmethod
     def static_example() -> pd.DataFrame:
         return pd.DataFrame(
-            [[1, "Helmut"],
-            [2, "Greta"],
-            [3, "Siegfried"]],
-            columns=["Value", "Other"]
+            [[1, 'Helmut'],
+            [2, 'Greta'],
+            [3, 'Siegfried']],
+            columns=['Value', 'Other']
         )
     
     @staticmethod
     def expected_static() -> pd.DataFrame:
         return pd.DataFrame(
-            [[1, "Helmut"],
-            [2, "Greta"],
-            [-100, "Siegfried"]],
-            columns=["Value", "Other"]
+            [[1, 'Helmut'],
+            [2, 'Greta'],
+            [-100, 'Siegfried']],
+            columns=['Value', 'Other']
         )
