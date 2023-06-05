@@ -1,5 +1,5 @@
-"""Add a new column `Date` where the date increases by one month from row to row, starting from 2023-01-01. 
-(So 2023-02-01, 2023-03-01, etc. depending of the length of the dataframe)"""
+'''Add a new column `Date` where the date increases by one month from row to row, starting from 2023-01-01. 
+(So 2023-02-01, 2023-03-01, etc. depending of the length of the dataframe)'''
 import pandas as pd
 import numpy as np
 import hypothesis
@@ -7,7 +7,7 @@ import hypothesis
 from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
+from .BaseChallenge import BaseChallenge
 from pandas.tseries.offsets import DateOffset
 
 
@@ -23,7 +23,7 @@ class MonthIndex(BaseChallenge):
     
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.DataFrame:
-        df.loc[:, "Date"] = pd.date_range("2023-01-01", freq=DateOffset(months=1), periods=len(df))
+        df.loc[:, 'Date'] = pd.date_range('2023-01-01', freq=DateOffset(months=1), periods=len(df))
         return df
     
     @staticmethod
@@ -34,16 +34,16 @@ class MonthIndex(BaseChallenge):
              [2],
              [3]
             ],
-            columns=["Value"]
+            columns=['Value']
         )
     
     @staticmethod
     def expected_static() -> pd.DataFrame:
         return pd.DataFrame(
             [
-             [1, pd.to_datetime("2023-01-01")],
-             [2, pd.to_datetime("2023-02-01")],
-             [3, pd.to_datetime("2023-03-01")]
+             [1, pd.to_datetime('2023-01-01')],
+             [2, pd.to_datetime('2023-02-01')],
+             [3, pd.to_datetime('2023-03-01')]
              ],
-            columns=["Value", "Date"]
+            columns=['Value', 'Date']
         )

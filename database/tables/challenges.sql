@@ -1,6 +1,8 @@
- create table challenges
+CREATE TABLE IF NOT EXISTS challenges
 (
-   id       integer primary key, 
-   initial_task     json not null,
-   possible_solution json not null
+   id       SERIAL PRIMARY KEY, 
+   initial_task     JSON NOT NULL,
+   possible_solution JSON NOT NULL,
+   static_example  JSON,
+   expected_static JSON
 );

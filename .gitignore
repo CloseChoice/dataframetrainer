@@ -3,3 +3,4 @@
 __pycache__
 hypothesis_example/.hypothesis/**
 .ipynb_checkpoints
+.venv

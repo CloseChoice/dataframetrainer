@@ -1,4 +1,4 @@
-"""Rename the column `Value` to `NewValue`"""
+'''Rename the column `Value` to `NewValue`'''
 import pandas as pd
 import numpy as np
 import hypothesis
@@ -6,8 +6,7 @@ import hypothesis
 from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
-from pandas.tseries.offsets import DateOffset
+from .BaseChallenge import BaseChallenge
 
 
 class RenameColumn(BaseChallenge):
@@ -22,7 +21,7 @@ class RenameColumn(BaseChallenge):
     
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.DataFrame:
-        df = df.rename(columns={"Value": "NewValue"})
+        df = df.rename(columns={'Value': 'NewValue'})
         return df
     
     @staticmethod
@@ -33,7 +32,7 @@ class RenameColumn(BaseChallenge):
              [2],
              [3]
             ],
-            columns=["Value"]
+            columns=['Value']
         )
     
     @staticmethod
@@ -44,5 +43,5 @@ class RenameColumn(BaseChallenge):
              [2],
              [3]
             ],
-            columns=["NewValue"]
+            columns=['NewValue']
         )

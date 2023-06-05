@@ -1,13 +1,12 @@
-"""Add a triangular DataFrame to a given pandas Series"""
-"""inspired by: https://stackoverflow.com/questions/73536536/how-to-generate-a-triangular-data-frame-with-as-many-columns-as-the-row-indica"""
+'''Add a triangular DataFrame to a given pandas Series'''
+'''inspired by: https://stackoverflow.com/questions/73536536/how-to-generate-a-triangular-data-frame-with-as-many-columns-as-the-row-indica'''
 import pandas as pd
 import numpy as np
-import hypothesis
 
 from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
 
-from BaseChallenge import BaseChallenge
+from .BaseChallenge import BaseChallenge
 
 class AddTriangularDataFrame(BaseChallenge):
     @staticmethod
@@ -22,7 +21,7 @@ class AddTriangularDataFrame(BaseChallenge):
                          ).example()
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.Series:
-        df_intermediate = pd.DataFrame(np.tril(np.ones((len(df), len(df))) * np.arange(len(df)) + 1), columns=[f"C{i}" for i in range(1, len(df) + 1)])
+        df_intermediate = pd.DataFrame(np.tril(np.ones((len(df), len(df))) * np.arange(len(df)) + 1), columns=[f'C{i}' for i in range(1, len(df) + 1)])
         return pd.concat([df, df_intermediate], axis=1).astype(int)
     
     @staticmethod
@@ -36,7 +35,7 @@ class AddTriangularDataFrame(BaseChallenge):
              [5],
              [6],
             ],
-            columns=["number"]
+            columns=['number']
         )
     
     @staticmethod
@@ -50,5 +49,5 @@ class AddTriangularDataFrame(BaseChallenge):
              [5, 1, 2, 3, 4, 5, 0],
              [6, 1, 2, 3, 4, 5, 6],
             ],
-            columns=["number", "C1", "C2", "C3", "C4", "C5", "C6"]
+            columns=['number', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6']
         )

@@ -11,7 +11,7 @@
   - Um Python Abschnitte zu Text zu machen können wir `compile` benutzen:
     We can pass a multi-line input program to the exec() method with the help of \n. But we need to use the compile() method to compile the program first. 
 - [x] welche Datenbank
-  - ~[ ] Mongo db checken -> Nope, das machen wir nicht~
+  - ~[x] Mongo db checken -> Nope, das machen wir nicht~
   - [x] Postgres mit Json Spalte -> Testen und Dockerisieren
 - [ ] Hypothesis um dynamische Einträge zu generieren/testen
   - [ ] wie bekommen wir hypothesis in pyscript/pyodide? -> Benutzen wir überhaupt PyScript? Einfach über micropip probieren
@@ -19,8 +19,8 @@
   - [x] 1 Datetime Bsp. -> Datetimes sind schwierig darzustellen (.to_json konvertiert diese immer integers, etc.)
   - [ ] 1 einfaches additives Beispiel
   - [x] 1 groupBy Bsp.
-  - [ ] erstelle Standard zum Anlegen von Tests
-  - [ ] erstelle Skript um anschließend Tests ins Datenbankformat zu bekommen (escape " -> '', alles muss in eine Zeile)
+  - [x] erstelle Standard zum Anlegen von Tests
+  - [ ] vllt. brauchen wir das hier gar nicht: erstelle Skript um anschließend Tests ins Datenbankformat zu bekommen (escape " -> '', alles muss in eine Zeile)! Wir könnten evtl. direkt den code compilen und per json verschicken! Aber eine DB ist vllt doch besser, dann hat man Sachen auch historisiert!
   - [ ] lade Daten in die Datenbank (hierzu: autoincrement id)
   
 Nützliches:
@@ -30,8 +30,8 @@ next step:
  - [x] 1 additives Beispiel -> checke ob Flask damit funktioniert -> Frontend bauen!
  - [x] lasse expected anzeigen
  - [ ] css header/css trenne 
- - [ ] Konzept für Challenges
- - [ ] example 2 ist falsch. Für generisches Template von Python Functions müssen wir auf jeden fall checken ob pd.DataFrame(json.loads(df.to_json())) funktioniert
+ - [x] Konzept für Challenges
+ - [x] example 2 ist falsch. Für generisches Template von Python Functions müssen wir auf jeden fall checken ob pd.DataFrame(json.loads(df.to_json())) funktioniert
  - [ ] Flask Backend dockerisieren
  - [ ] evtl hypothesis teil in pyscript/frontend auslagern
  - [ ] Save bei F5
@@ -52,3 +52,7 @@ Nice to Haves:
   - [ ] Postgres Docker Container: bisher sind die Informationen nur im Container gespeichert und dort von Hand eingetragen. Sinnvoll wäre ein Format in dem man die Aufgaben ablegt und ein Skript, das dann automatisch in diesen
   Container reinschreibt.
   - [x] Womit serven wir die Ergebnisse aus dem Docker Container? -> Flask, da wir auch noch Beispiele generieren müssen + das Ergebnis generieren können müssen.
+
+- Anderes
+  - [ ] Datetimes sind schwierig zu erzeugen und schwierig zu testen, da df.to_json() diese in unix timestamps konvertiert.
+  07116673 - 6586
