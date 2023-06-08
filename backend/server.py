@@ -10,6 +10,11 @@ import numpy as np
 import pandas as pd
 from flask_cors import CORS, cross_origin
 
+from hypothesis.extra.pandas import data_frames, column, range_indexes, series
+from hypothesis.extra.numpy import arrays
+from pandas.tseries.offsets import DateOffset
+import hypothesis.strategies as st
+
 app = Flask(__name__)
 CORS(app, support_credentials=True)
 
@@ -39,7 +44,8 @@ def hello(id):
     # evaluate the string expression to be able to call .example()
     # .example creates an example from the dataframe
     print(result)
-    df = eval(result[0][1]).example()
+    exec(result[0][1])
+    df = locals()['initial']()
     # in result[0][2] there is a function definition like
     # def transform: 
     #     df[1] = df[1] + 2
@@ -51,6 +57,16 @@ def hello(id):
     print(f"Try to get locals().get('transform', 'not found'): {locals().get('transform', 'not found')}")
     exec(result[0][2])
     # transform is now defined and acted upon df
+    exec(result[0][3])
+    exec(result[0][4])
+    df_static = locals()['static_example']()
+    df_static_expected = locals()['expected_static']()
     df_transformed = extract_transform_and_apply(df, result[0][2])
-    json_response = {"initial": df.to_json(), "expected": df_transformed.to_json()}
+    print(df)
+    print(df_transformed)
+    json_response = {"initial": df.to_json(),
+                     "expected": df_transformed.to_json(),
+                     "static_example": df_static.to_json(),
+                     "expected_static": df_static_expected.to_json()
+                     }
     return jsonify(response=json_response)

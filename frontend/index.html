@@ -24,10 +24,11 @@
         </div>
     </nav>
 
+    <!--todo: make this challenges dynamic-->
     <script>
       http_call = () => {
           let req = new XMLHttpRequest();
-          req.open('GET', 'http://127.0.0.1:5000/challenges/1/', false);
+          req.open('GET', 'http://127.0.0.1:5000/challenges/10/', false);
           req.send(null);
           let k = JSON.parse(req.responseText);
           let field = document.getElementById("field");
@@ -50,19 +51,19 @@
         global df_expected
         dictionary = http_call()
         response = dictionary.to_py()
-        df = pd.DataFrame(json.loads(response["initial"]))
-        df_expected = pd.DataFrame(json.loads(response["expected"]))
+        df = pd.DataFrame(json.loads(response["static_example"]))
+        df_expected = pd.DataFrame(json.loads(response["expected_static"]))
         display_df(df, "pandas-output-input")
         display_df(df_expected, "pandas-output-expected")
 
       def display_df(df_t, element):
         Element(element + "-inner").element.innerHTML = ""
         Element(element).element.style.display = "block"
-        display (df_t, target=element + "-inner", append="False")
+        display(df_t, target=element + "-inner", append="False")
       
       def log(message):
         # log to pyscript dev console
-        print (message)
+        print(message)
 
         # log to JS console
         js.console.log (message)
@@ -82,6 +83,7 @@
             <py-repl id="pandas-repl-inner">
               import pandas as pd
 
+              # df and df_expected are already defined
               print(df)
             </py-repl>
         </div>
