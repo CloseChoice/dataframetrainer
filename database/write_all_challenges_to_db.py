@@ -27,25 +27,26 @@ from hypothesis.extra.numpy import arrays
 from pandas.tseries.offsets import DateOffset
 import hypothesis.strategies as st
 import pandas.testing as tm
+import click
 
-def main():
-    #Define our connection string
-    conn_string = "host='localhost' dbname='postgres' user='postgres' password='secret' port=5433"
-
-    # print the connection string we will use to connect
-    print("Connecting to database\n    ->%s" % (conn_string))
-
-    # get a connection, if a connect cannot be made an exception will be raised here
-    # conn = psycopg2.connect(conn_string)
+@click.command()
+@click.option('--port', default=5433, help='Port of the database')
+@click.option('--password', default="secret", help='Password of the database')
+@click.option('--user', default="postgres", help='User of the database')
+@click.option('--host', default="localhost", help='Host of the database')
+@click.option('--dbname', default="postgres", help='Name of the database')
+def run(port, dbname, password, user, host):
+    # read the sql file to create challenges
     with open("tables/challenges.sql", "r", encoding="utf-8") as f:
         sql = f.read()
-    conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='test1234', port=5433)
+    conn = psycopg2.connect(host=host, dbname=dbname, user=user, password=password, port=port)
+    # conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='secret', port=5434)
 
     # conn.cursor will return a cursor object, you can use this cursor to perform queries
     cursor = conn.cursor()
+    cursor.execute("drop table if exists challenges")
     cursor.execute(sql)
     # todo: remove this
-    cursor.execute("truncate table challenges")
     for func in [ChangeAtIndex, MonthIndex, RenameColumn, AddTriangularDataFrame, AddPseudoTriangularDataFrame, 
                  GroupTerms, MapValues, TransformWithConditions, TransformWithConditions2, TransformWithMultipleConditions,
                  GroupbyTransform, Pivot1, Pivot2]:
@@ -79,5 +80,5 @@ def main():
         print("It works!\n")
 
 if __name__ == "__main__":
-    main()
+    run()
 

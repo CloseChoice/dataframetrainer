@@ -3,3 +3,4 @@ pandas
 hypothesis
 numpy
 pytest
+click
