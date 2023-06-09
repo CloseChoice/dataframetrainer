@@ -32,7 +32,8 @@ next step:
  - [ ] css header/css trenne 
  - [x] Konzept für Challenges
  - [x] example 2 ist falsch. Für generisches Template von Python Functions müssen wir auf jeden fall checken ob pd.DataFrame(json.loads(df.to_json())) funktioniert
- - [ ] Flask Backend dockerisieren
+ - [ ] Flask Backend dockerisieren und in docker-compose aufnehmen
+    - [ ] führe sudo docker run -v $(pwd):/app/dummy -v $(pwd)/blueprint.py:/app/blueprint.py -v $(pwd)/server.py:/app/server.py -it dftrainer-backend bash in der Konsole auf und bringe die Interaktion von DB und backend zum Laufen!
  - [ ] evtl hypothesis teil in pyscript/frontend auslagern
  - [ ] Save bei F5
 

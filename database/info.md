@@ -2,9 +2,9 @@
   - [ ] https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart#step-5-opening-a-postgres-prompt-with-the-new-role
 Use postgres 15.2 Docker image
 Run with:
- - sudo docker run -e POSTGRES_PASSWORD=secret -e POSTGRES_USER=tobias postgres:15.2
+ - sudo docker run -e POSTGRES_PASSWORD=secret -e POSTGRES_USER=tobias postgres:15.3
 
- - sudo docker run --user tobias -e POSTGRES_PASSWORD=secret -e POSTGRES_USER=tobias postgres:15.2
+ - sudo docker run --user tobias -e POSTGRES_PASSWORD=secret -e POSTGRES_USER=tobias postgres:15.3
  
  - sudo docker run postgres:15
  

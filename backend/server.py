@@ -14,16 +14,33 @@ from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
 from pandas.tseries.offsets import DateOffset
 import hypothesis.strategies as st
+import os
+import time
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
+app.debug = True
 
 @app.route("/login")
 @cross_origin(supports_credentials=True)
 def login():
   return jsonify({'success': 'ok'})
 
-conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='test1234', port=5433)
+def check_ping(hostname):
+    while True:
+        print("Checking network connection...")
+        response = os.system("ping -c 1 " + hostname)
+        # and then check the response...
+        if response == 0:
+            print("ping received")
+            return
+        time.sleep(5)
+      
+host = 'postgres'
+# conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='test1234', port=5433)
+check_ping(host)
+conn = psycopg2.connect(host=host, dbname='postgres', user='postgres', password='secret', port=5432)
+# conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='secret', port=5435)
 cursor = conn.cursor()
 
 def extract_transform_and_apply(df, transform_string):
@@ -34,7 +51,7 @@ def extract_transform_and_apply(df, transform_string):
 @app.route('/', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def site_response():
-  return jsonify({'success': 'ok'})
+    return jsonify({'success': 'ok'})
 
 @app.route('/challenges/<int:id>/', methods=['GET'])
 @cross_origin(supports_credentials=True)
@@ -70,3 +87,6 @@ def hello(id):
                      "expected_static": df_static_expected.to_json()
                      }
     return jsonify(response=json_response)
+  
+if __name__ == "__main__":
+  app.run(host="0.0.0.0")

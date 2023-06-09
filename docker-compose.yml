@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+  backend:
+    image: dftrainer-backend
+    ports:
+      - 5000:5000
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+
+
+  postgres:
+    image: postgres:15.3
+    restart: always
+    volumes:
+      # volume is created in database/create_container.sh
+      - dftrainer_db:/var/lib/postgresql/data
+    environment:
+      # todo: don't expose secrets here, see the todo in database/create_container.sh
+      POSTGRES_PASSWORD: secret
+    ports:
+      - 5432:5432
+
+volumes:
+  dftrainer_db:
+    external: true
