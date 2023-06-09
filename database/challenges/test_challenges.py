@@ -29,7 +29,10 @@ def test_challenge1():
     assert isinstance(df, pd.DataFrame)
     # check that the transform does anything
     assert isinstance(df_result, (pd.DataFrame, pd.Series))
-    tm.assert_frame_equal(df.reset_index(drop=True), _load_from_json(df.to_json()).reset_index(drop=True))
+    tm.assert_frame_equal(
+        df.reset_index(drop=True), _load_from_json(df.to_json()).reset_index(drop=True)
+    )
+
 
 def test_challenge2():
     challenge = ChangeDependingOfOthers()
@@ -38,7 +41,10 @@ def test_challenge2():
     assert isinstance(df, pd.DataFrame)
     # check that the transform does anything
     assert isinstance(df_result, (pd.DataFrame, pd.Series))
-    tm.assert_frame_equal(df.reset_index(drop=True), _load_from_json(df.to_json()).reset_index(drop=True))
+    tm.assert_frame_equal(
+        df.reset_index(drop=True), _load_from_json(df.to_json()).reset_index(drop=True)
+    )
+
 
 def test_challenge3():
     challenge = ChangeAtIndex()
@@ -52,6 +58,7 @@ def test_challenge3():
     df_result = challenge.transform(df)
     tm.assert_frame_equal(df_result, df_expected)
     tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
+
 
 def test_challenge4():
     challenge = MonthIndex()
@@ -67,6 +74,7 @@ def test_challenge4():
     # todo: this does not yet work
     tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
 
+
 def test_challenge5():
     challenge = RenameColumn()
     df = challenge.initial()
@@ -80,6 +88,7 @@ def test_challenge5():
     tm.assert_frame_equal(df_result, df_expected)
     tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
 
+
 def test_challenge6():
     challenge = AddTriangularDataFrame()
     df = challenge.initial()
@@ -92,6 +101,7 @@ def test_challenge6():
     df_result = challenge.transform(df)
     tm.assert_frame_equal(df_result, df_expected)
     tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
+
 
 def test_challenge7():
     challenge = AddPseudoTriangularDataFrame()
@@ -122,6 +132,7 @@ def test_challenge8():
     # test if this works
     tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
 
+
 def test_challenge9():
     challenge = MapValues()
     df = challenge.initial()
@@ -134,6 +145,7 @@ def test_challenge9():
     df_result = challenge.transform(df)
     tm.assert_frame_equal(df_result, df_expected)
     tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
+
 
 def test_challenge10():
     challenge = TransformWithConditions()
@@ -148,6 +160,7 @@ def test_challenge10():
     tm.assert_frame_equal(df_result, df_expected)
     tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
 
+
 def test_challenge11():
     challenge = TransformWithConditions2()
     df = challenge.initial()
@@ -160,6 +173,7 @@ def test_challenge11():
     df_result = challenge.transform(df)
     tm.assert_frame_equal(df_result, df_expected)
     tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
+
 
 def test_challenge12():
     challenge = TransformWithMultipleConditions()
@@ -174,6 +188,7 @@ def test_challenge12():
     tm.assert_frame_equal(df_result, df_expected)
     tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
 
+
 def test_challenge13():
     challenge = GroupbyTransform()
     df = challenge.initial()
@@ -186,6 +201,7 @@ def test_challenge13():
     df_result = challenge.transform(df)
     tm.assert_frame_equal(df_result, df_expected)
     tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
+
 
 def test_challenge14():
     challenge = Pivot1()

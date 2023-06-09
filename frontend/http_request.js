@@ -20,7 +20,7 @@ const http_call = () => {
 // fetch('http://127.0.0.1:5000/challenges/1')
 //   .then((response) => response.json())
 //   .then((data) => console.log(data)).then((data) => data).catch((data) => console.log(data));
-// 
+//
 // fetch('https://verkehr.autobahn.de/o/autobahn/A1/services/roadworks')
 //   .then((response) => response.json())
 //   .then((data) => console.log(data)).then((data) => data).catch((data) => console.log(data));

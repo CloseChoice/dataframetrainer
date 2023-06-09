@@ -1,4 +1,4 @@
-'''Rename the column `Value` to `NewValue`'''
+"""Rename the column `Value` to `NewValue`"""
 import pandas as pd
 import numpy as np
 import hypothesis
@@ -12,36 +12,25 @@ from .BaseChallenge import BaseChallenge
 class RenameColumn(BaseChallenge):
     @staticmethod
     def initial() -> pd.DataFrame:
-        return data_frames(columns=[column('Value', dtype=np.dtype(int)),
-                                   ],
-                             rows=st.tuples(st.sampled_from([1, 2, 3, 4, 5, 6, 7, 8, 9]),
-                                            ),
-                          index=range_indexes(min_size=3, max_size=10)
-                         ).example()
-    
+        return data_frames(
+            columns=[
+                column("Value", dtype=np.dtype(int)),
+            ],
+            rows=st.tuples(
+                st.sampled_from([1, 2, 3, 4, 5, 6, 7, 8, 9]),
+            ),
+            index=range_indexes(min_size=3, max_size=10),
+        ).example()
+
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.DataFrame:
-        df = df.rename(columns={'Value': 'NewValue'})
+        df = df.rename(columns={"Value": "NewValue"})
         return df
-    
+
     @staticmethod
     def static_example() -> pd.DataFrame:
-        return pd.DataFrame(
-            [
-             [1],
-             [2],
-             [3]
-            ],
-            columns=['Value']
-        )
-    
+        return pd.DataFrame([[1], [2], [3]], columns=["Value"])
+
     @staticmethod
     def expected_static() -> pd.DataFrame:
-        return pd.DataFrame(
-            [
-             [1],
-             [2],
-             [3]
-            ],
-            columns=['NewValue']
-        )
+        return pd.DataFrame([[1], [2], [3]], columns=["NewValue"])

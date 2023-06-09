@@ -9,7 +9,7 @@ const app = express()
 app.use(cors())
 
 // const httpsServer = https.createServer(httpsOptions, app);
-// 
+//
 // app.use((req, res, next) => {
 //     if(req.protocol === 'http') {
 //       res.redirect(301, `https://${req.headers.host}${req.url}`);
@@ -25,5 +25,5 @@ http.createServer(function (req, res) {
 // app.get('/hashes/:hashes', (request, response) => {
 //     return response.json("Dummy");
 // })
-// 
+//
 // httpsServer.listen(PORT, "0.0.0.0");
