@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 import pandas as pd
 
-class BaseChallenge(ABC):
 
+class BaseChallenge(ABC):
     @staticmethod
     @abstractmethod
     def initial() -> pd.DataFrame | pd.Series:

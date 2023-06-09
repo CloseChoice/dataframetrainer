@@ -44,7 +44,7 @@
     <py-script>
       import pandas as pd
       import json
-      from js import http_call 
+      from js import http_call
 
       def call_http_convert():
         global df
@@ -60,14 +60,14 @@
         Element(element + "-inner").element.innerHTML = ""
         Element(element).element.style.display = "block"
         display(df_t, target=element + "-inner", append="False")
-      
+
       def log(message):
         # log to pyscript dev console
         print(message)
 
         # log to JS console
         js.console.log (message)
-      
+
       def reset_inner_html():
         Element("pandas-dev-console-inner").element.innerHTML = ""
 
@@ -77,7 +77,7 @@
         <button type="button" id="other2" py-onClick="call_http_convert()">Get Example</button>
         <button type="button" id="reset" onClick="reset_dev_console()">Reset Console</button>
 
-        <label id="field" for="vname">Vorname:</label> 
+        <label id="field" for="vname">Vorname:</label>
         <div id="pandas-repl">
             <h3>Python REPL</h3>
             <py-repl id="pandas-repl-inner">

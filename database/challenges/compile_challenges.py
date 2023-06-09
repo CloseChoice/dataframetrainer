@@ -3,13 +3,15 @@ from .challenge1 import SumSpendings
 import json
 import pandas as pd
 
+
 def _load_from_json(df_as_json: str) -> pd.DataFrame:
     df = pd.DataFrame(json.loads(df_as_json))
     df.index = df.index.astype(int)
     return df
 
+
 def sanity_checks(function_name: str, function_as_string: str):
-    """Performs sanity checks on the function string. 
+    """Performs sanity checks on the function string.
     Current checks are:
       - no double quotes
       - all single quotes appear doubled, so no "'somestring'" but "''somestring''"
@@ -21,12 +23,17 @@ def sanity_checks(function_name: str, function_as_string: str):
     Raises:
         ValueError: _description_
     """
-    # todo: maybe this needs to be a bit more concrete: We can't forbid double 
+    # todo: maybe this needs to be a bit more concrete: We can't forbid double
     if '"' in function_as_string:
-        raise ValueError(f"Found double quotes in function {function_name}. Please change to single quotes.")
+        raise ValueError(
+            f"Found double quotes in function {function_name}. Please change to single quotes."
+        )
     backup_string = function_as_string.replace("''", "<s>")
     if "'" in backup_string:
-        raise ValueError(f"Found single double quote in function {function_name}. Expected duplicated single quotes.")
+        raise ValueError(
+            f"Found single double quote in function {function_name}. Expected duplicated single quotes."
+        )
+
 
 def transform_function_string(function_as_string: str) -> str:
     """Transform the function string into a format that PostGreSQL can parse.
@@ -40,15 +47,28 @@ def transform_function_string(function_as_string: str) -> str:
     # just to make sure that we don't have double quotes in here already
     r_str = function_as_string.replace("''", "'")
     r_str = r_str.replace("'", "''")
-    encoded_str = r_str.strip().strip("@staticmethod").strip().encode("unicode_escape").decode("utf-8")
+    encoded_str = (
+        r_str.strip()
+        .strip("@staticmethod")
+        .strip()
+        .encode("unicode_escape")
+        .decode("utf-8")
+    )
     return f'"{encoded_str}"'
+
 
 if __name__ == "__main__":
     c = SumSpendings()
-    import pdb; pdb.set_trace()
+    import pdb
+
+    pdb.set_trace()
     lines_initial = transform_function_string(inspect.getsource(c.initial))
     sanity_checks("initial", lines_initial)
     lines_transform = transform_function_string(inspect.getsource(c.transform))
     sanity_checks("transform", lines_transform)
-    import pdb; pdb.set_trace()
-    lines = inspect.getsource(c.transform).strip().replace("@staticmethod\n", "").strip()
+    import pdb
+
+    pdb.set_trace()
+    lines = (
+        inspect.getsource(c.transform).strip().replace("@staticmethod\n", "").strip()
+    )

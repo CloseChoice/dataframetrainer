@@ -3,11 +3,10 @@ SHELL := /bin/bash
 
 venv:
 	python3 -m venv .venv
-	source $(shell pwd)/.venv/bin/activate
-	pip install -r requirements.txt
+	source $(shell pwd)/.venv/bin/activate && pip install -r requirements.txt && pip install -r requirements.dev.txt
 
 run:
-	flask --app server run 
+	flask --app server run
 
 build:
 	docker build . -t dftrainer-backend
