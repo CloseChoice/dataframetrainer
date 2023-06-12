@@ -40,7 +40,7 @@ class SumSpendings(BaseChallenge):
 
 
 ### SEE: https://stackoverflow.com/a/19850183/9534390 for hints how to compile a string
-#  '"data_frames(columns=[column(''Customer'', dtype=np.dtype(str)),
+#  ''data_frames(columns=[column(''Customer'', dtype=np.dtype(str)),
 #                         column(''Spendings'', dtype=np.dtype(float)),
 #                        ],
 #                rows=st.tuples(st.sampled_from([''Helmut'',
@@ -57,8 +57,8 @@ class SumSpendings(BaseChallenge):
 #                               index=indexes(min_size=1,
 #                                             elements=st.integers(min_value=1,
 #                                                                  max_value=20),
-#                                             dtype=int)) "'::json,
-#  '"def transform(df): return df.groupby(''Customer'').Spendings.sum()"'::json
+#                                             dtype=int)) ''::json,
+#  ''def transform(df): return df.groupby(''Customer'').Spendings.sum()''::json
 
 # import pandas as pd
 # import numpy as np
@@ -79,12 +79,12 @@ class SumSpendings(BaseChallenge):
 #                                                          allow_subnormal=False))
 #                 ).example()
 #
-# generate_string = """
+# generate_string = '''
 # def generate():
 #     return data_frames(columns=[column('Customer', dtype=np.dtype(str)),
 #                                     column('Spendings', dtype=np.dtype(float)),
 #                                 ],
-#                             rows=st.tuples(st.sampled_from(["Helmut", "Greta", "Siegfried"]), st.floats(allow_infinity=False,
+#                             rows=st.tuples(st.sampled_from(['Helmut', 'Greta', 'Siegfried']), st.floats(allow_infinity=False,
 #                                                                                                 allow_nan=False,
 #                                                                                                 allow_subnormal=False,
 #                                                                                                 min_value=0.0,
@@ -93,13 +93,13 @@ class SumSpendings(BaseChallenge):
 #                                                                                                 exclude_min=True)),
 #                         index=indexes(min_size=1, elements=st.integers(min_value=1, max_value=20), dtype=int)
 #                         )
-# """
+# '''
 #
 #
 # given_df = data_frames(columns=[column('Customer', dtype=np.dtype(str)),
 #                                 column('Spendings', dtype=np.dtype(float)),
 #                                ],
-#                         rows=st.tuples(st.sampled_from(["Helmut", "Greta", "Siegfried"]), st.floats(allow_infinity=False,
+#                         rows=st.tuples(st.sampled_from(['Helmut', 'Greta', 'Siegfried']), st.floats(allow_infinity=False,
 #                                                                                             allow_nan=False,
 #                                                                                             allow_subnormal=False,
 #                                                                                             min_value=0.0,
@@ -116,9 +116,9 @@ class SumSpendings(BaseChallenge):
 #
 #
 # def transform(df):
-#     return df.groupby("Customer").Spendings.sum()
+#     return df.groupby('Customer').Spendings.sum()
 #
 # @given(df=given_df)
 # def test_something(df):
-#     tm.assert_frame_equal(transform(df), df.groupby(["Customer"]).agg({"Spendings": sum}))
+#     tm.assert_frame_equal(transform(df), df.groupby(['Customer']).agg({'Spendings': sum}))
 #

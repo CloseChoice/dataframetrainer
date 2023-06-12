@@ -46,7 +46,7 @@ def transform_function_string(function_as_string: str) -> str:
     """
     # just to make sure that we don't have double quotes in here already
     r_str = function_as_string.replace("''", "'")
-    r_str = r_str.replace("'", "''")
+    r_str = r_str.replace("'", "''").replace('"', "''")
     encoded_str = (
         r_str.strip()
         .strip("@staticmethod")

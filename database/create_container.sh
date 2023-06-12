@@ -12,7 +12,7 @@ docker container stop pgsql-test
 docker container rm pgsql-test
 docker volume rm $VOLUME_NAME
 docker run --detach --name pgsql-test \
-     --mount src=$VOLUME_NAME,dst=/var/lib/postgresql/data \
+     --mount type=volume,src=$VOLUME_NAME,dst=//var/lib/postgresql/data \
      -e POSTGRES_PASSWORD=$POSTGRES_PW \
      -p $POSTGRES_PORT:5432 postgres:15.3
 source .venv/bin/activate
