@@ -12,15 +12,11 @@
     onMount(async ()=>{
         pyodide = await loadPyodide()
 
-        let mountDir = "/mnt";
-        pyodide.FS.mkdir(mountDir);
-        pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, { root: "." }, mountDir);
-        
-
         await pyodide.loadPackage("micropip");
         const micropip = pyodide.pyimport("micropip");
         await micropip.install('hypothesis');
         await micropip.install('pytest')
+        await micropip.install('pytest-xdist')
 
         // pyodide.FS.writeFile("test_.py", data.test, {encoding: "utf8"})
 
@@ -39,23 +35,23 @@ print(os.listdir())`)
     let userCode = data.template
 
     async function testUserCode(){
-        console.log(userCode);
+        // console.log(userCode);
 
-        // let mountDir = "/mnt";
-        // pyodide.FS.mkdir(mountDir);
-        // pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, { root: "." }, mountDir);
 
         pyodide.FS.writeFile("solution.py", userCode, {encoding: "utf8"})
         pyodide.FS.writeFile("test_.py", data.test, {encoding: "utf8"})
 
-        // let pkg = pyodide.pyimport("pytest");
-        // let x = pkg.main();
+//         pyodide.runPythonAsync(`
+// with open("solution.py") as f:
+//     print(f.readlines())`)
+
+        pyodide.code.eval(`import pytest
+pytest.main()`)
+        // let pkg = pyodide.pyimport("test_");
+        // let x = pkg.test();
         // console.log(x);
 
-        pyodide.FS.syncfs()
-        pyodide.runPython(`import pytest
-pytest.main()
-`)
+        // pyodide.runPython(data.test)
     }
     
 </script>
