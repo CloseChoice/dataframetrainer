@@ -1,6 +1,14 @@
 # Dataframetrainer
 a WIP repository to build a data science programming tutor
 
+# Static File Server
+- `npm install -g http-server`
+- `http-server static-challenges`
+- `cd svelte-frontend`
+- `npm install`
+- `npm run dev`
+
+
 ## Setup
 It is assumed that Docker and python3.11 are installed and usable from the command-line.
 In order to use docker without `sudo`:
