@@ -22,6 +22,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"fast-xml-parser": "^4.2.4",
 		"pyodide": "^0.23.3"
 	}
 }
