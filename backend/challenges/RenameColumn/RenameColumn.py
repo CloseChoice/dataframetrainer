@@ -5,7 +5,7 @@ import hypothesis
 
 from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
-from hypothesis import given
+from hypothesis import given, settings
 from collections.abc import Callable
 
 
@@ -54,8 +54,3 @@ class RenameColumn:
         expected = self.transform(df)
         result = transform_func(df)
         tm.assert_frame_equal(expected, result)
-
-
-if __name__ == "__main__":
-    # this is just for debugging
-    print("you are here")

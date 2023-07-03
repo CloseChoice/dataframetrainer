@@ -9,7 +9,7 @@ import hypothesis.strategies as st
 # from .BaseChallenge import BaseChallenge
 
 
-class RenameColumn(): #  BaseChallenge):
+class RenameColumn:  #  BaseChallenge):
     @staticmethod
     def initial() -> pd.DataFrame:
         return data_frames(

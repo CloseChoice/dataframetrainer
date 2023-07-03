@@ -17,9 +17,24 @@
         await micropip.install('pandas');
         await micropip.install('numpy');
         await micropip.install('pytest');
+
+        let mountDir = ".";
+        pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, { root: "." }, mountDir);
+        pyodide.FS.mkdir('/home/pyodide/challenges');
+        pyodide.FS.mkdir('/home/pyodide/userSolutions');
+        pyodide.FS.mkdir('/home/pyodide/tests');
+        pyodide.FS.syncfs(true, function (err) {
+  console.log(err);
+  // handle callback
+  });
+        console.log("Synced folder");
     })
 
     async function testUserCode(){
+        // pyodide.FS.writeFile(userCode, '/mnt/usercode.py');
+        pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
+        pyodide.FS.writeFile('usercode.py', userCode);
+        pyodide.runPython("import os; print(os.listdir('.'))");
         pyodide.runPython(userCode);
         console.log("ran usercode", userCode);
         let transform_func = pyodide.globals.get('transform');
@@ -29,25 +44,42 @@
             alert("transform function is not defined! Please define this function otherwise we can't evaluate the code.");
             console.log("is pyproxy");
         }
+        // todo: maybe we need a reload here!
+        let transform_code = pyodide.runPython(`
+        import inspect
+        from usercode import transform
+
+        inspect.getsource(transform)`);
+        console.log("transform code", transform_code);
 
         // the define the class
         pyodide.runPython(data.challenge_class);
-        // todo: we need to find a better solution to extract the result of the test_challenge function
-        // here runs the testing stuff
-        // let exitCode = pyodide.runPython(`${data.challenge_name}().test_challenge(transform_func=transform)`);
-        // this also works, maybe this can help us to use a pytest plugin in order to capture the std/sterr
-        let exitCode = pyodide.runPython(`
-        import pytest
+        let s = `
+import pytest
+${data.challenge_class}
 
-        def test_transform():
-            ${data.challenge_name}().test_challenge(transform_func=transform)
+${transform_code}
 
-        if __name__ == "__main__":
-            pytest.main(['--junitxml', 'report.xml'])`
-            );
-        console.log("exitcode", exitCode);
-        let report = pyodide.FS.readFile('report.xml',  { encoding: "utf8" })
-    }
+def test_transform():
+    ${data.challenge_name}().test_challenge(transform_func=transform)
+    print('in main')
+`;
+        console.log(s);
+
+        pyodide.FS.writeFile(`test_${data.challenge_name}.py`, s);
+        pyodide.runPython(`import pytest; pytest.main(['--junitxml', 'report.xml', '-k', 'test_transform', '-x', '/home/pyodide/test_${data.challenge_name}.py'])`);
+        pyodide.runPython("import os; print(os.listdir('.'))");
+        // let exitCode = pyodide.runPython(`test_${data.challenge_name}.py`);
+        // console.log("This is the exitCode", exitCode);
+        // pyodide.runPython
+        let report = pyodide.FS.readFile('report.xml', { encoding: "utf8" })
+        console.log("This is the report", report);
+        pyodide.FS.syncfs(true, function (err) {
+  console.log(err);
+  // handle callback
+  });
+        console.log("Synced");
+}
 </script>
 
 <div>

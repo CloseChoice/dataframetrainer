@@ -22,14 +22,17 @@ def initial() -> pd.DataFrame:
         index=range_indexes(min_size=3, max_size=5),
     ).example()
 
+
 def transform(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[2, "Value"] = -100
     return df
+
 
 def static_example() -> pd.DataFrame:
     return pd.DataFrame(
         [[1, "Helmut"], [2, "Greta"], [3, "Siegfried"]], columns=["Value", "Other"]
     )
+
 
 def expected_static() -> pd.DataFrame:
     return pd.DataFrame(
