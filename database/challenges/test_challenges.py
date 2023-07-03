@@ -218,9 +218,23 @@ def test_challenge14():
 
 
 def test_challenge15():
-    challenge = Pivot2()
-    df = challenge.initial()
-    df_result = challenge.transform(df)
+    df = Pivot2.initial()
+    df_result = Pivot2.transform(df)
+    assert isinstance(df, pd.DataFrame)
+    # check that the transform does anything
+    assert isinstance(df_result, (pd.DataFrame, pd.Series))
+    df = Pivot2.static_example()
+    df_expected = Pivot2.expected_static()
+    df_result = Pivot2.transform(df)
+    tm.assert_frame_equal(df_result, df_expected, check_names=False)
+    tm.assert_frame_equal(df, _load_from_json(df.to_json()).reset_index(drop=True))
+
+
+def test_challenge15():
+    df = initial()
+    df_result = transform(df)
+    df_result_user = transform_user(df)
+    tm.assert_frame_equal(df_result, df_result_user)
     assert isinstance(df, pd.DataFrame)
     # check that the transform does anything
     assert isinstance(df_result, (pd.DataFrame, pd.Series))
