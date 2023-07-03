@@ -11,6 +11,7 @@ VOLUME_NAME=dftrainer_db
 docker container stop pgsql-test
 docker container rm pgsql-test
 docker volume rm $VOLUME_NAME
+# we need the double slash to make it work for git bash
 docker run --detach --name pgsql-test \
      --mount type=volume,src=$VOLUME_NAME,dst=//var/lib/postgresql/data \
      -e POSTGRES_PASSWORD=$POSTGRES_PW \
