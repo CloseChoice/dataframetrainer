@@ -12,7 +12,7 @@ services:
       POSTGRES_PASSWORD: example
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
-      - ../challenges:/challenges
+      - ../backend/challenges:/challenges
     ports:
       - "5432:5432"
 
