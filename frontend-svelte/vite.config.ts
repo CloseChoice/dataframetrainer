@@ -1,8 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import { createRequire } from 'node:module';
-import nodeBuiltins from 'rollup-plugin-node-builtins';
-import { resolve } from 'path';
 
 const require = createRequire(import.meta.url);
 
@@ -18,18 +16,5 @@ export default defineConfig({
 			rewrite: (path) => path.replace(/^\/files/, '')
 		  }
 		}
-	  },
-	//   resolve: {
-	// 	alias: {
-	// 	  // fs: require.resolve('rollup-plugin-node-builtins'),
-	// 	  https: require.resolve('rollup-plugin-node-builtins'),
-	// 	  // http: resolve('rollup-plugin-node-builtins'),
-	// 	  // util: resolve('rollup-plugin-node-builtins'),
-	// 	  // stream: resolve('rollup-plugin-node-builtins'),
-	// 	  // buffer: resolve('rollup-plugin-node-builtins'),
-	// 	  // process: resolve('rollup-plugin-node-builtins'),
-	// 	  // url: resolve('rollup-plugin-node-builtins'),
-	// 	  // querystring: resolve('rollup-plugin-node-builtins'),
-	// 	},
-	//   },
-})
+	  }
+});
