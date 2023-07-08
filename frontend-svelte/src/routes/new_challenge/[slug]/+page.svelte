@@ -1,37 +1,27 @@
 <script>
     import { onMount } from "svelte";
-    import { XMLParser } from 'fast-xml-parser'
+    import { XMLParser } from 'fast-xml-parser';
+    // todo: this needs to move in the src/components folder
+    import CodeMirror from "./CodeMirror.svelte";
+
+
 
     const parser = new XMLParser();
     /** @type {import('./$types').PageData} */
     export let data;
     let userCode;
+    let editor;
+    let startState;
 
     let pyodide;
-    onMount(async ()=>{
-        pyodide = await loadPyodide();
-
-        await pyodide.loadPackage("micropip");
-        const micropip = pyodide.pyimport("micropip");
-        await micropip.install('hypothesis');
-        await micropip.install('pandas');
-        await micropip.install('numpy');
-        await micropip.install('pytest');
-
-        let mountDir = ".";
-        pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, { root: "." }, mountDir);
-        pyodide.FS.mkdir('/home/pyodide/challenges');
-        pyodide.FS.mkdir('/home/pyodide/userSolutions');
-        pyodide.FS.mkdir('/home/pyodide/tests');
-        pyodide.FS.syncfs(true, function (err) {
-  console.log(err);
-  // handle callback
-  });
-        console.log("Synced folder");
-    })
+    async function executeUserCode(){
+        console.log("executing user code: ", userCode);
+    // todo: fill!
+    }
 
     async function testUserCode(){
         // pyodide.FS.writeFile(userCode, '/mnt/usercode.py');
+        // todo: this needs a cleanup!
         pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
         pyodide.FS.writeFile('usercode.py', userCode);
         pyodide.runPython("import os; print(os.listdir('.'))");
@@ -80,19 +70,75 @@ def test_transform():
   });
         console.log("Synced");
 }
+
+  let loadDone = false;
+  let edConfigMD = {
+    language: 'python',
+    lineNumbers: false,
+    lineWrapping: true,
+    lineHighlight: true
+  };
+  let cm;
+
+    onMount(async ()=>{
+        loadDone = true;
+        pyodide = await loadPyodide();
+
+        await pyodide.loadPackage("micropip");
+        const micropip = pyodide.pyimport("micropip");
+        await micropip.install('hypothesis');
+        await micropip.install('pandas');
+        await micropip.install('numpy');
+        await micropip.install('pytest');
+
+        userCode = data.default_code;
+        let mountDir = ".";
+        pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, { root: "." }, mountDir);
+        pyodide.FS.mkdir('/home/pyodide/challenges');
+        pyodide.FS.mkdir('/home/pyodide/userSolutions');
+        pyodide.FS.mkdir('/home/pyodide/tests');
+        console.log("this is default_code", data.default_code);
+        pyodide.FS.syncfs(true, function (err) {
+  console.log(err);
+  // handle callback
+  });
+});
+  console.log("Synced folder");
+
+  function textChange(e) {
+    userCode = e.detail.data.value;
+    console.log("userCode changed", userCode);
+  }
+
+  function editorChange(e) {
+    cm = e.detail.data;
+  }
+
+  function addText(e) {
+    if(typeof cm !== 'undefined') {
+      userCode += userCode;
+      cm.setValue(userCode);
+    }
+  }
 </script>
 
 <div>
-    <h1>Hier ist die Description</h1>
     {data.intro}
 </div>
 
-<div>
-    <h1>So sieht die Startzelle für die Challenge aus</h1>
-    <textarea value={data.default_code} name="Text1" cols="60" rows="10"></textarea>
-    <h1>Hier kann man mal temporär eine Lösung reinschreiben</h1>
-    <h4>Später sollte man keine zwei Zellen brauchen, sondern am Anfang sieht sie so aus wie oben, später dann wie unten</h4>
-    <textarea bind:value={userCode} name="Text2" cols="40" rows="5"></textarea>
-</div>
-
 <button on:click={testUserCode}>Submit Code</button>
+<button on:click={executeUserCode}>Execute Code</button>
+
+Dummy 
+<div id="firstEd">
+    <CodeMirror
+    height="4000px"
+    width="1000px"
+    config={edConfigMD}
+    initFinished={loadDone};
+    defaultCode={data.default_code};
+    on:textChange={textChange}
+    on:editorChange={editorChange}
+    />
+</div>
+After Dummy 

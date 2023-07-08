@@ -22,6 +22,14 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@codemirror/commands": "^6.2.4",
+		"@codemirror/lang-markdown": "^6.2.0",
+		"@codemirror/lang-python": "github:codemirror/lang-python",
+		"@codemirror/language": "^6.8.0",
+		"@codemirror/search": "^6.5.0",
+		"@codemirror/theme-one-dark": "^6.1.2",
+		"@codemirror/view": "^6.14.1",
+		"@lezer/highlight": "^1.1.6",
 		"fast-xml-parser": "^4.2.4",
 		"pyodide": "^0.23.3"
 	}

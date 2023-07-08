@@ -45,7 +45,7 @@ pytest.main(['--junitxml', 'report.xml'])`)
 <div>
     <h1>Hier ist der Kot editorr</h1>
     <textarea bind:value={userCode} name="Text1" cols="40" rows="5"></textarea>
-    
+
 </div>
 
 <button on:click={testUserCode}>Submit Code</button>

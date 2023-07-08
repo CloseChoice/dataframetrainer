@@ -56,3 +56,10 @@ Nice to Haves:
 - Anderes
   - [ ] Datetimes sind schwierig zu erzeugen und schwierig zu testen, da df.to_json() diese in unix timestamps konvertiert.
   07116673 - 6586
+
+- [x] Text aus editor auslesen
+- [x] Editor ist neues Eingabefeld
+- [x] Code-Highlighting
+- [x] Breite anpassen
+- [x] Editor hat Standardchallenge
+- [ ] im Editor definierte ausgaben werden angezeigt, wie ein Jupyter Notebook
