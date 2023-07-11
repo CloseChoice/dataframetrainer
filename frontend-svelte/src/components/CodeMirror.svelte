@@ -16,8 +16,8 @@
     height: 100%;
   }
 
-  :global(.cm-scroller) { 
-    overflow: auto; 
+  :global(.cm-scroller) {
+    overflow: auto;
   }
 </style>
 
@@ -36,12 +36,13 @@
   import { javascript } from '@codemirror/lang-javascript';
 
   const dispatch = createEventDispatcher();
-  
+
   export let height;
   export let width;
   export let config;
   export let initFinished = false;
   export let defaultCode;
+  export let code;
 
   let CodeMirrorEditor;
   let edState;
@@ -56,19 +57,17 @@
   }
 
   function setValue(text) {
-    // 
-    // Since we are setting a whole new document, create new editor 
+    //
+    // Since we are setting a whole new document, create new editor
     // states and views.
-    // 
-    console.log('Setting value: ' + text);
+    //
     if(initFinished) {
-      console.log("init finished");
       CreateEditorState(text);
     }
   }
 
   function CreateEditorState(text) {
-    // 
+    //
     // Clear out the div element in case a previous editor was
     // created.
     //
@@ -100,18 +99,14 @@
       oneDark,
       EditorView.updateListener.of(update => {
         if(update.docChanged) {
-          fire('textChange', {
-            value: getValue(),
-            cursor: getCursor(),
-            history: {}
-          })
+          code = getValue();
         }
       })
     ];
 
-    // 
+    //
     // Add extensions based on the configuration.
-    // 
+    //
     // if(config.lineNumbers) {
     //   exts.push(lineNumbers());
     // }
@@ -126,7 +121,7 @@
       case 'python':
         exts.push(python());
         break;
-      default: 
+      default:
         exts.push(markdown());
         break;
     }
@@ -138,19 +133,20 @@
     if(config.lineHighlight) {
       exts.push(highlightActiveLine());
     }
-    
-    // 
+
+    //
     // Create the editor state.
     //
     console.log("Inner stuff: " + text);
+    code = text;
     edState = EditorState.create({
       doc: text,
       extensions: exts
     });
 
-    // 
+    //
     // Create the editor View.
-    // 
+    //
     edView = new EditorView({
       state: edState,
       parent: CodeMirrorEditor
@@ -158,10 +154,9 @@
   }
 
   onMount(() => {
-    // 
+    //
     // Create the editor.
-    // 
-    console.log("this is the defualt code", defaultCode);
+    //
     // todo: where does the suffx ';' come from? Remove it here till we find out
     CreateEditorState(defaultCode.replace(/\;$/, ""));
 
@@ -179,7 +174,7 @@
       getLine: getLine,
       focus: focus
     };
-    
+
     //
     // Debugging: add to the window for testing.
     //
@@ -191,7 +186,7 @@
     //
     fire('editorChange', editorFunctions);
 
-    // 
+    //
     // Make sure the editor is focused.
     //
     focus();

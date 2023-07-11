@@ -2,20 +2,21 @@
     import { onMount } from "svelte";
     import { XMLParser } from 'fast-xml-parser';
     // todo: this needs to move in the src/components folder
-    import CodeMirror from "./CodeMirror.svelte";
-
+    import CodeMirror from "../../../components/CodeMirror.svelte";
+    import CodeOutput from "../../../components/CodeOutput.svelte";
 
 
     const parser = new XMLParser();
     /** @type {import('./$types').PageData} */
     export let data;
     let userCode;
-    let editor;
-    let startState;
+    let resultUserCode;
 
     let pyodide;
     async function executeUserCode(){
+        resultUserCode = pyodide.runPython(userCode);
         console.log("executing user code: ", userCode);
+        console.log("this is resultUserCode", resultUserCode);
     // todo: fill!
     }
 
@@ -25,7 +26,7 @@
         pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
         pyodide.FS.writeFile('usercode.py', userCode);
         pyodide.runPython("import os; print(os.listdir('.'))");
-        pyodide.runPython(userCode);
+        resultUserCode = pyodide.runPython(userCode);
         console.log("ran usercode", userCode);
         let transform_func = pyodide.globals.get('transform');
         // console.log("THIS IS transform", transform_func);
@@ -105,21 +106,6 @@ def test_transform():
 });
   console.log("Synced folder");
 
-  function textChange(e) {
-    userCode = e.detail.data.value;
-    console.log("userCode changed", userCode);
-  }
-
-  function editorChange(e) {
-    cm = e.detail.data;
-  }
-
-  function addText(e) {
-    if(typeof cm !== 'undefined') {
-      userCode += userCode;
-      cm.setValue(userCode);
-    }
-  }
 </script>
 
 <div>
@@ -128,17 +114,33 @@ def test_transform():
 
 <button on:click={testUserCode}>Submit Code</button>
 <button on:click={executeUserCode}>Execute Code</button>
-
-Dummy 
+<style>
+    #firstEd {
+        display: grid;
+        grid-template-rows: auto auto;
+    }
+    #firstEdIntro {
+        grid-row: 1;
+    }
+    #firstOutput {
+        grid-row: 2;
+    }
+</style>
+Dummy {userCode}
 <div id="firstEd">
-    <CodeMirror
-    height="4000px"
-    width="1000px"
-    config={edConfigMD}
-    initFinished={loadDone};
-    defaultCode={data.default_code};
-    on:textChange={textChange}
-    on:editorChange={editorChange}
-    />
+    <div id="firstOutput">
+        <CodeOutput resultUserCode={resultUserCode}></CodeOutput>
+    </div>
+    <div id="firstEdIntro">
+      <CodeMirror
+      id="firstEdMirror"
+      height="auto"
+      width="50%"
+      config={edConfigMD}
+      initFinished={loadDone}
+      defaultCode={data.default_code}
+      bind:code={userCode}
+      ></CodeMirror>
+    </div>
 </div>
-After Dummy 
+After Dummy
