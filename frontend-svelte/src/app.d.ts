@@ -10,7 +10,6 @@ declare global {
 }
 
 
-
 interface UserProperties {
 	id: number
 	expires?: string // ISO-8601 datetime
@@ -23,3 +22,5 @@ interface UserProperties {
   }
   
 type User = UserProperties | undefined | null
+
+export {};

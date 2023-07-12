@@ -23,9 +23,6 @@ export const handle: Handle = async ({ resolve, event }) => {
 
   if (!event.locals.user) cookies.delete('session')
 
-
-
-  
   // Apply CORS header for API routes
   if (event.url.pathname.startsWith('/api')) {
     // Required for CORS to work

@@ -5,11 +5,11 @@
     const parser = new XMLParser();
     /** @type {import('./$types').PageData} */
     export let data;
+    let pyodide;
     let userCode = data.template;
 
-    let pyodide;
     onMount(async ()=>{
-        pyodide = await loadPyodide();
+        pyodide = await loadPyodide()
 
         await pyodide.loadPackage("micropip");
         const micropip = pyodide.pyimport("micropip");
@@ -18,7 +18,6 @@
 
         pyodide.FS.writeFile("test_.py", data.test, {encoding: "utf8"})
         pyodide.FS.writeFile("solution.py", userCode, {encoding: "utf8"})
-        console.log("wrote to file system");
     })
 
     async function testUserCode(){
@@ -45,7 +44,6 @@ pytest.main(['--junitxml', 'report.xml'])`)
 <div>
     <h1>Hier ist der Kot editorr</h1>
     <textarea bind:value={userCode} name="Text1" cols="40" rows="5"></textarea>
-
 </div>
 
 <button on:click={testUserCode}>Submit Code</button>

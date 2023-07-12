@@ -1,8 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
 
 export default defineConfig({
 	plugins: [sveltekit()],
@@ -16,5 +13,5 @@ export default defineConfig({
 			rewrite: (path) => path.replace(/^\/files/, '')
 		  }
 		}
-	  },
-})
+	  }
+});
