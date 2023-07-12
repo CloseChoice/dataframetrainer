@@ -9,3 +9,25 @@ services:
     volumes:
       - ./backend:/app
 
+  db:
+    image: postgres
+    restart: always
+    build:
+      context: .
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      - ../backend/challenges:/challenges
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+
+volumes:
+  sql:
+
