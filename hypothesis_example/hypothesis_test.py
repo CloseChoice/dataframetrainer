@@ -19,23 +19,14 @@ df = data_frames(
 ).example()
 
 string = "pd.DataFrame([1, 2, 3], index=range(100, 103))"
-import pdb
-
-pdb.set_trace()
 given_df = data_frames(
     columns=[column("ActualDate", dtype=np.dtype("datetime64[ns]"))],
     index=indexes(
         min_size=1, elements=st.integers(min_value=1, max_value=1000), dtype=int
     ),
 )
-import pdb
-
-pdb.set_trace()
 given_df_string = "data_frames(columns=[column('ActualDate', dtype=np.dtype('datetime64[ns]'))], index=indexes(min_size=1, elements=st.integers(min_value=1, max_value=1000), dtype=int))"
 df = eval(given_df_string).example()
-import pdb
-
-pdb.set_trace()
 
 # given_df = data_frames(columns=[column('ActualDate', dtype=np.dtype('datetime64[ns]'))],
 #                        rows=st.tuples(st.datetimes(min_value=np.datetime64('2000-01-01'),
@@ -64,9 +55,6 @@ exec(transform_string)
 print(
     f"Try to get locals().get('transform', 'not found'): {locals().get('transform', 'not found')}"
 )
-import pdb
-
-pdb.set_trace()
 
 df["CalcEnd"] = df["ActualDate"].apply(to_end_of_month)
 

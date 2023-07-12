@@ -6,10 +6,10 @@ import hypothesis
 from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
 
-from .BaseChallenge import BaseChallenge
+# from .BaseChallenge import BaseChallenge
 
 
-class RenameColumn(BaseChallenge):
+class RenameColumn:  #  BaseChallenge):
     @staticmethod
     def initial() -> pd.DataFrame:
         return data_frames(

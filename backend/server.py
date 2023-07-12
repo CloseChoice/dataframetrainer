@@ -16,6 +16,7 @@ from pandas.tseries.offsets import DateOffset
 import hypothesis.strategies as st
 import os
 import time
+from flask import send_from_directory
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -39,14 +40,14 @@ def check_ping(hostname):
         time.sleep(5)
 
 
-host = "postgres"
+host = "db"
 # conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='test1234', port=5433)
-check_ping(host)
-conn = psycopg2.connect(
-    host=host, dbname="postgres", user="postgres", password="secret", port=5432
-)
+# check_ping(host)
+# conn = psycopg2.connect(
+#     host=host, dbname="postgres", user="postgres", password="secret", port=5432
+# )
 # conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='secret', port=5435)
-cursor = conn.cursor()
+# cursor = conn.cursor()
 
 
 def extract_transform_and_apply(df, transform_string):
@@ -61,6 +62,22 @@ def extract_transform_and_apply(df, transform_string):
 @cross_origin(supports_credentials=True)
 def site_response():
     return jsonify({"success": "ok"})
+
+
+@app.route("/get_challenge/<string:id>/", methods=["GET"])
+@cross_origin(supports_credentials=True)
+def get_challenge(id):
+    return send_from_directory(f"challenges/{id}", f"{id}.py")
+
+
+@app.route("/get_intro/<string:id>/", methods=["GET"])
+def get_intro(id):
+    return send_from_directory(f"challenges/{id}", f"intro.md")
+
+
+@app.route("/get_default/<string:id>/", methods=["GET"])
+def get_default(id):
+    return send_from_directory(f"challenges/{id}", f"defaultCode.py")
 
 
 @app.route("/challenges/<int:id>/", methods=["GET"])

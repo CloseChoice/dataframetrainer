@@ -4,3 +4,6 @@ __pycache__
 hypothesis_example/.hypothesis/**
 .ipynb_checkpoints
 .venv
+
+frontend-svelte/node_modules
+node_modules
