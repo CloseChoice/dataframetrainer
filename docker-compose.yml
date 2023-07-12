@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.1"
 
 services:
   backend:
@@ -17,8 +17,8 @@ services:
     environment:
       POSTGRES_PASSWORD: example
     volumes:
-      - ./sql:/docker-entrypoint-initdb.d
-      - ../backend/challenges:/challenges
+      - ./database/sql:/docker-entrypoint-initdb.d
+      - ./backend/challenges:/challenges
     ports:
       - "5432:5432"
 
