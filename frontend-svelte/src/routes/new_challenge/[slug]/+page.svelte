@@ -1,34 +1,23 @@
 <script>
     import { onMount } from "svelte";
-    import { XMLParser } from 'fast-xml-parser'
+    import { XMLParser } from 'fast-xml-parser';
+    // todo: this needs to move in the src/components folder
+    import CodeMirror from "../../../components/CodeMirror.svelte";
+    import CodeOutput from "../../../components/CodeOutput.svelte";
 
     const parser = new XMLParser();
     /** @type {import('./$types').PageData} */
     export let data;
     let userCode;
+    let resultUserCode;
 
     let pyodide;
-    onMount(async ()=>{
-        pyodide = await loadPyodide();
-
-        await pyodide.loadPackage("micropip");
-        const micropip = pyodide.pyimport("micropip");
-        await micropip.install('hypothesis');
-        await micropip.install('pandas');
-        await micropip.install('numpy');
-        await micropip.install('pytest');
-
-        let mountDir = ".";
-        pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, { root: "." }, mountDir);
-        pyodide.FS.mkdir('/home/pyodide/challenges');
-        pyodide.FS.mkdir('/home/pyodide/userSolutions');
-        pyodide.FS.mkdir('/home/pyodide/tests');
-        pyodide.FS.syncfs(true, function (err) {
-  console.log(err);
-  // handle callback
-  });
-        console.log("Synced folder");
-    })
+    async function executeUserCode(){
+        resultUserCode = pyodide.runPython(userCode);
+        console.log("executing user code: ", userCode);
+        console.log("this is resultUserCode", resultUserCode);
+    // todo: fill!
+    }
 
     async function testUserCode(){
         // pyodide.FS.writeFile(userCode, '/mnt/usercode.py');
@@ -80,19 +69,79 @@ def test_transform():
   });
         console.log("Synced");
 }
+
+  let loadDone = false;
+  let edConfigMD = {
+    language: 'python',
+    lineNumbers: false,
+    lineWrapping: true,
+    lineHighlight: true
+  };
+  let cm;
+
+    onMount(async ()=>{
+        loadDone = true;
+        pyodide = await loadPyodide();
+
+        await pyodide.loadPackage("micropip");
+        const micropip = pyodide.pyimport("micropip");
+        await micropip.install('hypothesis');
+        await micropip.install('pandas');
+        await micropip.install('numpy');
+        await micropip.install('pytest');
+
+        userCode = data.default_code;
+        let mountDir = ".";
+        pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, { root: "." }, mountDir);
+        pyodide.FS.mkdir('/home/pyodide/challenges');
+        pyodide.FS.mkdir('/home/pyodide/userSolutions');
+        pyodide.FS.mkdir('/home/pyodide/tests');
+        console.log("this is default_code", data.default_code);
+        pyodide.FS.syncfs(true, function (err) {
+  console.log(err);
+  // handle callback
+  });
+});
+  console.log("Synced folder");
+
 </script>
 
 <div>
-    <h1>Hier ist die Description</h1>
     {data.intro}
 </div>
 
-<div>
-    <h1>So sieht die Startzelle für die Challenge aus</h1>
-    <textarea value={data.default_code} name="Text1" cols="60" rows="10"></textarea>
-    <h1>Hier kann man mal temporär eine Lösung reinschreiben</h1>
-    <h4>Später sollte man keine zwei Zellen brauchen, sondern am Anfang sieht sie so aus wie oben, später dann wie unten</h4>
-    <textarea bind:value={userCode} name="Text2" cols="40" rows="5"></textarea>
-</div>
-
 <button on:click={testUserCode}>Submit Code</button>
+<button on:click={executeUserCode}>Execute Code</button>
+<style>
+    #firstEd {
+        display: grid;
+        grid-template-rows: auto auto;
+    }
+    #firstEdIntro {
+        grid-row: 1;
+    }
+    #firstOutput {
+        grid-row: 2;
+    }
+</style>
+Dummy {userCode}
+<div id="firstEd">
+    <div id="firstOutput">
+        <CodeOutput resultUserCode={resultUserCode}></CodeOutput>
+    </div>
+    <div id="firstEdIntro">
+      <CodeMirror
+      id="firstEdMirror"
+      height="auto"
+      width="50%"
+      config={edConfigMD}
+      initFinished={loadDone}
+      defaultCode={data.default_code}
+      bind:code={userCode}
+      ></CodeMirror>
+    </div>
+    <div id="firstOutput">
+        <CodeOutput resultUserCode={resultUserCode}></CodeOutput>
+    </div>
+</div>
+After Dummy

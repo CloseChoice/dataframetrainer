@@ -55,4 +55,17 @@ Nice to Haves:
 
 - Anderes
   - [ ] Datetimes sind schwierig zu erzeugen und schwierig zu testen, da df.to_json() diese in unix timestamps konvertiert.
-  07116673 - 6586
+
+- [x] Text aus editor auslesen
+- [x] Editor ist neues Eingabefeld
+- [x] Code-Highlighting
+- [x] Breite anpassen
+- [x] Editor hat Standardchallenge
+- [ ] im Editor definierte ausgaben werden angezeigt, wie ein Jupyter Notebook
+- [ ] Ausgabe von python returns irgendwohin
+- [ ] Ausgabe von prints irgendwohin (später dann wie jupyter notebook) (schaue hierzu auf write_stdout von py-script stdio.ts und pyterminal.ts)
+
+Basic verständnis von svelte:
+ - [ ] wo lege ich js files ab mit utils
+ - [ ] Komponente kreieren und reusen
+ - [ ] Kombiniere mehrere Komponenten miteinander!

@@ -20,6 +20,7 @@ export async function load({ params, fetch }) {
     const challengeClassText = await challengeClass.text();
     const introText = await intro.text();
     const defaultCodeText = await defaultCode.text();
+    console.log("SERVER SIDE: this is the default Code text", defaultCodeText);
     return {
         challenge_class: challengeClassText ,
         intro: introText,
