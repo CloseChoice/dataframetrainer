@@ -29,9 +29,6 @@ CREATE TABLE IF NOT EXISTS public.sessions (
 ) TABLESPACE pg_default;
 
 
-
-
-
 CREATE OR REPLACE FUNCTION public.authenticate(
 	input json,
 	OUT response json)
