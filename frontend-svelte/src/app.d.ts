@@ -9,4 +9,18 @@ declare global {
 	}
 }
 
+
+interface UserProperties {
+	id: number
+	expires?: string // ISO-8601 datetime
+	role: 'student' | 'teacher' | 'admin'
+	password?: string
+	firstName?: string
+	lastName?: string
+	email?: string
+	phone?: string
+  }
+  
+type User = UserProperties | undefined | null
+
 export {};

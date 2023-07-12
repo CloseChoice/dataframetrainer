@@ -40,14 +40,14 @@ def check_ping(hostname):
         time.sleep(5)
 
 
-host = "postgres"
+host = "db"
 # conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='test1234', port=5433)
-check_ping(host)
-conn = psycopg2.connect(
-    host=host, dbname="postgres", user="postgres", password="secret", port=5432
-)
+# check_ping(host)
+# conn = psycopg2.connect(
+#     host=host, dbname="postgres", user="postgres", password="secret", port=5432
+# )
 # conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='secret', port=5435)
-cursor = conn.cursor()
+# cursor = conn.cursor()
 
 
 def extract_transform_and_apply(df, transform_string):

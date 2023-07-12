@@ -5,7 +5,6 @@
     import CodeMirror from "../../../components/CodeMirror.svelte";
     import CodeOutput from "../../../components/CodeOutput.svelte";
 
-
     const parser = new XMLParser();
     /** @type {import('./$types').PageData} */
     export let data;
@@ -22,11 +21,10 @@
 
     async function testUserCode(){
         // pyodide.FS.writeFile(userCode, '/mnt/usercode.py');
-        // todo: this needs a cleanup!
         pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
         pyodide.FS.writeFile('usercode.py', userCode);
         pyodide.runPython("import os; print(os.listdir('.'))");
-        resultUserCode = pyodide.runPython(userCode);
+        pyodide.runPython(userCode);
         console.log("ran usercode", userCode);
         let transform_func = pyodide.globals.get('transform');
         // console.log("THIS IS transform", transform_func);
@@ -141,6 +139,9 @@ Dummy {userCode}
       defaultCode={data.default_code}
       bind:code={userCode}
       ></CodeMirror>
+    </div>
+    <div id="firstOutput">
+        <CodeOutput resultUserCode={resultUserCode}></CodeOutput>
     </div>
 </div>
 After Dummy
