@@ -5,20 +5,23 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TYPE public.roles AS ENUM
   ('user', 'admin');
 
-CREATE TABLE IF NOT EXISTS public.users (
-  id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-  role roles NOT NULL DEFAULT 'user'::roles,
-  email character varying(80) COLLATE pg_catalog."default" NOT NULL,
-  password character varying(80) COLLATE pg_catalog."default",
-  user_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
-  CONSTRAINT users_pkey PRIMARY KEY (id),
-  CONSTRAINT users_email_unique UNIQUE (email),
-  CONSTRAINT users_uname_unique UNIQUE (user_name)
-) TABLESPACE pg_default;
+CREATE TABLE IF NOT EXISTS "users" (
+    "id" TEXT NOT NULL,
+    "user_name" TEXT,
+    "email" TEXT,
+    "emailVerified" TIMESTAMP(3),
+    "password" TEXT,
+    "image" TEXT,
+    "isNew" BOOLEAN NOT NULL DEFAULT true,
+    "role" roles NOT NULL DEFAULT 'user'::roles,
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT users_email_unique UNIQUE (email),
+    CONSTRAINT users_uname_unique UNIQUE (user_name)
+);
 
 CREATE TABLE IF NOT EXISTS public.sessions (
   id uuid NOT NULL DEFAULT uuid_generate_v4(),
-  user_id integer NOT NULL,
+  user_id TEXT NOT NULL,
   expires timestamp with time zone DEFAULT (CURRENT_TIMESTAMP + '02:00:00'::interval),
   CONSTRAINT sessions_pkey PRIMARY KEY (id),
   CONSTRAINT sessions_user_fkey FOREIGN KEY (user_id)
@@ -47,7 +50,7 @@ BEGIN
   END IF;
 
   WITH user_authenticated AS (
-    SELECT users.id, role, user_name
+    SELECT id, role, user_name
     FROM users
     WHERE email = input_email AND password = crypt(input_password, password) LIMIT 1
   )
@@ -76,7 +79,7 @@ $BODY$;
 
 
 CREATE OR REPLACE FUNCTION public.create_session(
-	input_user_id integer)
+	input_user_id TEXT)
     RETURNS uuid
     LANGUAGE 'sql'
     COST 100
@@ -100,7 +103,7 @@ SELECT json_build_object(
   'email', users.email,
   'name', users.user_name,
   'expires', sessions.expires
-) AS user
+) AS users
 FROM sessions
   INNER JOIN users ON sessions.user_id = users.id
 WHERE sessions.id = input_session_id AND expires > CURRENT_TIMESTAMP LIMIT 1;
@@ -142,7 +145,7 @@ $BODY$;
 
 
 
-CREATE PROCEDURE public.delete_session(input_id integer)
+CREATE PROCEDURE public.delete_session(input_id TEXT)
     LANGUAGE sql
     AS $$
 DELETE FROM sessions WHERE user_id = input_id;
@@ -156,31 +159,28 @@ CREATE OR REPLACE PROCEDURE public.upsert_user(input json)
 LANGUAGE plpgsql
 AS $BODY$
 DECLARE
-  input_id integer := COALESCE((input->>'id')::integer,0);
+  input_id text := (input->>'id')::text;
   input_role roles := COALESCE((input->>'role')::roles, 'user');
   input_email varchar(80) := LOWER(TRIM((input->>'email')::varchar));
   input_password varchar(80) := COALESCE((input->>'password')::varchar, '');
   input_name varchar(20) := TRIM((input->>'name')::varchar);
 BEGIN
-  IF input_id = 0 THEN
-    INSERT INTO users (role, email, password, user_name)
-    VALUES (
-	  input_role, input_email, crypt(input_password, gen_salt('bf', 8)), input_name);
-  ELSE
-    UPDATE users SET
+  INSERT INTO users (id, role, email, password, user_name)
+  VALUES (
+    input_id,
+  input_role, input_email, crypt(input_password, gen_salt('bf', 8)), input_name)
+  ON CONFLICT (id) DO
+    UPDATE SET
 	  role = input_role,
 	  email = input_email,
 	  password = CASE WHEN input_password = ''
-		  THEN password -- leave as is (we are updating fields other than the password)
+		  THEN users.password -- leave as is (we are updating fields other than the password)
 		  ELSE crypt(input_password, gen_salt('bf', 8))
 	  END,
 	  user_name = input_name
-	WHERE id = input_id;
-  END IF;
+	WHERE users.id = input_id;
 END;
 $BODY$;
-
-
 
 
 CREATE OR REPLACE PROCEDURE public.update_user(input_id integer, input json)
@@ -204,4 +204,4 @@ $BODY$;
 
 
 
-CALL public.upsert_user('{"id":0, "role":"user", "email":"exampleuser@gmail.com", "password":"supersecurepassword123", "name":"nicerusername420"}'::json)
+CALL public.upsert_user('{"id":"someid", "role":"user", "email":"exampleuser@gmail.com", "password":"supersecurepassword123", "name":"nicerusername420"}'::json)
