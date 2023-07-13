@@ -41,13 +41,13 @@ def check_ping(hostname):
 
 
 host = "db"
-# conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='test1234', port=5433)
-# check_ping(host)
+#conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='test1234', port=5433)
+check_ping(host)
 # conn = psycopg2.connect(
 #     host=host, dbname="postgres", user="postgres", password="secret", port=5432
 # )
-# conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='secret', port=5435)
-# cursor = conn.cursor()
+conn = psycopg2.connect(host=host, dbname='postgres', user='postgres', password='example', port=5432)
+cursor = conn.cursor()
 
 
 def extract_transform_and_apply(df, transform_string):
@@ -79,6 +79,12 @@ def get_intro(id):
 def get_default(id):
     return send_from_directory(f"challenges/{id}", f"defaultCode.py")
 
+@app.route("/get_all_challenges/", methods=["GET"])
+@cross_origin(supports_credentials=True)
+def get_all_challenges():
+    cursor.execute(f"select id from challenges")
+    result = cursor.fetchall()
+    return [k[0] for k in result]
 
 @app.route("/challenges/<int:id>/", methods=["GET"])
 @cross_origin(supports_credentials=True)
