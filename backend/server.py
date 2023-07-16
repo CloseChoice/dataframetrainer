@@ -36,17 +36,21 @@ def check_ping(hostname):
         # and then check the response...
         if response == 0:
             print("ping received")
+            # sleep for 3 seconds so that db has time to set up
+            time.sleep(3)
             return
         time.sleep(5)
 
 
 host = "db"
-#conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='test1234', port=5433)
+# conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='test1234', port=5433)
 check_ping(host)
 # conn = psycopg2.connect(
 #     host=host, dbname="postgres", user="postgres", password="secret", port=5432
 # )
-conn = psycopg2.connect(host=host, dbname='postgres', user='postgres', password='example', port=5432)
+conn = psycopg2.connect(
+    host=host, dbname="postgres", user="postgres", password="example", port=5432
+)
 cursor = conn.cursor()
 
 
@@ -79,12 +83,14 @@ def get_intro(id):
 def get_default(id):
     return send_from_directory(f"challenges/{id}", f"defaultCode.py")
 
+
 @app.route("/get_all_challenges/", methods=["GET"])
 @cross_origin(supports_credentials=True)
 def get_all_challenges():
     cursor.execute(f"select id from challenges")
     result = cursor.fetchall()
     return json.dumps([k[0] for k in result])
+
 
 @app.route("/challenges/<int:id>/", methods=["GET"])
 @cross_origin(supports_credentials=True)
