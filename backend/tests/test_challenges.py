@@ -1,20 +1,22 @@
 ### todo: write a generic script how to test the challenge classes
-from ..challenges import (AddPseudoTriangularDataFrame,
-                          AddTriangularDataFrame,
-                          ChangeAtIndex,
-                          ChangeDependingOnOthers,
-                          GroupbyTransform,
-                          GroupTerms,
-                          MapValues,
-                          MonthIndex,
-                          Pivot1,
-                          Pivot2,
-                          PivotMedian,
-                          RenameColumn,
-                          SumSpendings,
-                          TransformWithConditions,
-                          TransformWithConditions2,
-                          TransformWithMultipleConditions)
+from ..challenges import (
+    AddPseudoTriangularDataFrame,
+    AddTriangularDataFrame,
+    ChangeAtIndex,
+    ChangeDependingOnOthers,
+    GroupbyTransform,
+    GroupTerms,
+    MapValues,
+    MonthIndex,
+    Pivot1,
+    Pivot2,
+    PivotMedian,
+    RenameColumn,
+    SumSpendings,
+    TransformWithConditions,
+    TransformWithConditions2,
+    TransformWithMultipleConditions,
+)
 import pandas as pd
 import pandas.testing as tm
 import pytest
