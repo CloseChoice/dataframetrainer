@@ -7,10 +7,8 @@ from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
-from .BaseChallenge import BaseChallenge
 
-
-class TransformWithConditions(BaseChallenge):
+class TransformWithConditions:
     # todo: this is not optimal, but it works for now
     # things to improve:
     #   - use one of the strategies from hypothesis.extra.pandas to generate the whole df, don't use pd.concat

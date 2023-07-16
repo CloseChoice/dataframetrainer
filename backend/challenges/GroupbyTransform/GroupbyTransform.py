@@ -9,7 +9,7 @@ from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
 
-class GroupbyTransform():
+class GroupbyTransform:
     @staticmethod
     def initial() -> pd.DataFrame:
         # todo: this is not optimal, but it works for now

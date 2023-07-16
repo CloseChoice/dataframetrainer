@@ -1,15 +1,7 @@
 import pandas as pd
-import numpy as np
 
 df = pd.DataFrame(
-    [
-        [1],
-        [2],
-        [3],
-        [4],
-        [6],
-    ],
-    columns=["number"],
+    [[1, "Helmut"], [2, "Greta"], [3, "Siegfried"]], columns=["Value", "Other"]
 )
 
 

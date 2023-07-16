@@ -7,7 +7,7 @@ from hypothesis.extra.pandas import data_frames, column, indexes
 import hypothesis.strategies as st
 
 
-class ChangeDependingOnOthers():
+class ChangeDependingOnOthers:
     @staticmethod
     def initial() -> pd.DataFrame:
         return data_frames(

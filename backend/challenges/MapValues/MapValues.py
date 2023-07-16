@@ -7,7 +7,7 @@ from hypothesis.extra.pandas import data_frames, column, range_indexes
 import hypothesis.strategies as st
 
 
-class MapValues():
+class MapValues:
     @staticmethod
     def initial() -> pd.DataFrame:
         # todo: this somehow generates floats in the number_col column, this should be changed

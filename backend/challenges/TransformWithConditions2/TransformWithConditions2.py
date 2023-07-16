@@ -8,7 +8,7 @@ from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
 
-class TransformWithConditions2():
+class TransformWithConditions2:
     @staticmethod
     def initial() -> pd.DataFrame:
         # todo: this is not optimal, but it works for now

@@ -8,10 +8,8 @@ from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
-from .BaseChallenge import BaseChallenge
 
-
-class TransformWithMultipleConditions(BaseChallenge):
+class TransformWithMultipleConditions:
     @staticmethod
     def initial() -> pd.DataFrame:
         # todo: this is not optimal, but it works for now
