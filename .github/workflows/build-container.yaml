@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - 'main'
+    paths:
+      - *
   pull_request:
   workflow_call:
   pull_request_target:
@@ -12,12 +14,12 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+      - name: Setup docker compose
+        uses: KengoTODA/actions-setup-docker-compose@v1
       -
         name: Run docker compose
         run: |
+          ls -la
           docker compose up -d
       -
         name: Check curl response
