@@ -1,9 +1,9 @@
 <script>
     import { onMount } from "svelte";
     import { XMLParser } from 'fast-xml-parser';
-    // todo: this needs to move in the src/components folder
     import CodeMirror from "../../../components/CodeMirror.svelte";
     import CodeOutput from "../../../components/CodeOutput.svelte";
+    import { pyodide } from "$lib/store";
 
     const parser = new XMLParser();
     /** @type {import('./$types').PageData} */
@@ -11,9 +11,8 @@
     let userCode;
     let resultUserCode;
 
-    let pyodide;
     async function executeUserCode(){
-        resultUserCode = pyodide.runPython(userCode);
+        resultUserCode = $pyodide.runPython(userCode);
         console.log("executing user code: ", userCode);
         console.log("this is resultUserCode", resultUserCode);
     // todo: fill!
@@ -21,20 +20,20 @@
 
     async function testUserCode(){
         // pyodide.FS.writeFile(userCode, '/mnt/usercode.py');
-        pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
-        pyodide.FS.writeFile('usercode.py', userCode);
-        pyodide.runPython("import os; print(os.listdir('.'))");
-        pyodide.runPython(userCode);
+        $pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
+        $pyodide.FS.writeFile('usercode.py', userCode);
+        $pyodide.runPython("import os; print(os.listdir('.'))");
+        $pyodide.runPython(userCode);
         console.log("ran usercode", userCode);
-        let transform_func = pyodide.globals.get('transform');
+        let transform_func = $pyodide.globals.get('transform');
         // console.log("THIS IS transform", transform_func);
         // todo: alert if transform is not defined and BONUS: show the defined functions
-        if (!pyodide.isPyProxy(transform_func)) {
+        if (!$pyodide.isPyProxy(transform_func)) {
             alert("transform function is not defined! Please define this function otherwise we can't evaluate the code.");
             console.log("is pyproxy");
         }
         // todo: maybe we need a reload here!
-        let transform_code = pyodide.runPython(`
+        let transform_code = $pyodide.runPython(`
         import inspect
         from usercode import transform
 
@@ -42,7 +41,7 @@
         console.log("transform code", transform_code);
 
         // the define the class
-        pyodide.runPython(data.challenge_class);
+        $pyodide.runPython(data.challenge_class);
         let s = `
 import pytest
 ${data.challenge_class}
@@ -55,15 +54,15 @@ def test_transform():
 `;
         console.log(s);
 
-        pyodide.FS.writeFile(`test_${data.challenge_name}.py`, s);
-        pyodide.runPython(`import pytest; pytest.main(['--junitxml', 'report.xml', '-k', 'test_transform', '-x', '/home/pyodide/test_${data.challenge_name}.py'])`);
-        pyodide.runPython("import os; print(os.listdir('.'))");
+        $pyodide.FS.writeFile(`test_${data.challenge_name}.py`, s);
+        $pyodide.runPython(`import pytest; pytest.main(['--junitxml', 'report.xml', '-k', 'test_transform', '-x', '/home/pyodide/test_${data.challenge_name}.py'])`);
+        $pyodide.runPython("import os; print(os.listdir('.'))");
         // let exitCode = pyodide.runPython(`test_${data.challenge_name}.py`);
         // console.log("This is the exitCode", exitCode);
         // pyodide.runPython
-        let report = pyodide.FS.readFile('report.xml', { encoding: "utf8" })
+        let report = $pyodide.FS.readFile('report.xml', { encoding: "utf8" })
         console.log("This is the report", report);
-        pyodide.FS.syncfs(true, function (err) {
+        $pyodide.FS.syncfs(true, function (err) {
   console.log(err);
   // handle callback
   });
@@ -81,26 +80,26 @@ def test_transform():
 
     onMount(async ()=>{
         loadDone = true;
-        pyodide = await loadPyodide();
-
-        await pyodide.loadPackage("micropip");
-        const micropip = pyodide.pyimport("micropip");
-        await micropip.install('hypothesis');
-        await micropip.install('pandas');
-        await micropip.install('numpy');
-        await micropip.install('pytest');
-
         userCode = data.default_code;
-        let mountDir = ".";
-        pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, { root: "." }, mountDir);
-        pyodide.FS.mkdir('/home/pyodide/challenges');
-        pyodide.FS.mkdir('/home/pyodide/userSolutions');
-        pyodide.FS.mkdir('/home/pyodide/tests');
         console.log("this is default_code", data.default_code);
-        pyodide.FS.syncfs(true, function (err) {
-  console.log(err);
-  // handle callback
-  });
+        // pyodide = await loadPyodide();
+
+        // await pyodide.loadPackage("micropip");
+        // const micropip = pyodide.pyimport("micropip");
+        // await micropip.install('hypothesis');
+        // await micropip.install('pandas');
+        // await micropip.install('numpy');
+        // await micropip.install('pytest');
+
+        // let mountDir = ".";
+        // pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, { root: "." }, mountDir);
+        // pyodide.FS.mkdir('/home/pyodide/challenges');
+        // pyodide.FS.mkdir('/home/pyodide/userSolutions');
+        // pyodide.FS.mkdir('/home/pyodide/tests');
+        // pyodide.FS.syncfs(true, function (err) {
+        // console.log(err);
+        // // handle callback
+        // });
 });
   console.log("Synced folder");
 
