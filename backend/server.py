@@ -84,7 +84,7 @@ def get_default(id):
 def get_all_challenges():
     cursor.execute(f"select id from challenges")
     result = cursor.fetchall()
-    return [k[0] for k in result]
+    return json.dumps([k[0] for k in result])
 
 @app.route("/challenges/<int:id>/", methods=["GET"])
 @cross_origin(supports_credentials=True)

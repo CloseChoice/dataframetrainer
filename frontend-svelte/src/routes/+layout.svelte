@@ -35,6 +35,9 @@
           <li class="nav-item">
             <a class="nav-link" class:active={$page.url.pathname === "/logout"} href="/logout">Logout</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" class:active={$page.url.pathname === "/browse_challenges"} href="/browse_challenges">Browse</a>
+          </li>
 
         </ul>
       </div>
