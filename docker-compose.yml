@@ -2,7 +2,10 @@ version: "3.1"
 
 services:
   backend:
-    image: dftrainer-backend
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    # image: dftrainer-backend
     ports:
       - 5000:5000
     working_dir: /app
