@@ -28,6 +28,7 @@ jobs:
       -
         name: Check curl response
         run: |
+          docker container ls
           response_code=$(curl -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/get_all_challenges/)
           if [ "$response_code" -ne 200 ]; then
             echo "Response code is not 200. Failing the pipeline."
