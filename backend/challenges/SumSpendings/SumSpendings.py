@@ -7,7 +7,7 @@ from hypothesis.extra.pandas import data_frames, column, indexes
 import hypothesis.strategies as st
 
 
-class SumSpendings():
+class SumSpendings:
     @staticmethod
     def initial() -> pd.DataFrame:
         return data_frames(

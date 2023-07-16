@@ -9,7 +9,7 @@ from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
 
-class Pivot1():
+class Pivot1:
     @staticmethod
     def initial() -> pd.DataFrame:
         return data_frames(

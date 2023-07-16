@@ -7,7 +7,7 @@ from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
 
 
-class AddTriangularDataFrame():
+class AddTriangularDataFrame:
     @staticmethod
     def initial() -> pd.DataFrame:
         return data_frames(

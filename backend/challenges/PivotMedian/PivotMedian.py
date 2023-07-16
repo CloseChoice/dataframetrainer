@@ -11,7 +11,7 @@ from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
 
 
-class PivotMedian():
+class PivotMedian:
     @staticmethod
     def initial() -> pd.DataFrame:
         return data_frames(

@@ -7,7 +7,7 @@ from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
 
 
-class AddPseudoTriangularDataFrame():
+class AddPseudoTriangularDataFrame:
     @staticmethod
     def initial() -> pd.DataFrame:
         # todo: this somehow generates floats in the number column, this should be changed

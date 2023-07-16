@@ -10,7 +10,7 @@ import hypothesis.strategies as st
 from pandas.tseries.offsets import DateOffset
 
 
-class MonthIndex():
+class MonthIndex:
     @staticmethod
     def initial() -> pd.DataFrame:
         return data_frames(

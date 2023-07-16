@@ -8,7 +8,7 @@ from hypothesis.extra.pandas import data_frames, column, range_indexes
 import hypothesis.strategies as st
 
 
-class GroupTerms():
+class GroupTerms:
     @staticmethod
     def initial() -> pd.DataFrame:
         # todo: this somehow generates floats in the number column, this should be changed

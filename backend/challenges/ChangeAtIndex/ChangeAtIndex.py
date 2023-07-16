@@ -22,7 +22,6 @@ class ChangeAtIndex:
             index=range_indexes(min_size=3, max_size=5),
         ).example()
 
-
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.DataFrame:
         df.loc[2, "Value"] = -100
