@@ -1,4 +1,4 @@
-name: e2e-tests
+name: ci
 
 on:
   push:
@@ -55,4 +55,3 @@ jobs:
         run: sleep 10
       - name: Run Cypress tests
         run: npx cypress run
-
