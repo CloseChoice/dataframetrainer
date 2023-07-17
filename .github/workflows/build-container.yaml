@@ -21,9 +21,9 @@ jobs:
         with:
           version: '2.14.2' # the full version of `docker-compose` command
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '20'
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
