@@ -32,7 +32,7 @@ jobs:
           restore-keys: npm-
       - name: Install dependencies
         working-directory: ./frontend-svelte
-        run: npm install && npm install --only=dev
+        run: npm ci
       -
         name: Run docker compose
         run: |
