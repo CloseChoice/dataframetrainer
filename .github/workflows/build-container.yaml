@@ -49,8 +49,10 @@ jobs:
             exit 1
           fi
       - name: Start frontend
+        working-directory: ./frontend-svelte
         run: npm run dev &
       - name: Wait for server to start
         run: sleep 10
       - name: Run Cypress tests
+        working-directory: ./frontend-svelte
         run: npx cypress run
