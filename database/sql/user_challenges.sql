@@ -2,6 +2,7 @@ CREATE TABLE "user_challenges" (
     "UserId" TEXT NOT NULL,
     "ChallengeId" TEXT,
     "SessionId" TEXT,
+    "Timestamp" TIMESTAMP NOT NULL,
     "Successful" BOOLEAN,
     "Score" FLOAT,
 
