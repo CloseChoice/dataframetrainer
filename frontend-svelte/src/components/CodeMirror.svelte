@@ -1,4 +1,4 @@
-<div class="wrapper" style="height: {height}; width: {width};">
+<div class="CodeMirrorWrapper" style="height: {height}; width: {width};">
   <div name="editor" id="CMeditor" bind:this='{CodeMirrorEditor}' >
   </div>
 </div>
