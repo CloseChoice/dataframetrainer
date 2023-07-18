@@ -23,6 +23,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@auth/core": "^0.9.0",
+		"@auth/sveltekit": "^0.3.5",
 		"@codemirror/commands": "^6.2.4",
 		"@codemirror/lang-markdown": "^6.2.0",
 		"@codemirror/lang-python": "github:codemirror/lang-python",
