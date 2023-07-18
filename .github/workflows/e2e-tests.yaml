@@ -1,0 +1,58 @@
+name: e2e-tests
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup docker compose
+        uses: KengoTODA/actions-setup-docker-compose@v1
+        with:
+          version: '2.14.2' # the full version of `docker-compose` command
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - name: Install dependencies
+        working-directory: ./frontend-svelte
+        run: npm ci
+      -
+        name: Run docker compose
+        run: |
+          ls -la
+          docker compose up -d
+      -
+        name: Check curl response of backend
+        run: |
+          sleep 10
+          docker container ls
+          response_code=$(curl -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/get_all_challenges/)
+          if [ "$response_code" -ne 200 ]; then
+            echo "Response code is not 200. Failing the pipeline."
+            exit 1
+          fi
+      - name: Start frontend
+        working-directory: ./frontend-svelte
+        run: npm run dev &
+      - name: Wait for server to start
+        run: sleep 10
+      - name: Run Cypress tests
+        working-directory: ./frontend-svelte
+        run: npx cypress run
