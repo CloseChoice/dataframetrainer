@@ -20,10 +20,19 @@ services:
     environment:
       POSTGRES_PASSWORD: example
     volumes:
-      - ./database/sql:/docker-entrypoint-initdb.d
+      # - ./database/sql:/docker-entrypoint-initdb.d
       - ./backend/challenges:/challenges
     ports:
       - "5432:5432"
+  
+  db-fill-or-update-tables:
+    build:
+      context: ./database
+      dockerfile: Dockerfile_fill_or_update_tables
+    volumes:
+      - ./database/fill_or_update_tables.py:/app/fill_or_update_tables.py
+      - ./backend/challenges:/app/challenges
+      - ./database/sql:/app/sql
 
   adminer:
     image: adminer

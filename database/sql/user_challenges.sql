@@ -1,4 +1,4 @@
-CREATE TABLE "user_challenges" (
+CREATE TABLE IF NOT EXISTS "user_challenges" (
     "user_id" TEXT NOT NULL,
     "challenge_id" TEXT,
     "session_id" TEXT,

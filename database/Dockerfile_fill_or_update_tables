@@ -1,0 +1,10 @@
+FROM python:3.11.4-bullseye
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+
+RUN apt update -y && apt install -y libpq-dev iputils-ping 
+RUN pip install --upgrade pip 
+RUN pip install -r /app/requirements.txt
+
+RUN ["python", "update_db_if_not_exists.py"]
