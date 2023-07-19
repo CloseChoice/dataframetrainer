@@ -3,8 +3,8 @@ WORKDIR /app
 
 COPY requirements.txt requirements.txt
 
-RUN apt update -y && apt install -y libpq-dev iputils-ping 
-RUN pip install --upgrade pip 
+RUN apt update -y && apt install -y libpq-dev iputils-ping
+RUN pip install --upgrade pip
 RUN pip install -r /app/requirements.txt
 
-RUN ["python", "update_db_if_not_exists.py"]
+RUN ["python", "fill_or_update_tables.py"]

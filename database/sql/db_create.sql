@@ -1,10 +1,10 @@
 -- CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
--- 
--- 
+--
+--
 -- CREATE TYPE public.roles AS ENUM
 --   ('user', 'admin');
--- 
+--
 -- CREATE TABLE IF NOT EXISTS "users" (
 --     "id" TEXT NOT NULL,
 --     "user_name" TEXT,
@@ -18,7 +18,7 @@
 --     CONSTRAINT users_email_unique UNIQUE (email),
 --     CONSTRAINT users_uname_unique UNIQUE (user_name)
 -- );
--- 
+--
 -- CREATE TABLE IF NOT EXISTS "sessions" (
 --   id uuid NOT NULL DEFAULT uuid_generate_v4(),
 --   user_id TEXT NOT NULL,
@@ -30,8 +30,8 @@
 --     ON DELETE CASCADE
 --     NOT VALID
 -- ) TABLESPACE pg_default;
--- 
--- 
+--
+--
 -- CREATE OR REPLACE FUNCTION authenticate(
 -- 	input json,
 -- 	OUT response json)
@@ -48,7 +48,7 @@
 --     response := json_build_object('statusCode', 400, 'status', 'Please provide an email address and password to authenticate.', 'user', NULL);
 -- 	RETURN;
 --   END IF;
--- 
+--
 --   WITH user_authenticated AS (
 --     SELECT id, role, user_name
 --     FROM users
@@ -73,11 +73,11 @@
 --   ) INTO response;
 -- END;
 -- $BODY$;
--- 
--- 
--- 
--- 
--- 
+--
+--
+--
+--
+--
 -- CREATE OR REPLACE FUNCTION public.create_session(
 -- 	input_user_id TEXT)
 --     RETURNS uuid
@@ -88,11 +88,11 @@
 -- DELETE FROM sessions WHERE user_id = input_user_id;
 -- INSERT INTO sessions(user_id) VALUES (input_user_id) RETURNING sessions.id;
 -- $BODY$;
--- 
--- 
--- 
--- 
--- 
+--
+--
+--
+--
+--
 -- CREATE OR REPLACE FUNCTION public.get_session(input_session_id uuid)
 --   RETURNS json
 --   LANGUAGE 'sql'
@@ -108,11 +108,11 @@
 --   INNER JOIN users ON sessions.user_id = users.id
 -- WHERE sessions.id = input_session_id AND expires > CURRENT_TIMESTAMP LIMIT 1;
 -- $BODY$;
--- 
--- 
--- 
--- 
--- 
+--
+--
+--
+--
+--
 -- CREATE OR REPLACE FUNCTION public.register(
 -- 	input json,
 -- 	OUT user_session json)
@@ -140,21 +140,21 @@
 --   END IF;
 -- END;
 -- $BODY$;
--- 
--- 
--- 
--- 
--- 
+--
+--
+--
+--
+--
 -- CREATE PROCEDURE public.delete_session(input_id TEXT)
 --     LANGUAGE sql
 --     AS $$
 -- DELETE FROM sessions WHERE user_id = input_id;
 -- $$;
--- 
--- 
--- 
--- 
--- 
+--
+--
+--
+--
+--
 -- CREATE OR REPLACE PROCEDURE public.upsert_user(input json)
 -- LANGUAGE plpgsql
 -- AS $BODY$
@@ -181,8 +181,8 @@
 -- 	WHERE users.id = input_id;
 -- END;
 -- $BODY$;
--- 
--- 
+--
+--
 -- CREATE OR REPLACE PROCEDURE public.update_user(input_id integer, input json)
 -- LANGUAGE plpgsql
 -- AS $BODY$
@@ -201,8 +201,8 @@
 --   WHERE id = input_id;
 -- END;
 -- $BODY$;
--- 
--- 
--- 
+--
+--
+--
 -- CALL public.upsert_user('{"id":"someid", "role":"user", "email":"exampleuser@gmail.com", "password":"supersecurepassword123", "name":"nicerusername420"}'::json)
--- 
+--

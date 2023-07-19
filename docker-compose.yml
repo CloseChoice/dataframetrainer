@@ -24,7 +24,7 @@ services:
       - ./backend/challenges:/challenges
     ports:
       - "5432:5432"
-  
+
   db-fill-or-update-tables:
     build:
       context: ./database
