@@ -30,7 +30,6 @@ services:
       context: ./database
       dockerfile: Dockerfile_fill_or_update_tables
     volumes:
-      - ./database/fill_or_update_tables.py:/app/fill_or_update_tables.py
       - ./backend/challenges:/app/challenges
       - ./database/sql:/app/sql
 

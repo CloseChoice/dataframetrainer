@@ -1,7 +1,7 @@
 FROM python:3.11.4-bullseye
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
+COPY requirements.txt fill_or_update_tables.py ./
 
 RUN apt update -y && apt install -y libpq-dev iputils-ping
 RUN pip install --upgrade pip
