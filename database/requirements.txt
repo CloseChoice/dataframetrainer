@@ -1,6 +1,2 @@
 psycopg2
-pandas
-hypothesis
-numpy
-pytest
 click

@@ -20,9 +20,10 @@ sudo usermod -aG docker $USER
 ```
 Afterwards just execute:
 ```bash
-make build
 docker compose up
 ```
-This will build the necessary docker containers and launch them. The frontend accessed through the `frontend/index.html` file.
-We recommend using the [live server extension for vscode](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
-but any other server also works.
+This starts the backend and the database. To start the frontend, use
+```bash
+cd frontend-svelte && npm run dev
+```
+

@@ -1,38 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-
-CREATE TYPE public.roles AS ENUM
-  ('user', 'admin');
-
-CREATE TABLE IF NOT EXISTS "users" (
-    "id" TEXT NOT NULL,
-    "user_name" TEXT,
-    "email" TEXT,
-    "emailVerified" TIMESTAMP(3),
-    "password" TEXT,
-    "image" TEXT,
-    "isNew" BOOLEAN NOT NULL DEFAULT true,
-    "role" roles NOT NULL DEFAULT 'user'::roles,
-    CONSTRAINT "users_pkey" PRIMARY KEY ("id"),
-    CONSTRAINT users_email_unique UNIQUE (email),
-    CONSTRAINT users_uname_unique UNIQUE (user_name)
-);
-
-CREATE TABLE IF NOT EXISTS public.sessions (
-  id uuid NOT NULL DEFAULT uuid_generate_v4(),
-  user_id TEXT NOT NULL,
-  expires timestamp with time zone DEFAULT (CURRENT_TIMESTAMP + '02:00:00'::interval),
-  CONSTRAINT sessions_pkey PRIMARY KEY (id),
-  CONSTRAINT sessions_user_fkey FOREIGN KEY (user_id)
-    REFERENCES public.users (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE
-    NOT VALID
-) TABLESPACE pg_default;
-
-
-CREATE OR REPLACE FUNCTION public.authenticate(
+CREATE OR REPLACE FUNCTION authenticate(
 	input json,
 	OUT response json)
     RETURNS json
@@ -78,7 +47,7 @@ $BODY$;
 
 
 
-CREATE OR REPLACE FUNCTION public.create_session(
+CREATE OR REPLACE FUNCTION create_session(
 	input_user_id TEXT)
     RETURNS uuid
     LANGUAGE 'sql'
@@ -93,7 +62,7 @@ $BODY$;
 
 
 
-CREATE OR REPLACE FUNCTION public.get_session(input_session_id uuid)
+CREATE OR REPLACE FUNCTION get_session(input_session_id uuid)
   RETURNS json
   LANGUAGE 'sql'
 AS $BODY$
@@ -113,7 +82,7 @@ $BODY$;
 
 
 
-CREATE OR REPLACE FUNCTION public.register(
+CREATE OR REPLACE FUNCTION register(
 	input json,
 	OUT user_session json)
     RETURNS json
@@ -145,7 +114,7 @@ $BODY$;
 
 
 
-CREATE PROCEDURE public.delete_session(input_id TEXT)
+CREATE PROCEDURE delete_session(input_id TEXT)
     LANGUAGE sql
     AS $$
 DELETE FROM sessions WHERE user_id = input_id;
@@ -155,7 +124,7 @@ $$;
 
 
 
-CREATE OR REPLACE PROCEDURE public.upsert_user(input json)
+CREATE OR REPLACE PROCEDURE upsert_user(input json)
 LANGUAGE plpgsql
 AS $BODY$
 DECLARE
@@ -183,7 +152,7 @@ END;
 $BODY$;
 
 
-CREATE OR REPLACE PROCEDURE public.update_user(input_id integer, input json)
+CREATE OR REPLACE PROCEDURE update_user(input_id integer, input json)
 LANGUAGE plpgsql
 AS $BODY$
 DECLARE
@@ -204,4 +173,4 @@ $BODY$;
 
 
 
-CALL public.upsert_user('{"id":"someid", "role":"user", "email":"exampleuser@gmail.com", "password":"supersecurepassword123", "name":"nicerusername420"}'::json)
+CALL upsert_user('{"id":"someid", "role":"user", "email":"exampleuser@gmail.com", "password":"supersecurepassword123", "name":"nicerusername420"}'::json)
