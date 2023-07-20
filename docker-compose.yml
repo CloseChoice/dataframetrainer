@@ -12,6 +12,14 @@ services:
     volumes:
       - ./backend:/app
 
+  db-fill-or-update-tables:
+    build:
+      context: ./database
+      dockerfile: Dockerfile_fill_or_update_tables
+    volumes:
+      - ./backend/challenges:/app/challenges
+      - ./database/sql:/app/sql
+
   db:
     image: postgres
     restart: always
@@ -24,14 +32,6 @@ services:
       - ./backend/challenges:/challenges
     ports:
       - "5432:5432"
-
-  db-fill-or-update-tables:
-    build:
-      context: ./database
-      dockerfile: Dockerfile_fill_or_update_tables
-    volumes:
-      - ./backend/challenges:/app/challenges
-      - ./database/sql:/app/sql
 
   adminer:
     image: adminer

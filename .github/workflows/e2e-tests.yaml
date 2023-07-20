@@ -9,7 +9,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  docker:
+  e2e-tests:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -38,6 +39,8 @@ jobs:
         run: |
           ls -la
           docker compose up -d
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       -
         name: Check curl response of backend
         run: |
