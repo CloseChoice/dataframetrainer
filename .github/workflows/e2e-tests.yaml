@@ -39,8 +39,6 @@ jobs:
         run: |
           ls -la
           docker compose up -d
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
       -
         name: Check curl response of backend
         run: |

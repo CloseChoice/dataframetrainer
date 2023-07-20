@@ -51,7 +51,6 @@ def run(port, dbname, password, user, host):
         with open(f"sql/{function}.sql") as f:
             cursor.execute(f.read())
 
-    import pdb; pdb.set_trace()
     for challenge in os.listdir("challenges"):
         # ignore files that are not challenges
         if not challenge[0].isupper():
