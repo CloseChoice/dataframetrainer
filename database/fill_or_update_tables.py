@@ -5,7 +5,9 @@ import os
 import time
 
 DEFAULT_ELO = 700
-TABLE_ORDER = ["users", "sessions", "challenges", "user_challenges", "challenge_elo"]
+TABLE_ORDER = ["users", "sessions", "challenges", "users_challenges", "groups",
+               # THESE ARE THE A/B TESTING TABLES
+               "a_b_testing/users_groups", "a_b_testing/strategies/challenge_elo", "a_b_testing/strategies/users_elo"]
 ROLES = ["roles"]
 FUNCTIONS = ["authentication_functions"]
 
@@ -33,20 +35,20 @@ def run(port, dbname, password, user, host):
     conn = psycopg2.connect(
         host=host, dbname=dbname, user=user, password=password, port=port
     )
-    # conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='secret', port=5434)
-
-    # conn.cursor will return a cursor object, you can use this cursor to perform queries
-    cursor = conn.cursor()
     # make sure that all tables are created
-    # todo: add db_create tables aswell
+    cursor = conn.cursor()
     for role in ROLES:
         with open(f"sql/{role}.sql") as f:
+            # todo: this wastes the cursor if the role already exists,
+            # and there is no possibility to add something like `if not exists` to a role definition AFAIK
             cursor.execute(f.read())
 
+    cursor = conn.cursor()
     for table in TABLE_ORDER:
         with open(f"sql/{table}.sql") as f:
             cursor.execute(f.read())
 
+    cursor = conn.cursor()
     for function in FUNCTIONS:
         with open(f"sql/{function}.sql") as f:
             cursor.execute(f.read())
