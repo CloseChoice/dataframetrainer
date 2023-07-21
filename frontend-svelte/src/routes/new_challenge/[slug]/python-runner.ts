@@ -41,7 +41,7 @@ async function initPyodide(){
 
 // All functions which use pyodide have to resolve this promise to get the pyodide object
 // The Code inside the promise (loading an initializing pyodide) only runs once
-export const pyodidePromise = initPyodide()
+const pyodidePromise = initPyodide()
 // isPyodideReady will be true after initPyodide successfully ran
 export const isPyodideReady = writable(false);
 
