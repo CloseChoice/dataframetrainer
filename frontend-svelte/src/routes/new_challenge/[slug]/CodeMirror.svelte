@@ -10,6 +10,7 @@
     import { indentOnInput } from "@codemirror/language";
     import { autocompletion, closeBrackets } from '@codemirror/autocomplete';
     import { highlightSelectionMatches } from "@codemirror/search";
+    import { python } from "@codemirror/lang-python";
 
     let codeMirrorRef
 
@@ -30,6 +31,7 @@
       closeBrackets(),
       autocompletion(),
       highlightSelectionMatches(),
+      python()
     ]
 
     onMount(()=>{
