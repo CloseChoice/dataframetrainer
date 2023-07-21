@@ -48,6 +48,16 @@
 
 </script>
 
-<div class="overflow-y-scroll h-100 bg-dark">
-    <div bind:this={codeMirrorRef}></div>
-</div>
+
+<div class="CodeMirror" bind:this={codeMirrorRef}></div>
+
+<style>
+    .CodeMirror {
+        height: 100%;
+        max-height: 100%;
+        overflow: scroll;
+    }
+    :global(.cm-editor){
+        height: 100%;
+    }
+</style>
