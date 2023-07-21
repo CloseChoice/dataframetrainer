@@ -13,8 +13,7 @@
     // ...and add it to the context for child components to access    setContext('user', user);
 </script>
 
-
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="w-100 position-fixed top-0 navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Dataframetrainer</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,4 +43,14 @@
     </div>
   </nav>
 
-<slot />
+<!-- The main body is 100 viewport heights to allow for easy full screen pages -->
+<!-- If you want to have a full screen page (minus the header) set the height of the outermost div to 100%-->
+<main class="vh-100 max-vw-100" role="main">
+  <slot/>
+</main>
+
+<style>
+	main{
+		padding-top: 3.5rem;
+	}
+</style>
