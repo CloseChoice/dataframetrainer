@@ -91,7 +91,7 @@ ${data.challenge_class}
 ${transform_code}
 
 def test_transform():
-${data.challenge_name}().test_challenge(transform_func=transform)
+    ${data.challenge_name}().test_challenge(transform_func=transform)
 print('in main')
 `;
     console.log(s);
