@@ -1,12 +1,10 @@
-<script>
+<script lang="ts">
     import CodeMirror from "./CodeMirror.svelte";
-    import CodeOutput from "./CodeOutput.svelte";
+    import { isPyodideReady, pyodideWorker } from "$lib/stores/pyodide-store";
     /** @type {import('./$types').PageData} */
     export let data;
     // https://github.com/nathancahill/split/tree/master/packages/splitjs
     import Split from 'split.js'
-
-    import {executeUserCode, testUserCode, isPyodideReady} from './python-runner'
     import { onMount } from "svelte";
 
     const descritption = data.intro
@@ -14,17 +12,23 @@
     let resultUserCode = "";
 
     async function handleRun(){
-        resultUserCode = await executeUserCode(code)
+        if ($isPyodideReady) {
+            resultUserCode = await pyodideWorker.executeUserCode(code)
+        }
     }
     async function handleTest(){
-        testUserCode(code, data)
+        if ($isPyodideReady) {
+            await pyodideWorker.testUserCode(code, data)
+        }
     }
 
     let splitEditor;
     let splitConsole;
     let splitLeft;
     let splitRight;
-    onMount(()=>{
+
+    onMount(async ()=>{
+        
         Split([splitEditor, splitConsole], {
             sizes: [75, 25],
             minSize: [200, 200],
