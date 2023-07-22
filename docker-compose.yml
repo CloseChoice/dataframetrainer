@@ -22,6 +22,7 @@ services:
     volumes:
       - ./database/sql:/docker-entrypoint-initdb.d
       - ./backend/challenges:/challenges
+      - ./database/sql_scripts:/sql_scripts
     ports:
       - "5432:5432"
 
