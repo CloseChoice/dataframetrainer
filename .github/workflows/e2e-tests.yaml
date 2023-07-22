@@ -36,8 +36,8 @@ jobs:
           path: ~/.npm
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
       - name: Install dependencies
         working-directory: ./frontend-svelte
         run: npm ci
