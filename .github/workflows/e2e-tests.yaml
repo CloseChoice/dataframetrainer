@@ -39,6 +39,7 @@ jobs:
         run: |
           ls -la
           docker compose up -d
+      -
         name: Check curl response of backend
         run: |
           sleep 10
@@ -57,6 +58,7 @@ jobs:
         run: sleep 10
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
+        max_attempts: 3  # we just need thss retries in case the server is to slow to start
         run: npx cypress run --browser chrome
       - name: Run Cypress tests Firefox
         working-directory: ./frontend-svelte
