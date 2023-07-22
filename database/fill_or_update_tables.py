@@ -5,7 +5,7 @@ import os
 import time
 
 DEFAULT_ELO = 700
-TABLE_ORDER = ["users", "sessions", "challenges", "user_challenges", "challenge_elo"]
+TABLE_ORDER = ["users", "accounts", "sessions", "verification_tokens", "challenges", "user_challenges", "challenge_elo"]
 ROLES = ["roles"]
 FUNCTIONS = ["authentication_functions"]
 
@@ -43,12 +43,12 @@ def run(port, dbname, password, user, host):
         with open(f"sql/{role}.sql") as f:
             cursor.execute(f.read())
 
-    for table in TABLE_ORDER:
-        with open(f"sql/{table}.sql") as f:
-            cursor.execute(f.read())
-
     for function in FUNCTIONS:
         with open(f"sql/{function}.sql") as f:
+            cursor.execute(f.read())
+
+    for table in TABLE_ORDER:
+        with open(f"sql/{table}.sql") as f:
             cursor.execute(f.read())
 
     for challenge in os.listdir("challenges"):
