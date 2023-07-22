@@ -39,9 +39,6 @@ jobs:
         run: |
           ls -la
           docker compose up -d
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
-      -
         name: Check curl response of backend
         run: |
           sleep 10
@@ -51,11 +48,13 @@ jobs:
             echo "Response code is not 200. Failing the pipeline."
             exit 1
           fi
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Start frontend
         working-directory: ./frontend-svelte
         run: npm run dev &
       - name: Wait for server to start
-        run: sleep 20
+        run: sleep 10
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
         run: npx cypress run --browser chrome
