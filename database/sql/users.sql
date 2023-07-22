@@ -1,13 +1,10 @@
-CREATE TABLE IF NOT EXISTS "users" (
-    "id" TEXT NOT NULL,
-    "user_name" TEXT,
-    "email" TEXT,
-    "emailVerified" TIMESTAMP(3),
-    "password" TEXT,
-    "image" TEXT,
-    "isNew" BOOLEAN NOT NULL DEFAULT true,
-    "role" roles NOT NULL DEFAULT 'user'::roles,
-    CONSTRAINT "users_pkey" PRIMARY KEY ("id"),
-    CONSTRAINT users_email_unique UNIQUE (email),
-    CONSTRAINT users_uname_unique UNIQUE (user_name)
+CREATE TABLE IF NOT EXISTS public.users (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name character varying,
+    email character varying,
+    email_verified character varying,
+    image character varying,
+
+    CONSTRAINT "users_pk" PRIMARY KEY (id),
+    CONSTRAINT "users_unique_email" UNIQUE (email)
 );

@@ -5,9 +5,14 @@ import os
 import time
 
 DEFAULT_ELO = 700
+<<<<<<< HEAD
 TABLE_ORDER = ["users", "sessions", "challenges", "users_challenges", "a_b_testing/groups",
                # THESE ARE THE A/B TESTING TABLES
                "a_b_testing/users_groups", "a_b_testing/strategies/challenge_elo", "a_b_testing/strategies/users_elo"]
+TABLE_ORDER = ["users", "accounts", "sessions", "verification_tokens", "challenges", "user_challenges", 
+               # THESE ARE THE A/B TESTING TABLES
+                "a_b_testing/groups", "a_b_testing/users_groups",
+                "a_b_testing/strategies/challenge_elo", "a_b_testing/strategies/users_elo"]
 ROLES = ["roles"]
 FUNCTIONS = ["authentication_functions"]
 
@@ -50,15 +55,12 @@ def run(port, dbname, password, user, host):
                 print(e)
                 raise ValueError(e)
 
-    cursor = conn.cursor()
-    for table in TABLE_ORDER:
-        with open(f"sql/{table}.sql") as f:
-            print(table)
-            cursor.execute(f.read())
-
-    cursor = conn.cursor()
     for function in FUNCTIONS:
         with open(f"sql/{function}.sql") as f:
+            cursor.execute(f.read())
+
+    for table in TABLE_ORDER:
+        with open(f"sql/{table}.sql") as f:
             cursor.execute(f.read())
 
     for challenge in os.listdir("challenges"):

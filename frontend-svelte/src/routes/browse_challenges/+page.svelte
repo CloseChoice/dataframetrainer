@@ -1,16 +1,16 @@
 <script>
-    import { slide } from "svelte/transition";
+    // import { slide } from "svelte/transition";
 
     export let data;
 </script>
 
 <ul class="list">
     {#each data.challenges as challenge}
-        <div transition:slide>
+ 
         <li class="list-item">
             <a href={`/new_challenge/${challenge}`}>{challenge}</a>
         </li>
-        </div>
+
     {/each}
 </ul>
 <style>
