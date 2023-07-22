@@ -30,6 +30,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@auth/core": "^0.9.0",
+		"@auth/sveltekit": "^0.3.5",
+		"@auth/typeorm-adapter": "^1.0.1",
 		"@codemirror/commands": "^6.2.4",
 		"@codemirror/lang-markdown": "^6.2.0",
 		"@codemirror/lang-python": "github:codemirror/lang-python",
@@ -48,6 +51,8 @@
 		"pyodide": "^0.23.3",
 		"rollup-plugin-node-builtin": "^0.0.1",
 		"rollup-plugin-node-builtins": "^2.1.2",
-		"split.js": "^1.6.5"
+		"split.js": "^1.6.5",
+		"typeorm": "^0.3.17",
+		"typeorm-naming-strategies": "^4.1.0"
 	}
 }
