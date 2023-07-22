@@ -114,7 +114,7 @@ $BODY$;
 
 
 
-CREATE PROCEDURE delete_session(input_id TEXT)
+CREATE OR REPLACE PROCEDURE delete_session(input_id TEXT)
     LANGUAGE sql
     AS $$
 DELETE FROM sessions WHERE user_id = input_id;

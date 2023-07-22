@@ -91,6 +91,23 @@ def get_all_challenges():
     result = cursor.fetchall()
     return json.dumps([k[0] for k in result])
 
+@app.route("/get_next_challenge", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def get_next_challenge(user_id: str):
+    cursor.execute(f"select elo from users_elo where user_id = {user_id} order by time desc")
+    # todo: test if this is really the current elo
+    current_user_elo = cursor.fetchone()
+    cursor.execute(f"select elo, challenge_id from challenge_elo")
+    challenges_elo = cursor.fetchall()
+    cursor.execute(f"select description from users_groups ug join groups g on ug.group_id = g.id where ug.user_id = {user_id}")
+    user_group = cursor.fetchall()
+    match user_group:
+        # todo: implement
+        case "elo_group":
+            pass
+        case _:
+            pass
+
 
 @app.route("/challenges/<int:id>/", methods=["GET"])
 @cross_origin(supports_credentials=True)
