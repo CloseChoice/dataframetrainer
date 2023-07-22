@@ -9,7 +9,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  docker:
+  run-e2e-tests:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     defaults:
       run:

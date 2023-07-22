@@ -12,6 +12,14 @@ services:
     volumes:
       - ./backend:/app
 
+  db-fill-or-update-tables:
+    build:
+      context: ./database
+      dockerfile: Dockerfile_fill_or_update_tables
+    volumes:
+      - ./backend/challenges:/app/challenges
+      - ./database/sql:/app/sql
+
   db:
     image: postgres
     restart: always
@@ -20,7 +28,7 @@ services:
     environment:
       POSTGRES_PASSWORD: example
     volumes:
-      - ./database/sql:/docker-entrypoint-initdb.d
+      # - ./database/sql:/docker-entrypoint-initdb.d
       - ./backend/challenges:/challenges
       - ./database/sql_scripts:/sql_scripts
     ports:
