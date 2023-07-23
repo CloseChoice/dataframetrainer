@@ -1,0 +1,17 @@
+FROM python:3.11.4-bullseye
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+
+RUN apt update -y && apt install -y libpq-dev iputils-ping
+RUN pip install --upgrade pip
+RUN pip install -r /app/requirements.txt
+# ENTRYPOINT ["tail", "-f", "/dev/null"]
+
+# waiting 10 seconds is only because we need to be sure that the tables are already created
+# maybe it would be better to check in the script if all tables are there and then start running
+# todo: implement check in script if tables are there and remove `sleep 10`
+CMD ["sh", "-c", "sleep 10 && python fill_for_local_test.py"]
+# CMD ["python", "fill_for_local_test.py"]
+# RUN ["python", "fill_or_update_tables.py"]
+
