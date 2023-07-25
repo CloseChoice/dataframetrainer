@@ -1,0 +1,18 @@
+version: "3.1"
+
+
+services:
+  frontend:
+    restart: on-failure
+    build:
+      context: ./fronend-svelte
+      dockerfile: Dockerfile.dev
+    environment:
+      - NODE_ENV=development
+    ports:
+      - 3000:3000
+      - 24678:24678
+      - 5173:5173
+    volumes:
+      - ./frontend-svelte:/frontend-svelte
+      # - /usr/src/frontend-svelte/node_modules

@@ -7,6 +7,11 @@ const require = createRequire(import.meta.url);
 export default defineConfig({
 	plugins: [sveltekit()],
 	server: {
+		host: true,
+   		port: 24678,
+		watch: {
+			usePolling: true
+		},
 		proxy: {
 		  '/files': {
 			target: 'http://127.0.0.1:8080',

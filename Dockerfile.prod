@@ -1,0 +1,12 @@
+FROM node:lts-alpine AS build
+
+WORKDIR /app
+COPY .env .env
+COPY ./frontend-svelte ./frontend-svelte
+WORKDIR /app/frontend-svelte
+RUN npm ci
+RUN npm run build
+
+
+
+CMD [ "node", "build/index.js" ]

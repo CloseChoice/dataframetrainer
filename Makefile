@@ -10,3 +10,9 @@ cleanup:
 	docker image rm -f dataframetrainer-db-fill-or-update-tables
 	docker image rm -f dataframetrainer-backend
 	docker volume rm -f dataframetrainer_sql
+
+prod:
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml up
+
+dev:
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml up

@@ -1,0 +1,15 @@
+version: "3.1"
+
+services:
+  frontend:
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    user: "node"
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
