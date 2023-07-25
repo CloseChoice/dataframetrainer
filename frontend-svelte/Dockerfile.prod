@@ -1,0 +1,11 @@
+FROM node:lts-alpine AS build
+
+COPY package.json .
+COPY package-lock.json .
+# Copies the entire frontend-svelte folder
+COPY . .
+# Do a clean install of dependencies
+RUN npm ci
+RUN npm run build
+
+CMD [ "node", "build/index.js" ]
