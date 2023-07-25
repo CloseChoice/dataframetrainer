@@ -1,26 +1,11 @@
 # Our Node base image
 FROM node:lts-alpine AS dev
 
-# Set the Node environment to development to ensure all packages are installed
-WORKDIR /frontend-svelte
+# Copying the package files allows docker to cache node modules
+# Installation will only run when dependencies changed
+COPY package.json .
+COPY package-lock.json .
 
-# Change our current working directory
-COPY ../env .env
-# COPY ./frontend-svelte ./frontend-svelte
-
-# Copy over `package.json` and lock files to optimize the build process
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "yarn.lock", "./"]
-
-# Install Node modules
 RUN npm install
 
-# Copy over rest of the project files
-# COPY ./frontend-svelte .
-
-# Expose port 3000 for the SvelteKit app and 24678 for Vite's HMR
-EXPOSE 3000
-EXPOSE 24678
-EXPOSE 5173
-
-# Run `yarn dev` and set the host to 0.0.0.0 so we can access the web app from outside
-CMD ["npm","run", "dev", "--host", "0.0.0.0"]
+CMD ["npm","run", "dev", "--host"]

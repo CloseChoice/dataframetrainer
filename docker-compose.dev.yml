@@ -5,14 +5,16 @@ services:
   frontend:
     restart: on-failure
     build:
-      context: ./fronend-svelte
+      context: ./frontend-svelte
       dockerfile: Dockerfile.dev
     environment:
       - NODE_ENV=development
     ports:
-      - 3000:3000
-      - 24678:24678
+      # The port of the website
       - 5173:5173
+
+    # This will make all variables inside the root .env accessible inside the container
+    env_file: .env
     volumes:
       - ./frontend-svelte:/frontend-svelte
-      # - /usr/src/frontend-svelte/node_modules
+    working_dir: /frontend-svelte
