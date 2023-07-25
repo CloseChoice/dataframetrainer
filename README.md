@@ -27,3 +27,11 @@ This starts the backend and the database. To start the frontend, use
 cd frontend-svelte && npm run dev
 ```
 
+# Commands
+```bash
+# Will make the website available on localhost:5173
+make dev
+
+# Build the production version of the website on localhost:3000
+make prod
+```
