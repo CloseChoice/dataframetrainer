@@ -9,9 +9,9 @@ export async function load({ params, fetch }) {
     let url = `/files/${challengeName}/description.md`;
 
     console.log(`IN load method ${url}`);
-    const descriptionRes = await fetch(url);
+    let descriptionRes = await fetch(url);
     console.log(`IN load method`);
-    const descriptionRes = await fetch(`/files/${challengeName}/description.md`);
+    descriptionRes = await fetch(`/files/${challengeName}/description.md`);
 
     if (descriptionRes.status != 200) {
         throw error(404, `challenge ${challengeName} no exist you stupiddo. This is the url ${url}`);
