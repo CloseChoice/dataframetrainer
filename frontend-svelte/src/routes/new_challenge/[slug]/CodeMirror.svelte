@@ -55,7 +55,6 @@
     .CodeMirror {
         height: 100%;
         max-height: 100%;
-        overflow: scroll;
     }
     :global(.cm-editor){
         height: 100%;
