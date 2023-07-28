@@ -48,7 +48,8 @@ jobs:
       -
         name: Check curl response of backend
         run: |
-          sleep 10
+          # wait till the fill-db-with-test-input finished writing to db
+          sleep 30
           docker container ls
           response_code=$(curl -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/get_all_challenges/)
           if [ "$response_code" -ne 200 ]; then
