@@ -62,6 +62,7 @@ jobs:
           # check if GroupTerms is in the next_challenge string
           if [[ "$next_challenge" != *"GroupTerms"* ]]; then
             echo "Expected next_challenge to be GroupTerms. Received $next_challenge instead."
+            echo $response_code
             exit 1
           fi
       - name: Start frontend
