@@ -1,6 +1,6 @@
 # run with
 # flask --app server run
-from flask import Flask, Response, jsonify
+from flask import Flask, Response, jsonify, request
 import psycopg2
 import sys
 from hypothesis.extra.pandas import data_frames, column, indexes
@@ -17,6 +17,10 @@ import hypothesis.strategies as st
 import os
 import time
 from flask import send_from_directory
+
+from elo.entities.ChallengeElo import ChallengeElo
+from elo.entities.UserElo import UserElo
+from elo.utils import get_best_suited_challenge
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -90,6 +94,52 @@ def get_all_challenges():
     cursor.execute(f"select id from challenges")
     result = cursor.fetchall()
     return json.dumps([k[0] for k in result])
+
+
+# todo: differentiate between logged in and guests
+@app.route("/get_next_challenge", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def get_next_challenge():
+    user_id = request.json.get("user_id")
+    cursor.execute(
+        f"select elo from users_elo where user_id = '{user_id}' order by time desc limit 1"
+    )
+    # todo: test if this is really the current elo
+    current_user_elo = cursor.fetchone()
+    user_elo = UserElo(elo=current_user_elo[0], user_id=user_id)
+    cursor.execute(f"select elo, challenge_id from challenges_elo")
+    challenges_elo = cursor.fetchall()
+    challenges_elo = [
+        ChallengeElo(elo=ce[0], challenge_id=ce[1]) for ce in challenges_elo
+    ]
+    cursor.execute(
+        f"select description from users_groups ug join groups g on ug.group_id = g.id where ug.user_id = '{user_id}' limit 1"
+    )
+    user_group = cursor.fetchone()
+    print("user_group: ", user_group)
+    match user_group[0]:
+        # todo: implement
+        case "elo_group":
+            # todo: get past challenges of user
+            next_challenge = get_best_suited_challenge(
+                challenges_elo, user_elo, past_challenges=[]
+            )
+            return jsonify(
+                response={
+                    "success": "first ok",
+                    "user_group": user_group,
+                    "challenges_elo": [ce.model_dump_json() for ce in challenges_elo],
+                    "current_user_elo": current_user_elo[0],
+                    "next_challenge": next_challenge[0],
+                }
+            )
+        case _:
+            jsonify(response={"next_challenge": f"user group currently not implemented {user_group[0]}"})
+    return jsonify(
+        response={
+            "next_challenge": f"user group not found {user_group}",
+        }
+    )
 
 
 @app.route("/challenges/<int:id>/", methods=["GET"])
