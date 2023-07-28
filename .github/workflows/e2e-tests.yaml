@@ -43,6 +43,7 @@ jobs:
         run: npm ci
       -
         name: Run docker compose
+        working-directory: .
         run: |
           ls -la
           docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
