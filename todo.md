@@ -72,10 +72,8 @@ Basic verständnis von svelte:
  - [x] Kombiniere mehrere Komponenten miteinander!
 
 ELO:
- - [x] wir brauchen vermutlich einen regelmäßigen job, der das elo einzelner Challenges updated, ich denke, das geht nicht live, da wir sonst 
+ - [x] wir brauchen vermutlich einen regelmäßigen job, der das elo einzelner Challenges updated, ich denke, das geht nicht live, da wir sonst
        in errors laufen.
 Dokumentation:
  - [ ] dokumentiere wie tabellen erstellt werden
  - [ ] dokumentiere wie das elo system funktioniert
-
-

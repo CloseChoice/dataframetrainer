@@ -36,8 +36,6 @@ jobs:
           path: ~/.npm
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
       - name: Install dependencies
         working-directory: ./frontend-svelte
         run: npm ci
@@ -47,6 +45,8 @@ jobs:
         run: |
           ls -la
           docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       -
         name: Check curl response of backend
         run: |
