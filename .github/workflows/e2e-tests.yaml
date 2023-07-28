@@ -45,7 +45,7 @@ jobs:
         name: Run docker compose
         run: |
           ls -la
-          docker compose up -d
+          docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
       -
         name: Check curl response of backend
         run: |
