@@ -36,24 +36,34 @@ jobs:
           path: ~/.npm
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
       - name: Install dependencies
         working-directory: ./frontend-svelte
         run: npm ci
       -
         name: Run docker compose
+        working-directory: .
         run: |
           ls -la
-          docker compose up -d
+          docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
       -
         name: Check curl response of backend
         run: |
-          sleep 10
+          # wait till the fill-db-with-test-input finished writing to db
+          sleep 30
           docker container ls
           response_code=$(curl -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/get_all_challenges/)
           if [ "$response_code" -ne 200 ]; then
             echo "Response code is not 200. Failing the pipeline."
+            exit 1
+          fi
+
+          echo "start testing elo endpoints"
+          response_code=$(curl -X POST http://127.0.0.1:5000/get_next_challenge -H "Content-Type: application/json" -d '{"user_id": "d037ce8d-0381-471f-bfa5-98467685a335"}')
+          next_challenge=$(echo "$response_code" | grep "next_challenge")
+          # check if GroupTerms is in the next_challenge string
+          if [[ "$next_challenge" != *"GroupTerms"* ]]; then
+            echo "Expected next_challenge to be GroupTerms. Received $next_challenge instead."
+            echo $response_code
             exit 1
           fi
       - name: Start frontend

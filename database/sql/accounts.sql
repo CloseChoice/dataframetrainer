@@ -1,4 +1,4 @@
-CREATE TABLE public.accounts (
+CREATE TABLE IF NOT EXISTS public.accounts (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     user_id uuid NOT NULL,
     type character varying NOT NULL,

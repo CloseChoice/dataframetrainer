@@ -1,12 +1,13 @@
 FROM python:3.11.4-bullseye
 WORKDIR /app
 
-COPY requirements.txt fill_or_update_tables.py ./
+# COPY requirements.txt fill_or_update_tables.py ./
+COPY requirements.txt requirements.txt
 
 RUN apt update -y && apt install -y libpq-dev iputils-ping
 RUN pip install --upgrade pip
 RUN pip install -r /app/requirements.txt
 # ENTRYPOINT ["tail", "-f", "/dev/null"]
 
-CMD ["python", "fill_or_update_tables.py"]
+CMD ["sh", "-c", "python fill_or_update_tables.py"]
 # RUN ["python", "fill_or_update_tables.py"]
