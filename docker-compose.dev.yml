@@ -1,6 +1,5 @@
 version: "3.1"
 
-
 services:
   frontend-dev:
     restart: on-failure
@@ -18,3 +17,12 @@ services:
     volumes:
       - ./frontend-svelte:/frontend-svelte
     working_dir: /frontend-svelte
+
+  fill-db-with-test-input:
+    build:
+      context: ./database/tests_docker
+      dockerfile: Dockerfile_fill_db_with_test_inputs
+    volumes:
+      - ./database/tests_docker/sql:/app/sql
+      - ./database/tests_docker/fill_for_local_test.py:/app/fill_for_local_test.py
+

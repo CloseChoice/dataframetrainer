@@ -62,10 +62,18 @@ Nice to Haves:
 - [x] Breite anpassen
 - [x] Editor hat Standardchallenge
 - [ ] im Editor definierte ausgaben werden angezeigt, wie ein Jupyter Notebook
-- [ ] Ausgabe von python returns irgendwohin
+- [x] Ausgabe von python returns irgendwohin
 - [ ] Ausgabe von prints irgendwohin (später dann wie jupyter notebook) (schaue hierzu auf write_stdout von py-script stdio.ts und pyterminal.ts)
 
+
 Basic verständnis von svelte:
- - [ ] wo lege ich js files ab mit utils
- - [ ] Komponente kreieren und reusen
- - [ ] Kombiniere mehrere Komponenten miteinander!
+ - [x] wo lege ich js files ab mit utils
+ - [x] Komponente kreieren und reusen
+ - [x] Kombiniere mehrere Komponenten miteinander!
+
+ELO:
+ - [x] wir brauchen vermutlich einen regelmäßigen job, der das elo einzelner Challenges updated, ich denke, das geht nicht live, da wir sonst
+       in errors laufen.
+Dokumentation:
+ - [ ] dokumentiere wie tabellen erstellt werden
+ - [ ] dokumentiere wie das elo system funktioniert

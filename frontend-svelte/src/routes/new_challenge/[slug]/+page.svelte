@@ -61,8 +61,7 @@
                     </div>
             </div>
             <div bind:this={splitConsole} style="min-height: 200px; background: green" >
-                shish
-                <!-- <CodeOutput resultUserCode={resultUserCode}/> -->
+                <CodeOutput resultUserCode={resultUserCode}/>
             </div>
         </div>
     </div>
