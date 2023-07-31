@@ -3,6 +3,8 @@
     import { writable } from 'svelte/store';
     import {page} from '$app/stores'
     import { signIn, signOut } from "@auth/sveltekit/client"
+
+    console.log($page.data.session);
 </script>
 
 <nav style="z-index:1030" class="w-100 position-fixed zindex-fixed top-0 navbar navbar-expand-md navbar-dark bg-dark">
