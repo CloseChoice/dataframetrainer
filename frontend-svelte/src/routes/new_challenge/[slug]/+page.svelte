@@ -1,6 +1,9 @@
 <script>
     import CodeMirror from "./CodeMirror.svelte";
     import CodeOutput from "./CodeOutput.svelte";
+    import { goto } from '$app/navigation';
+    import {page} from '$app/stores'
+    import axios from 'axios'
     /** @type {import('./$types').PageData} */
     export let data;
     // https://github.com/nathancahill/split/tree/master/packages/splitjs
@@ -18,6 +21,24 @@
     }
     async function handleTest(){
         testUserCode(code, data)
+    }
+
+    async function handleNewChallenge(){
+        const userId = $page.data.session?.user?.id
+
+        if (! userId) {
+            alert("yer gotta be signed in for datt")
+        }
+
+        const res = await axios.post('/backend/get_next_challenge', {
+            data: {
+                user_id: userId
+            }
+        })
+        const nextChallenge = res.data.next_challenge
+        goto('/new_challenge/' + nextChallenge)
+
+        
     }
 
     let splitEditor;
@@ -44,8 +65,12 @@
 <div class="h-100">
     <div class="row gx-0 h-100">
         <div bind:this={splitLeft} class="col-6">
+            <div class="p-2">
+                <button on:click={handleNewChallenge} class="btn btn-sm btn-primary">New Challenge</button>
+            </div>
             {@html descritption}
         </div>
+
         <div bind:this={splitRight} class="h-100 col-6 d-flex flex-column" >
             <!-- min height:0 is necessary to prevent overflow  -->
             <div bind:this={splitEditor} class="flex-grow-1 position-relative" style="min-height:0">
