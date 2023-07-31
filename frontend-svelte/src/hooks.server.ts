@@ -29,6 +29,15 @@ export const handle = SvelteKitAuth({
     GitHub({ clientId: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET }),
     Google({clientId: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET})
   ],
+  callbacks: {
+    // Attach the user ID to the Session Object
+    async session({ session, user, token }) {
+      if (session?.user){
+        session.user.id = user.id
+      }
+      return session
+    },
+  }
 });
 
 // export const handle: Handle = async ({ resolve, event }) => {
