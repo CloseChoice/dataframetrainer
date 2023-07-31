@@ -1,11 +1,15 @@
-FROM node:lts-alpine AS build
+# Our Node base image
+FROM node:lts-alpine AS dev
 
+# Copying the package files allows docker to cache node modules
+# Installation will only run when dependencies changed
 COPY package.json .
 COPY package-lock.json .
-# Copies the entire frontend-svelte folder
-COPY . .
-# Do a clean install of dependencies
+
 RUN npm ci
+
 RUN npm run build
 
-CMD [ "node", "build/index.js" ]
+CMD ["node", "build/index.js"]
+
+# CMD ["npm","run", "dev", "--host"]
