@@ -1,20 +1,13 @@
-import { writable } from 'svelte/store';
+// Firefox does not support workers of type module yet
+// Until that changes we can't use regular imports in vite development mode so this'll do
+importScripts("https://unpkg.com/comlink/dist/umd/comlink.js");
+importScripts("https://cdn.jsdelivr.net/pyodide/v0.23.3/full/pyodide.js")
 
-const timer = ms => new Promise(res => setTimeout(res, ms))
-// Since pyodide is included via CDN we can't just use it right away, it might not have been loaded yet
-// This function loads pyodide as soon as the loadPyodide function is available
-async function ensurePyodide(){
-    while (typeof loadPyodide === 'undefined'){
-        await timer(30)
-    }
-    const py = await loadPyodide()
-    return py
-}
 
-async function initPyodide(){
-    const py = await ensurePyodide()
-    await py.loadPackage("micropip");
-    const micropip = await py.pyimport("micropip");
+async function loadPyodideAndPackages(){
+    const pyodide = await loadPyodide()
+    await pyodide.loadPackage("micropip");
+    const micropip = await pyodide.pyimport("micropip");
 
     // Install Dependencies
     await Promise.all([
@@ -25,33 +18,29 @@ async function initPyodide(){
     ])
 
     const mountDir = ".";
-    await py.FS.mount(py.FS.filesystems.IDBFS, { root: "." }, mountDir);
+    await pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, { root: "." }, mountDir);
     await Promise.all([
-        py.FS.mkdir('/home/pyodide/challenges'),
-        py.FS.mkdir('/home/pyodide/userSolutions'),
-        py.FS.mkdir('/home/pyodide/tests')
+        pyodide.FS.mkdir('/home/pyodide/challenges'),
+        pyodide.FS.mkdir('/home/pyodide/userSolutions'),
+        pyodide.FS.mkdir('/home/pyodide/tests')
     ])
-    await py.FS.syncfs(true, function (err) {
+    await pyodide.FS.syncfs(true, function (err) {
         console.log(err);
         // handle callback
     });
-    isPyodideReady.set(true)
-    return py;
+    return pyodide;
 }
 
-// All functions which use pyodide have to resolve this promise to get the pyodide object
-// The Code inside the promise (loading an initializing pyodide) only runs once
-const pyodidePromise = initPyodide()
-// isPyodideReady will be true after initPyodide successfully ran
-export const isPyodideReady = writable(false);
+let pyodideReadyPromise;
 
-export async function testPyodide(){
-    const py = await pyodidePromise
-    console.log(py);
+async function initialize(){
+    pyodideReadyPromise = loadPyodideAndPackages()
+    await pyodideReadyPromise
+    return true
 }
 
-export async function executeUserCode(userCode:String){
-    const pyodide = await pyodidePromise
+async function executeUserCode(userCode){
+    const pyodide = await pyodideReadyPromise
     const resultUserCode = pyodide.runPython(userCode);
     console.log("executing user code: ", userCode);
     console.log("this is resultUserCode", resultUserCode);
@@ -59,8 +48,8 @@ export async function executeUserCode(userCode:String){
 // todo: fill!
 }
 
-export async function testUserCode(userCode:String, data){
-    const pyodide = await pyodidePromise
+async function testUserCode(userCode, data){
+    const pyodide = await pyodideReadyPromise
     // pyodide.FS.writeFile(userCode, '/mnt/usercode.py');
     pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
     pyodide.FS.writeFile('usercode.py', userCode);
@@ -112,3 +101,12 @@ print('in main')
 
     return report
 }
+
+
+// Export functions to be used in pyodide-store
+Comlink.expose({
+    initialize,
+    executeUserCode,
+    testUserCode
+})
+
