@@ -10,4 +10,3 @@ RUN pip install -r /app/requirements.txt
 # ENTRYPOINT ["tail", "-f", "/dev/null"]
 
 CMD ["sh", "-c", "python fill_or_update_tables.py"]
-# RUN ["python", "fill_or_update_tables.py"]
