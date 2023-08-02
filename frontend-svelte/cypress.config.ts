@@ -19,10 +19,6 @@ const pool = new Pool({
 // Check if the database connection is succesfull
 pool.query('SELECT NOW()')
 
-const sqlText = fs.readFileSync('./cypress/seed.sql', { encoding: 'utf8' })
-console.log(sqlText);
-
-
 
 const tasks = {
   'db:query': ({queryText, queryValues}) => {
@@ -32,9 +28,6 @@ const tasks = {
   'db:reseed': async () => {
     const sqlText = fs.readFileSync('./cypress/seed.sql', { encoding: 'utf8' })
     return pool.query(sqlText)
-
-  
-    
   }
 }
 
