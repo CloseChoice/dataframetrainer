@@ -17,6 +17,11 @@ jobs:
       NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
       GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      PORT: ${{ secrets.PORT }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      HOST: ${{ secrets.HOST }}
     defaults:
       run:
         working-directory: ./backend
@@ -39,6 +44,8 @@ jobs:
       - name: Install dependencies
         working-directory: ./frontend-svelte
         run: npm ci
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       -
         name: Run docker compose
         working-directory: .

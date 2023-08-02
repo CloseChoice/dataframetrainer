@@ -53,7 +53,7 @@ conn = psycopg2.connect(
     dbname=os.environ["DB_NAME"],
     user=os.environ["DB_USER"],
     password=os.environ["PASSWORD"],
-    port=os.environ["PORT"]
+    port=os.environ["PORT"],
 )
 cursor = conn.cursor()
 
@@ -134,7 +134,11 @@ def get_next_challenge():
                 }
             )
         case _:
-            jsonify(response={"next_challenge": f"user group currently not implemented {user_group[0]}"})
+            jsonify(
+                response={
+                    "next_challenge": f"user group currently not implemented {user_group[0]}"
+                }
+            )
     return jsonify(
         response={
             "next_challenge": f"user group not found {user_group}",
