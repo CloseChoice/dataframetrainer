@@ -41,7 +41,7 @@ def run():
     conn = psycopg2.connect(
         host=host,
         dbname=os.environ["DB_NAME"],
-        user=os.environ["USER"],
+        user=os.environ["DB_USER"],
         password=os.environ["PASSWORD"],
         port=os.environ["PORT"],
     )
