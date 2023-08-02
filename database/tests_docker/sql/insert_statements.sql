@@ -1,5 +1,7 @@
-insert into users ("id", "name", "email") 
-  values ('d037ce8d-0381-471f-bfa5-98467685a335'::uuid, 'admin', 'admin@dummy.org') ON CONFLICT DO NOTHING;
+insert into users ("id", "name") 
+  values ('d037ce8d-0381-471f-bfa5-98467685a335'::uuid, 'admin') ON CONFLICT DO NOTHING;
+
+SELECT register_user_with_credentials('bob', '9as8df769a8sdf6987ds6f');
 
 insert into groups ("id", "description") values (1, 'elo_group') ON CONFLICT DO NOTHING;
 

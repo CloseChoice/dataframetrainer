@@ -4,21 +4,14 @@ import os
 import time
 
 DEFAULT_ELO = 700
-TABLE_ORDER = [
-    "users",
-    "accounts",
-    "sessions",
-    "verification_tokens",
-    "challenges",
-    "users_challenges",
-    # THESE ARE THE A/B TESTING TABLES
-    "a_b_testing/groups",
-    "a_b_testing/users_groups",
-    "a_b_testing/strategies/challenges_elo",
-    "a_b_testing/strategies/users_elo",
-]
+
+TABLE_ORDER = ["users", "credentials", "challenges", "users_challenges", 
+               # THESE ARE THE A/B TESTING TABLES
+                "a_b_testing/groups", "a_b_testing/users_groups",
+                "a_b_testing/strategies/challenges_elo", "a_b_testing/strategies/users_elo"]
+
 ROLES = ["roles"]
-FUNCTIONS = ["authentication_functions"]
+FUNCTIONS = []
 
 
 def check_ping(hostname):
@@ -47,18 +40,18 @@ def run():
     )
     # make sure that all tables are created
     cursor = conn.cursor()
-    for role in ROLES:
-        with open(f"sql/{role}.sql") as f:
-            # todo: this wastes the cursor if the role already exists,
-            # and there is no possibility to add something like `if not exists` to a role definition AFAIK
-            try:
-                cursor.execute(f.read())
-            except psycopg2.errors.DuplicateObject as e:
-                # roles are already defined
-                conn.rollback()
-            except Exception as e:
-                print(e)
-                raise ValueError(e)
+    # for role in ROLES:
+    #     with open(f"sql/{role}.sql") as f:
+    #         # todo: this wastes the cursor if the role already exists,
+    #         # and there is no possibility to add something like `if not exists` to a role definition AFAIK
+    #         try:
+    #             cursor.execute(f.read())
+    #         except psycopg2.errors.DuplicateObject as e:
+    #             # roles are already defined
+    #             conn.rollback()
+    #         except Exception as e:
+    #             print(e)
+    #             raise ValueError(e)
 
     print("Creating functions")
     for function in FUNCTIONS:
