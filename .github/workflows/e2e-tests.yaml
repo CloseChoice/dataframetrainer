@@ -44,14 +44,14 @@ jobs:
       - name: Install dependencies
         working-directory: ./frontend-svelte
         run: npm ci
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
       -
         name: Run docker compose
         working-directory: .
         run: |
           ls -la
           docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       -
         name: Check curl response of backend
         run: |
