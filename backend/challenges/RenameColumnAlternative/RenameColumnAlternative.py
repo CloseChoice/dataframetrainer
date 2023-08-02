@@ -9,12 +9,15 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
     df = df.rename(columns={"Value": "NewValue"})
     return df
 
+
 # Since the "run" "initial" and "test" use cases all rely on the same param generators it makes sense to share them
-# Possibly as a dict 
+# Possibly as a dict
 params = {
-    'df': data_frames(
+    "df": data_frames(
         columns=[column("Value", dtype=np.dtype(int))],
-        rows=st.tuples(st.sampled_from([1, 2, 3, 4, 5, 6, 7, 8, 9]),),
+        rows=st.tuples(
+            st.sampled_from([1, 2, 3, 4, 5, 6, 7, 8, 9]),
+        ),
         index=range_indexes(min_size=3, max_size=10),
     )
 }

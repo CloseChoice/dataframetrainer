@@ -5,7 +5,7 @@ We make it pretty easy for you: Rename the `Value` column to `NewValue` and keep
 <table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>Value</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>2</td>    </tr>    <tr>      <th>1</th>      <td>4</td>    </tr>    <tr>      <th>2</th>      <td>5</td>    </tr>  </tbody></table>
 
 
-<!--These html outputs are generated with  
+<!--These html outputs are generated with
 df = RenameColumn.create_df_func().example()
 RenameColumn.transform(df).to_html()
 -->

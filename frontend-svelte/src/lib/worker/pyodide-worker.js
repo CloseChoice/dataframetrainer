@@ -75,12 +75,16 @@ async function testUserCode(userCode, data){
     pyodide.runPython(data.challenge_class);
     let s = `
 import pytest
+from hypothesis import given
 ${data.challenge_class}
 
 ${transform_code}
 
-def test_transform():
-    ${data.challenge_name}().test_challenge(transform_func=transform)
+@given(df = ${data.challenge_name}.create_df_func())
+def test_transform(df):
+    user_df = transform(df)
+    expected_df = ${data.challenge_name}.transform(df)
+    tm.assert_frame_equal(user_df, expected_df)
 print('in main')
 `;
     console.log(s);
