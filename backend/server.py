@@ -46,14 +46,14 @@ def check_ping(hostname):
         time.sleep(5)
 
 
-host = "db"
-# conn = psycopg2.connect(host='localhost', dbname='postgres', user='postgres', password='test1234', port=5433)
+host = os.environ["HOST"]
 check_ping(host)
-# conn = psycopg2.connect(
-#     host=host, dbname="postgres", user="postgres", password="secret", port=5432
-# )
 conn = psycopg2.connect(
-    host=host, dbname="postgres", user="postgres", password="example", port=5432
+    host=host,
+    dbname=os.environ["DB_NAME"],
+    user=os.environ["DB_USER"],
+    password=os.environ["PASSWORD"],
+    port=os.environ["PORT"],
 )
 cursor = conn.cursor()
 
@@ -134,7 +134,11 @@ def get_next_challenge():
                 }
             )
         case _:
-            jsonify(response={"next_challenge": f"user group currently not implemented {user_group[0]}"})
+            jsonify(
+                response={
+                    "next_challenge": f"user group currently not implemented {user_group[0]}"
+                }
+            )
     return jsonify(
         response={
             "next_challenge": f"user group not found {user_group}",
