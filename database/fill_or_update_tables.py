@@ -1,6 +1,5 @@
 import psycopg2
 
-import click
 import os
 import time
 
