@@ -24,17 +24,16 @@ def check_ping(hostname):
             return
         time.sleep(5)
 
-@click.command()
-@click.option("--port", default=5432, help="Port of the database")
-@click.option("--password", default="example", help="Password of the database")
-@click.option("--user", default="postgres", help="User of the database")
-@click.option("--host", default="db", help="Host of the database")
-@click.option("--dbname", default="postgres", help="Name of the database")
-def run(port, dbname, password, user, host):
+def run(host):
     # read the sql file to create challenges
+    host = os.environ["HOST"]
     check_ping(host)
     conn = psycopg2.connect(
-        host=host, dbname=dbname, user=user, password=password, port=port
+        host=host,
+        dbname=os.environ["DB_NAME"],
+        user=os.environ["USER"],
+        password=os.environ["PASSWORD"],
+        port=os.environ["PORT"]
     )
     # make sure that all tables are created
     cursor = conn.cursor()
