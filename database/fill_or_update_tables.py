@@ -34,7 +34,7 @@ def check_ping(hostname):
         time.sleep(5)
 
 
-def run(host):
+def run():
     # read the sql file to create challenges
     host = os.environ["HOST"]
     check_ping(host)
