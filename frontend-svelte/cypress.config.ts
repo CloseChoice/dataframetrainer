@@ -21,15 +21,16 @@ pool.query('SELECT NOW()')
 
 
 const tasks = {
-  'db:query': ({queryText, queryValues}) => {
-    queryValues = queryValues ? queryValues : []
-    return pool.query(queryText, queryValues)
+  // Since all Values in the tests are hard coded anyways the queryText has to be "baked" when using db:query 
+  'db:query': (queryText) => {
+    return pool.query(queryText)
   },
   'db:reseed': async () => {
     const sqlText = fs.readFileSync('./cypress/seed.sql', { encoding: 'utf8' })
     return pool.query(sqlText)
   }
 }
+
 
 export default defineConfig({
   // setupNodeEvents can be defined in either
