@@ -7,8 +7,7 @@
     /** @type {import('./$types').LayoutData} */
     export let data;
     // Create a store and update it when necessary...    
-    const user = writable(null);
-    $: user.set(data.user);
+
 
 
     console.log(data);
@@ -17,7 +16,7 @@
     onMount(initPyodideStore)
     import { signIn, signOut } from "@auth/sveltekit/client"
 
-    console.log($page.data.session);
+    console.log('session through layout server:', $page.data.session);
 </script>
 
 <nav style="z-index:1030" class="w-100 position-fixed zindex-fixed top-0 navbar navbar-expand-md navbar-dark bg-dark">
@@ -27,15 +26,18 @@
       </button>
 
       <div class="">
-        <span class="navbar-text me-3">
+        <span data-test="username-display" class="navbar-text me-3">
           {#if $page.data.session}
             {$page.data.session.user?.name ?? "User"}
           {/if}
         </span>
         {#if $page.data.session}
-        <button class="btn btn-primary" on:click={()=> signOut()}>Sign Out</button>
+        <form method="POST" action="/authentication?/logout">
+          <!-- A Logout Link has to be POST because some clients prefetch links and therefore a simple GET link would instantly log users out -->
+          <button class="btn btn-primary">Sign Out</button>
+        </form>
         {:else}
-        <button class="btn btn-primary" on:click={()=> signIn()}>Sign In</button>
+        <a href="/authentication" class="btn btn-primary" role="button">Sign In</a>
         {/if}
       </div>
       <!-- <a class="navbar-brand" href="#">Dataframetrainer</a> -->
