@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "users_challenges" (
-    "user_id" UUID NOT NULL,
+    "user_id" TEXT NOT NULL,
     "challenge_id" TEXT,
     "session_id" TEXT,
     "timestamp" TIMESTAMP NOT NULL,

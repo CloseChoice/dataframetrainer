@@ -5,7 +5,7 @@ import time
 
 DEFAULT_ELO = 700
 
-TABLE_ORDER = ["users", "credentials", "challenges", "users_challenges", 
+TABLE_ORDER = ["users", "challenges", "users_challenges", 
                # THESE ARE THE A/B TESTING TABLES
                 "a_b_testing/groups", "a_b_testing/users_groups",
                 "a_b_testing/strategies/challenges_elo", "a_b_testing/strategies/users_elo"]
