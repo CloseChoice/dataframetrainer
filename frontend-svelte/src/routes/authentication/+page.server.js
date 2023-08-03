@@ -5,7 +5,6 @@ import {signIn} from '@auth/sveltekit/client'
 import { auth } from "$lib/server/lucia";
 
 function validateFormData(userData){
-
     const isValid = {}
 
     isValid.name = Boolean(userData.name)
@@ -62,17 +61,12 @@ export const actions = {
         }
 
         const userExists = await checkUserExists(userData.name)
-
         if (userExists){
             throw new Error('That name is already taken')
         }
         
         const session = await createUser(userData.name, userData.password)
         await locals.auth.setSession(session);
-        // cookies.set('session', session.sessionId)
-        // signIn('Credentials', {}, {username: userData.name, password: userData.password})
-
-        console.log(userData);
 
         return {
             success: true,
