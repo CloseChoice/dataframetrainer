@@ -11,11 +11,11 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - HOST=${HOST}
-      - PASSWORD=${PASSWORD}
-      - PORT=${PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      HOST: db
+      PASSWORD: ${PASSWORD}
+      PORT: ${PORT}
 
   db-fill-or-update-tables:
     build:
@@ -26,11 +26,12 @@ services:
       - ./database/fill_or_update_tables.py:/app/fill_or_update_tables.py
       - ./database/sql:/app/sql
     environment:
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - HOST=${HOST}
-      - PASSWORD=${PASSWORD}
-      - PORT=${PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      HOST: db
+      PASSWORD: ${PASSWORD}
+      PORT: ${PORT}
+
 
   db:
     image: postgres
