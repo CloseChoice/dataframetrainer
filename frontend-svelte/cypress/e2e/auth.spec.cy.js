@@ -22,7 +22,7 @@ describe('Authentication Form', () => {
 
     it('fails when a username is already taken', () => {
         cy.setup()
-        cy.task('db:query', "INSERT INTO users (name) VALUES ('Peter')")
+        cy.task('db:query', "INSERT INTO users (id, name) VALUES ('sheesh987sd6f987', 'Peter')")
 
         cy.visit('/authentication')
         cy.getByData('name').type('Peter')
