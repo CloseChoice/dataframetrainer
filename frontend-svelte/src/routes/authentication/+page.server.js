@@ -1,4 +1,4 @@
-import { error, json, redirect } from '@sveltejs/kit'
+import { error, json, redirect, fail } from '@sveltejs/kit'
 import * as bcrypt from 'bcrypt'
 import {pool} from '$lib/server/db'
 import {signIn} from '@auth/sveltekit/client'
@@ -49,7 +49,32 @@ async function createUser(username, password){
 /** @type {import('./$types').Actions} */
 export const actions = {
     login: async (event) => {
+      const {request, cookies, locals} = event
+      const data = await request.formData();
 
+      const password = data.get('password')?.toString()
+      const name = data.get('name')?.toString()
+      let session = null
+      try {
+        if (!password || !name){
+          throw Error("Invalid Password or Username")
+        }
+        console.log('password', password);
+        console.log('name', name);
+        const key = await auth.useKey("username", name, password);
+        session = await auth.createSession({userId: key.userId, attributes: {}});
+      }catch (e){
+        return fail(400, {password: {
+          isValid: false,
+          feedback: "Invalid Password or Username"
+        }})
+      }
+
+      return {
+        success: true,
+        session
+      }
+      
     },
     register: async (event) => {
         const {request, cookies, locals} = event
@@ -62,7 +87,10 @@ export const actions = {
 
         const userExists = await checkUserExists(userData.name)
         if (userExists){
-            throw new Error('That name is already taken')
+          return fail(400, { username: {
+            isValid: false,
+            feedback: "This username is already taken"
+          } });
         }
         
         const session = await createUser(userData.name, userData.password)
