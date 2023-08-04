@@ -1,5 +1,5 @@
 describe('Authentication Form', () => {
-    it('lets a user Register', async () => {
+    it('lets a user Register', () => {
         cy.setup()
 
         cy.visit('/authentication')
@@ -25,9 +25,9 @@ describe('Authentication Form', () => {
         cy.task('db:query', "INSERT INTO users (id, name) VALUES ('sheesh987sd6f987', 'Peter')")
 
         cy.visit('/authentication')
-        cy.getByData('name').type('Peter')
-        cy.getByData('password').type('123456789')
-        cy.getByData('register-button').submit()
+        cy.getByData('name-input').type('Peter')
+        cy.getByData('password-input').type('123456789')
+        cy.getByData('register-button').click()
 
         cy.get('.is-valid').should('not.exist')
         cy.get('.is-invalid').should('exist')
