@@ -2,8 +2,10 @@
 import { type QueryResult, Pool} from 'pg'
 
 import { 
-  PG_CONNECTION_STRING,
-} from "$env/static/private";
+  PGUSER, PGPASSWORD, PGPORT, PGHOST,
+  } from "$env/static/private";
+
+const PG_CONNECTION_STRING = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/postgres`
 
 if (!PG_CONNECTION_STRING){
   throw new Error(`missing PG_CONNECTION_STRING environment variable`)

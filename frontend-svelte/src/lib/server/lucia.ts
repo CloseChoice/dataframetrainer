@@ -4,9 +4,12 @@ import postgres from "postgres";
 import { sveltekit } from "lucia/middleware";
 import { dev } from "$app/environment";
 import { 
-    PG_CONNECTION_STRING,
+  PGUSER, PGPASSWORD, PGPORT, PGHOST,
   } from "$env/static/private";
 
+
+
+const PG_CONNECTION_STRING = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/postgres`
 const sql = postgres(PG_CONNECTION_STRING);
 
 export const auth = lucia({

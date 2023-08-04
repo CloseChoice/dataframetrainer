@@ -1,23 +1,16 @@
 import { defineConfig } from "cypress";
+import * as fs from 'fs';
 import pg from 'pg'
-const {Pool} = pg
-// Read the environment variables from the root file
 import * as dotenv from 'dotenv'
 dotenv.config({path: '../.env'})
 
-
-import * as fs from 'fs'
-const pgConnectionString = process.env.PG_CONNECTION_STRING
-if (!pgConnectionString){
+const {PGUSER, PGPASSWORD, PGHOST, PGPORT} = process.env
+const PG_CONNECTION_STRING = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/postgres`
+if (!PG_CONNECTION_STRING){
   throw new Error(`missing PG_CONNECTION_STRING environment variable`)
 }
+const pool = new pg.Pool({connectionString : PG_CONNECTION_STRING})
 
-
-const pool = new Pool({
-  connectionString : pgConnectionString
-})
-// Check if the database connection is succesfull
-pool.query('SELECT NOW()')
 
 
 const tasks = {
