@@ -20,18 +20,19 @@ describe('Authentication Form', () => {
 
     })
 
-    // it('fails when a username is already taken', () => {
-    //     cy.task('db:reseed')
-    //     const queryText = "SELECT register_user_with_credentials('Peter', '1234')"
-    //     cy.task('db:query', queryText)
+    it('fails when a username is already taken', () => {
+        cy.setup()
+        cy.task('db:query', "INSERT INTO users (name) VALUES ('Peter')")
 
-    //     cy.visit('/authentication')
-    //     cy.getByData('name').type('Peter')
-    //     cy.getByData('password').type('123456789')
-    //     cy.getByData('register-button').submit()
+        cy.visit('/authentication')
+        cy.getByData('name').type('Peter')
+        cy.getByData('password').type('123456789')
+        cy.getByData('register-button').submit()
 
-    //     cy.getByData("success-indicator").should('not.exist')
-    // })
+        cy.get('.is-valid').should('not.exist')
+        cy.get('.is-invalid').should('exist')
+        
+    })
 
 
 
