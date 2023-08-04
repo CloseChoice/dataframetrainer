@@ -4,8 +4,8 @@ import pg from 'pg'
 import * as dotenv from 'dotenv'
 dotenv.config({path: '../.env'})
 
-const {PGUSER, PGPASSWORD, PGHOST, PGPORT} = process.env
-const PG_CONNECTION_STRING = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/postgres`
+const {DB_NAME, DB_USER, HOST, PASSWORD, PORT} = process.env
+const PG_CONNECTION_STRING = `postgres://${DB_USER}:${PASSWORD}@${HOST}:${PORT}/postgres`
 if (!PG_CONNECTION_STRING){
   throw new Error(`missing PG_CONNECTION_STRING environment variable`)
 }

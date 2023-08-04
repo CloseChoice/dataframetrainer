@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { type QueryResult, Pool} from 'pg'
 
-import { 
-  PGUSER, PGPASSWORD, PGPORT, PGHOST,
-  } from "$env/static/private";
+import {DB_NAME, DB_USER, HOST, PASSWORD, PORT} from '$env/static/private'
+const PG_CONNECTION_STRING = `postgres://${DB_USER}:${PASSWORD}@${HOST}:${PORT}/${DB_NAME}`
 
-const PG_CONNECTION_STRING = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/postgres`
+console.log(PG_CONNECTION_STRING);
 
 if (!PG_CONNECTION_STRING){
   throw new Error(`missing PG_CONNECTION_STRING environment variable`)
