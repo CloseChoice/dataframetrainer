@@ -9,11 +9,12 @@ import hypothesis
 from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
 import hypothesis.strategies as st
+from collections.abc import Callable
 
 
 class PivotMedian:
     @staticmethod
-    def initial() -> pd.DataFrame:
+    def create_df_func() -> Callable:
         return data_frames(
             columns=[
                 column("Customer", dtype=np.dtype(str)),
@@ -26,7 +27,7 @@ class PivotMedian:
                 st.integers(min_value=-1, max_value=1000),
             ),
             index=range_indexes(min_size=3, max_size=12),
-        ).example()
+        )
 
     @staticmethod
     def transform(df: pd.DataFrame, **kwargs) -> pd.DataFrame:

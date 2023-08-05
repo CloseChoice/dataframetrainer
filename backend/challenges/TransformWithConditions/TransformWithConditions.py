@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import hypothesis
+from collections.abc import Callable
 
 from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
@@ -9,35 +10,38 @@ import hypothesis.strategies as st
 
 
 class TransformWithConditions:
+    # TODO: NOT SURE IF THIS WORKS
     # todo: this is not optimal, but it works for now
     # things to improve:
     #   - use one of the strategies from hypothesis.extra.pandas to generate the whole df, don't use pd.concat
     #   - length of the df should be variable
     #   - np.nan should be generated in the value column, but this is not possible if one specifies min and max values
     @staticmethod
-    def initial() -> pd.DataFrame:
-        df = data_frames(
-            columns=[
-                column("group", dtype=np.dtype(str)),
-                column("value", dtype=np.dtype(float)),
-            ],
-            rows=st.tuples(
-                st.sampled_from(["A", "B"]),
-                st.floats(min_value=0.0, max_value=10.0, width=16),
-            ),
-            index=range_indexes(min_size=25, max_size=25),
-        ).example()
-        srs = pd.Series(
-            arrays(
+    def create_df_func() -> dict[str, Callable]:
+        def _create_df():
+            df = data_frames(
+                columns=[
+                    column("group", dtype=np.dtype(str)),
+                    column("value", dtype=np.dtype(float)),
+                ],
+                rows=st.tuples(
+                    st.sampled_from(["A", "B"]),
+                    st.floats(min_value=0.0, max_value=10.0, width=16),
+                ),
+                index=range_indexes(min_size=25, max_size=25),
+            ).example()
+            srs = pd.Series(
+                arrays(
+                    dtype=np.dtype(int),
+                    shape=(25),
+                    elements=st.integers(min_value=1, max_value=25),
+                    unique=True,
+                ).example(),
+                name="ID",
                 dtype=np.dtype(int),
-                shape=(25),
-                elements=st.integers(min_value=1, max_value=25),
-                unique=True,
-            ).example(),
-            name="ID",
-            dtype=np.dtype(int),
-        )
-        return pd.concat([srs, df], axis=1)
+            )
+            return pd.concat([srs, df], axis=1)
+        return {"df": _create_df}
 
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.DataFrame:

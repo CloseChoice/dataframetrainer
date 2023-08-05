@@ -1,4 +1,5 @@
 // Firefox does not support workers of type module yet
+
 // Until that changes we can't use regular imports in vite development mode so this'll do
 importScripts("https://unpkg.com/comlink/dist/umd/comlink.js");
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.23.3/full/pyodide.js")
@@ -49,11 +50,22 @@ async function executeUserCode(userCode){
 }
 
 async function testUserCode(userCode, data){
+    console.log("This is data", data);
+    console.log("This is the challengeName", data.challenge_name);
+    console.log("This is the challengeTest", data.challenge_test);
     const pyodide = await pyodideReadyPromise
     // pyodide.FS.writeFile(userCode, '/mnt/usercode.py');
     pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
-    pyodide.FS.writeFile('usercode.py', userCode);
-    pyodide.runPython("import os; print(os.listdir('.'))");
+    await pyodide.FS.mkdir('/home/pyodide/challenges');
+    await pyodide.FS.mkdir(`/home/pyodide/challenges/${data.challenge_name}`);
+    console.log("created directory");
+    pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
+    pyodide.runPython("import os; print(os.listdir('/home/pyodide/challenges'))");
+    pyodide.FS.writeFile(`challenges/${data.challenge_name}/submission.py`, userCode);
+    pyodide.runPython(`import os; print(os.listdir('/home/pyodide/challenges/${data.challenge_name}'))`);
+    pyodide.FS.writeFile(`challenges/${data.challenge_name}/test_${data.challenge_name}.py`, data.challenge_test);
+    pyodide.FS.writeFile(`challenges/${data.challenge_name}/${data.challenge_name}.py`, data.challenge_class);
+
     pyodide.runPython(userCode);
     console.log("ran usercode", userCode);
     let transform_func = pyodide.globals.get('transform');
@@ -63,34 +75,10 @@ async function testUserCode(userCode, data){
         alert("transform function is not defined! Please define this function otherwise we can't evaluate the code.");
         console.log("is pyproxy");
     }
-    // todo: maybe we need a reload here!
-    let transform_code = pyodide.runPython(`
-    import inspect
-    from usercode import transform
-
-    inspect.getsource(transform)`);
-    console.log("transform code", transform_code);
-
-    // the define the class
-    pyodide.runPython(data.challenge_class);
-    let s = `
-import pytest
-from hypothesis import given
-${data.challenge_class}
-
-${transform_code}
-
-@given(df = ${data.challenge_name}.create_df_func())
-def test_transform(df):
-    user_df = transform(df)
-    expected_df = ${data.challenge_name}.transform(df)
-    tm.assert_frame_equal(user_df, expected_df)
-print('in main')
-`;
-    console.log(s);
-
-    pyodide.FS.writeFile(`test_${data.challenge_name}.py`, s);
-    pyodide.runPython(`import pytest; pytest.main(['--junitxml', 'report.xml', '-k', 'test_transform', '-x', '/home/pyodide/test_${data.challenge_name}.py'])`);
+    pyodide.FS.writeFile(`challenges/${data.challenge_name}/submission.py`, userCode);
+    pyodide.runPython(`import os; print(os.listdir('/home/pyodide/challenges/${data.challenge_name}'))`);
+    // pyodide.runPython("import os; print(os.listdir('.'))");
+    pyodide.runPython(`import pytest; pytest.main(['--junitxml', 'report.xml', '-x', '/home/pyodide/challenges/${data.challenge_name}/test_${data.challenge_name}.py'])`);
     pyodide.runPython("import os; print(os.listdir('.'))");
     // let exitCode = pyodide.runPython(`test_${data.challenge_name}.py`);
     // console.log("This is the exitCode", exitCode);

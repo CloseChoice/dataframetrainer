@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import hypothesis
+from collections.abc import Callable
 
 from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
@@ -9,8 +10,8 @@ import hypothesis.strategies as st
 
 class ChangeAtIndex:
     @staticmethod
-    def initial() -> pd.DataFrame:
-        return data_frames(
+    def create_df_func() -> dict[str, Callable]:
+        return {"df": data_frames(
             columns=[
                 column("Value", dtype=np.dtype(int)),
                 column("Name", dtype=np.dtype(str)),
@@ -20,7 +21,7 @@ class ChangeAtIndex:
                 st.sampled_from(["Helmut", "Greta", "Siegfried"]),
             ),
             index=range_indexes(min_size=3, max_size=5),
-        ).example()
+        )}
 
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.DataFrame:

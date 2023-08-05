@@ -10,9 +10,11 @@
     import Split from 'split.js'
     import { onMount } from "svelte";
 
-    const descritption = data.intro
-    let code = data.default_code
+    const description = data.intro;
+    let code = data.default_code;
+    let test_challenge = data.test_challenge;
     let resultUserCode = "";
+    let challengeName = data.challengeName;
 
     async function handleRun(){
         resultUserCode = await pyodideWorker.executeUserCode(code)
@@ -45,7 +47,7 @@
 <div class="h-100">
     <div class="row gx-0 h-100">
         <div bind:this={splitLeft} class="col-6">
-            {@html descritption}
+            {@html description}
         </div>
         <div bind:this={splitRight} class="h-100 col-6 d-flex flex-column" >
             <!-- min height:0 is necessary to prevent overflow  -->

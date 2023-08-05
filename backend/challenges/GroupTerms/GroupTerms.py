@@ -3,6 +3,7 @@
 import pandas as pd
 import numpy as np
 import hypothesis
+from collections.abc import Callable
 
 from hypothesis.extra.pandas import data_frames, column, range_indexes
 import hypothesis.strategies as st
@@ -10,9 +11,9 @@ import hypothesis.strategies as st
 
 class GroupTerms:
     @staticmethod
-    def initial() -> pd.DataFrame:
+    def create_df_func() -> dict[str, Callable]:
         # todo: this somehow generates floats in the number column, this should be changed
-        return data_frames(
+        return {"df": data_frames(
             columns=[
                 column("id", dtype=np.dtype(str)),
                 column("group", dtype=np.dtype(str)),
@@ -30,7 +31,7 @@ class GroupTerms:
                 st.sampled_from(["term1", "term2", "term3"]),
             ),
             index=range_indexes(min_size=3, max_size=10),
-        ).example()
+        )}
 
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.DataFrame:
