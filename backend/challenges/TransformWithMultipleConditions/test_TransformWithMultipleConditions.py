@@ -12,4 +12,4 @@ from challenges.TransformWithMultipleConditions.submission import transform
 def test_transform(df):
     expected_df = TransformWithMultipleConditions.transform(df)
     user_df = transform(df)
-    assert tm.assert_frame_equal(user_df, expected_df)
+    tm.assert_frame_equal(user_df, expected_df)

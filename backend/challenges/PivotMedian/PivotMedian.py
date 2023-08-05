@@ -14,8 +14,8 @@ from collections.abc import Callable
 
 class PivotMedian:
     @staticmethod
-    def create_df_func() -> Callable:
-        return data_frames(
+    def create_df_func() -> dict[str, Callable]:
+        return {"df": data_frames(
             columns=[
                 column("Customer", dtype=np.dtype(str)),
                 column("Type", dtype=np.dtype(str)),
@@ -27,7 +27,7 @@ class PivotMedian:
                 st.integers(min_value=-1, max_value=1000),
             ),
             index=range_indexes(min_size=3, max_size=12),
-        )
+        )}
 
     @staticmethod
     def transform(df: pd.DataFrame, **kwargs) -> pd.DataFrame:

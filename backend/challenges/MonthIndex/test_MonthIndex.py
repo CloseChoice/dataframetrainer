@@ -12,4 +12,4 @@ from challenges.MonthIndex.submission import transform
 def test_transform(df):
     expected_df = MonthIndex.transform(df)
     user_df = transform(df)
-    assert tm.assert_frame_equal(user_df, expected_df)
+    tm.assert_frame_equal(user_df, expected_df)
