@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import hypothesis
+from collections.abc import Callable
 
 from hypothesis.extra.pandas import data_frames, column, indexes
 import hypothesis.strategies as st
@@ -9,8 +10,8 @@ import hypothesis.strategies as st
 
 class ChangeDependingOnOthers:
     @staticmethod
-    def initial() -> pd.DataFrame:
-        return data_frames(
+    def create_df_func() -> dict[str, Callable]:
+        return {"df": data_frames(
             columns=[
                 column("Value", dtype=np.dtype(float)),
                 column("Other", dtype=np.dtype(str)),
@@ -22,7 +23,7 @@ class ChangeDependingOnOthers:
             index=indexes(
                 min_size=5, elements=st.integers(min_value=1, max_value=20), dtype=int
             ),
-        ).example()
+        )}
 
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.DataFrame:

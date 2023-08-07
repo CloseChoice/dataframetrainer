@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import hypothesis
+from collections.abc import Callable
 
 from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
@@ -10,13 +11,13 @@ import hypothesis.strategies as st
 
 class TransformWithConditions2:
     @staticmethod
-    def initial() -> pd.DataFrame:
+    def create_df_func() -> dict[str, Callable]:
         # todo: this is not optimal, but it works for now
         # things to improve:
         #   - use one of the strategies from hypothesis.extra.pandas to generate the whole df, don't use pd.concat
         #   - length of the df should be variable
         #   - np.nan should be generated in the value column, but this is not possible if one specifies min and max values
-        return data_frames(
+        return {"df": data_frames(
             columns=[
                 column("Type", dtype=np.dtype(str)),
                 column("Set", dtype=np.dtype(str)),
@@ -25,7 +26,7 @@ class TransformWithConditions2:
                 st.sampled_from(["A", "B", "C"]), st.sampled_from(["X", "Y", "Z"])
             ),
             index=range_indexes(min_size=3, max_size=8),
-        ).example()
+        )}
 
     @staticmethod
     def transform(df: pd.DataFrame, **kwargs) -> pd.DataFrame:

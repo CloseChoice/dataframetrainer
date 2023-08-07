@@ -42,7 +42,6 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_DB: ${DB_NAME}
     volumes:
-      # - ./database/sql:/docker-entrypoint-initdb.d
       - ./backend/challenges:/challenges
       - ./database/sql_scripts:/sql_scripts
       - sql:/var/lib/postgresql/data

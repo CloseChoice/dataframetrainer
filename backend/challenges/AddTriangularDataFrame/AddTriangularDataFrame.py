@@ -2,6 +2,7 @@
 """inspired by: https://stackoverflow.com/questions/73536536/how-to-generate-a-triangular-data-frame-with-as-many-columns-as-the-row-indica"""
 import pandas as pd
 import numpy as np
+from collections.abc import Callable
 
 from hypothesis.extra.pandas import data_frames, column, indexes, range_indexes
 import hypothesis.strategies as st
@@ -9,8 +10,8 @@ import hypothesis.strategies as st
 
 class AddTriangularDataFrame:
     @staticmethod
-    def initial() -> pd.DataFrame:
-        return data_frames(
+    def create_df_func() -> dict[str, Callable]:
+        return {"df": data_frames(
             columns=[
                 column("number", dtype=np.dtype(int)),
             ],
@@ -21,7 +22,7 @@ class AddTriangularDataFrame:
                 )
             ),
             index=range_indexes(min_size=3, max_size=10),
-        ).example()
+        )}
 
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.Series:
