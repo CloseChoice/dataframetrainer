@@ -8,7 +8,7 @@
     export let data;
     // Create a store and update it when necessary...    
     const user = writable(null);
-    $: user.set(data.user);
+    // $: user.set(data.user);
 
 
     console.log(data);
@@ -16,7 +16,10 @@
 
     onMount(initPyodideStore)
     import { signIn, signOut } from "@auth/sveltekit/client"
+    import CookieBanner from '$lib/components/CookieBanner.svelte';
 </script>
+
+<CookieBanner/>
 
 <nav style="z-index:1030" class="w-100 position-fixed zindex-fixed top-0 navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
