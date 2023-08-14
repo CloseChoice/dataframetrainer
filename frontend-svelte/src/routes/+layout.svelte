@@ -3,6 +3,9 @@
     import { writable } from 'svelte/store';
     import {page} from '$app/stores'
 
+    import '@fortawesome/fontawesome-free/js/all'
+    import '@fortawesome/fontawesome-free/css/all.css'
+
     import {initPyodideStore} from '$lib/stores/pyodide-store'
     /** @type {import('./$types').LayoutData} */
     export let data;
@@ -16,9 +19,14 @@
 
     onMount(initPyodideStore)
     import { signIn, signOut } from "@auth/sveltekit/client"
+    import CookieBanner from '$lib/components/CookieBanner.svelte';
 </script>
 
-<nav style="z-index:1030" class="w-100 position-fixed zindex-fixed top-0 navbar navbar-expand-md navbar-dark bg-dark">
+
+<CookieBanner/>
+
+
+<nav style="z-index:1030" class="bg-dark shadow border-bottom w-100 position-fixed zindex-fixed top-0 navbar navbar-expand-md">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -53,14 +61,7 @@
     
   </nav>
 
-<!-- The main body is 100 viewport heights to allow for easy full screen pages -->
-<!-- If you want to have a full screen page (minus the header) set the height of the outermost div to 100%-->
-<main class="vh-100 max-vw-100" role="main">
-  <slot/>
-</main>
 
-<style>
-	main{
-		padding-top: 3.5rem;
-	}
-</style>
+<slot></slot>
+
+
