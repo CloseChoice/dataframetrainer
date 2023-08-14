@@ -9,3 +9,6 @@ cleanup:
 
 up:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+recreate:
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml up --force-recreate
