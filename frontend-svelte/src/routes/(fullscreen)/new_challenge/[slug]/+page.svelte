@@ -1,10 +1,8 @@
 <script lang="ts">
-    /** @type {import('./$types').PageData} */
-    export let data;
-
+    export let data: PageData;
 
     import CodeMirror from "./CodeMirror.svelte";
-    import { isPyodideReady, pyodideWorker } from "$lib/stores/pyodide-store";
+    import { isPyodideReady, pyodideWorkerPromise, pyodideState } from "$lib/stores/pyodide-store";
     import CodeOutput from "./CodeOutput.svelte";
 
     // https://github.com/nathancahill/split/tree/master/packages/splitjs
@@ -12,21 +10,25 @@
     import { onMount } from "svelte";
     import TestResults from "$lib/components/TestResult/index.svelte";
     import type { PytestResult } from "$lib/components/TestResult/pytest-result";
+    import type { PageData } from "./$types";
 
 
     const description = data.intro;
     let code = data.default_code;
-    let test_challenge = data.test_challenge;
     let resultUserCode = "";
-    let challengeName = data.challengeName;
 
+    let didChallengeLoad = false;
     let testResult: PytestResult | null = null;
 
     async function handleRun(){
-        resultUserCode = await pyodideWorker.executeUserCode(code)
+        const worker = await pyodideWorkerPromise
+        resultUserCode = await worker.runCode(code)
+        console.log(resultUserCode);
     }
+
     async function handleTest(){
-        const testResultString = await pyodideWorker.testUserCode(code, data)
+        const worker = await pyodideWorkerPromise
+        const testResultString = await worker.testCode(code)
         testResult = JSON.parse(testResultString)
     }
 
@@ -48,6 +50,15 @@
             snapOffset: 0,
         })
     })
+    // console.log('pyodideWorkerschmorker', pyodideWorkerPromise)
+    pyodideWorkerPromise.then(async worker => {
+        await worker.loadChallenge(data.challenge_class, data.challenge_test)
+        didChallengeLoad = true
+        // staticExample = worker.getStatic()
+    })
+
+
+    // Get static example
 
 </script>
 
@@ -87,7 +98,7 @@
                     <div class="text-light top-0 end-0 position-absolute d-flex justify-content-end gap-2 p-2">
                         {#if !$isPyodideReady}
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Loading Pyodide...
+                            {$pyodideState}...
                         {/if}
                         <button disabled='{!$isPyodideReady}' type="button" on:click={handleRun} class="btn btn-primary btn-sm">Run</button>
                         <button disabled='{!$isPyodideReady}' type="button" on:click={handleTest} class="btn btn-secondary btn-sm">Test</button>
