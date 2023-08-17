@@ -11,7 +11,7 @@
     export let data;
     // Create a store and update it when necessary...    
     const user = writable(null);
-    $: user.set(data.user);
+    // $: user.set(data.user);
 
 
     console.log(data);
