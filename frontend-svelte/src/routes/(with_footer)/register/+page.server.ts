@@ -1,23 +1,12 @@
 import { query } from '$lib/server/db'
 import { error, json } from '@sveltejs/kit'
 
-
-
-function validateFormData(userData){
-
-    const isValid = {}
-
-    isValid.name = Boolean(userData.name)
-    isValid.email = Boolean(userData.email);
-    isValid.password = Boolean(userData.password);
-
-    return isValid
-}
+import type { Actions } from '@sveltejs/kit'
 
 
 
-/** @type {import('./$types').Actions} */
-export const actions = {
+
+export const actions: Actions = {
     register: async (event) => {
         const {request, cookies} = event
         const data = await request.formData();
@@ -32,8 +21,6 @@ export const actions = {
             email: data.get('email'),
             password: data.get('password')
         }
-
-        const validation = validateFormData(userData)
 
         // console.log(userData);
         const sql = `SELECT register($1) AS "authenticationResult";`

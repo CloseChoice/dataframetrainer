@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
+import type { ServerLoad } from '@sveltejs/kit';
 
-/** @type {import('./$types').PageServerLoad} */
-export async function load({ params, fetch }) {
+export const load: ServerLoad = async ({ params, fetch })=> {
     console.log(params.slug);
 
     const challengeName = params.slug
@@ -13,9 +13,9 @@ export async function load({ params, fetch }) {
     const defaultCode = await fetch(`http://127.0.0.1:5000/files/challenges/${challengeName}/defaultCode.py`)
     const challengeTest = await fetch(`http://127.0.0.1:5000/files/challenges/${challengeName}/test_.py`)
 
-    if (challengeClass.status != 200) {
-        throw error(404, `challenge ${challengeName} no exist you stupiddo. This is the url ${url}`);
-    }
+    // if (challengeClass.status != 200) {
+    //     throw error(404, `challenge ${challengeName} no exist you stupiddo. This is the url ${url}`);
+    // }
 
     // await pyodidemoped
 
