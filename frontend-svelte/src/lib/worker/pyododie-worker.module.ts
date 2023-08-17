@@ -80,6 +80,14 @@ const worker = {
         const res = dftModule.run_code(code)
         stateSubject.next(PyodideWorkerState.IDLE)
         return res
+    },
+    generateExample: async (): Promise<ChallengeExample> => {
+        stateSubject.next(PyodideWorkerState.GENERATING_EXAMPLE)
+        const pyodide = await pyodideReadyPromise
+        const dftModule = await pyodide.pyimport("dft");
+        const res = dftModule.generate_example()
+        stateSubject.next(PyodideWorkerState.IDLE)
+        return JSON.parse(res)
     }
 }
 
@@ -89,7 +97,11 @@ export enum PyodideWorkerState{
     IDLE = 'idle',
     RUNNING = 'running',
     TESTING = 'testing',
-    INSTALLING = 'installing pyodidie'
-
+    INSTALLING = 'installing pyodidie',
+    GENERATING_EXAMPLE = 'generating example'
 }
+export interface ChallengeExample {
+    result: string;
+    params: Record<string, string>;
+  }
 expose(worker)
