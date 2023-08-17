@@ -22,7 +22,7 @@
 
     let didChallengeLoad = false;
     let testResult: PytestResult | null = null;
-
+    let activeTab = 'description'
     async function handleRun(){
         const worker = await pyodideWorkerPromise
         await worker.runCode(code)
@@ -32,6 +32,7 @@
         const worker = await pyodideWorkerPromise
         const testResultString = await worker.testCode(code)
         testResult = JSON.parse(testResultString)
+        activeTab = 'tests'
     }
 
     let splitEditor : HTMLElement;
@@ -65,14 +66,16 @@
 
 <div class="h-100 d-flex">
         <div bind:this={splitLeft} class="position-relative h-100">
+            {#key activeTab}
             <TabContent>
-                <TabPane tabId="description" tab="Description">
+                <TabPane tabId="description" tab="Description" active={activeTab == 'description'}>
                     <DescriptionTab staticExample={staticExample} description={description}/>
                 </TabPane>
-                <TabPane tabId="tests" tab="Tests" active>
+                <TabPane tabId="tests" tab="Tests" active={activeTab == 'tests'}>
                     <TestResults bind:testResult={testResult}/>
                 </TabPane>
             </TabContent>
+            {/key}
         </div>
         <div bind:this={splitRight} class="h-100 col-6 d-flex flex-column" >
             <!-- min height:0 is necessary to prevent overflow  -->
