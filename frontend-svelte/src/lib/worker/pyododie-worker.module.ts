@@ -3,7 +3,8 @@ import * as pyodidePackage from 'pyodide'
 const {loadPyodide} = pyodidePackage
 import {expose} from 'threads/worker'
 import dftCode from './dft.py?raw'
-
+import pyodideLockFileURL from './repodata.json?url'
+console.log(pyodideLockFileURL)
 
 const stateSubject = new Subject<PyodideWorkerState>()
 const stdoutSubject = new Subject<string>()
@@ -20,7 +21,11 @@ const dependencies = [
 
 async function loadPyodideAndPackages(){
     stateSubject.next(PyodideWorkerState.INSTALLING)
-    const pyodide = await loadPyodide({indexURL: '/pyodide-indexurl'})
+    const pyodide = await loadPyodide({
+        indexURL: '/pyodide-indexurl',
+        // If you change the requirements make sure to update the repodata.json lockfile (e.g by printing micropip.freeze() to console)
+        lockFileURL: pyodideLockFileURL,
+    })
     pyodide.setStdout({
         batched: (batch) => {
             console.log('print: ', batch)
@@ -35,6 +40,7 @@ async function loadPyodideAndPackages(){
     await pyodide.FS.writeFile("dft.py", dftCode, { encoding: "utf8" });
     
     console.log('🦆: Pyodidie and Modules were successfully installed')
+
     stateSubject.next(PyodideWorkerState.IDLE)
     return pyodide
 }
