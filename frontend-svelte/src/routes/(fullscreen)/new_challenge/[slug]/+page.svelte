@@ -25,8 +25,7 @@
 
     async function handleRun(){
         const worker = await pyodideWorkerPromise
-        resultUserCode = await worker.runCode(code)
-        console.log(resultUserCode);
+        await worker.runCode(code)
     }
 
     async function handleTest(){

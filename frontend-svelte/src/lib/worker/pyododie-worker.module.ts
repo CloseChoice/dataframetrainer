@@ -61,23 +61,17 @@ const worker = {
         stateSubject.next(PyodideWorkerState.TESTING)
         const pyodide = await pyodideReadyPromise
         await pyodide.FS.writeFile("submission.py", code, {encoding: "utf8"})
-
-        console.log(pyodide.FS.readdir('.'))
-        const challengemod = await pyodide.pyimport("challenge");
-        console.log(challengemod);
         const dftModule = await pyodide.pyimport("dft");
-        const res = await dftModule.test_code(code)
+        const res = await dftModule.test_code()
         stateSubject.next(PyodideWorkerState.IDLE)
-        console.log(res);
         return res
     },
     runCode: async (code: String) => {
         stateSubject.next(PyodideWorkerState.RUNNING)
         const pyodide = await pyodideReadyPromise
-
-        
+        await pyodide.FS.writeFile("submission.py", code, {encoding: "utf8"})
         const dftModule = await pyodide.pyimport("dft");
-        const res = dftModule.run_code(code)
+        const res = dftModule.run_code()
         stateSubject.next(PyodideWorkerState.IDLE)
         return res
     },
