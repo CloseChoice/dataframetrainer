@@ -29,8 +29,7 @@
 
     async function handleTest(){
         const worker = await pyodideWorkerPromise
-        const testResultString = await worker.testCode(code)
-        testResult = JSON.parse(testResultString)
+        testResult = await worker.testCode(code)
         activeTab = 'tests'
     }
 

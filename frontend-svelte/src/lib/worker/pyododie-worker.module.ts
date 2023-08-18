@@ -1,23 +1,17 @@
+import { PyodideWorkerState } from '$lib/worker/types'
 import { Observable, Subject } from 'observable-fns'
 import * as pyodidePackage from 'pyodide'
 const {loadPyodide} = pyodidePackage
+import type { PyodideInterface } from 'pyodide'
 import {expose} from 'threads/worker'
+import requirements from './requirements/requirements.json'
 import dftCode from './dft.py?raw'
-import pyodideLockFileURL from './repodata.json?url'
-console.log(pyodideLockFileURL)
+import pyodideLockFileURL from './requirements/repodata.json?url'
+import type { PytestResult } from '$lib/components/TestResult/pytest-result'
 
 const stateSubject = new Subject<PyodideWorkerState>()
 const stdoutSubject = new Subject<string>()
 const pyodideReadyPromise = loadPyodideAndPackages()
-
-const dependencies = [
-    'hypothesis',
-    'pandas',
-    'numpy',
-    'pytest',
-    // pytest-json
-    'https://files.pythonhosted.org/packages/81/35/d07400c715bf8a88aa0c1ee9c9eb6050ca7fe5b39981f0eea773feeb0681/pytest_json_report-1.5.0-py3-none-any.whl'
-]
 
 async function loadPyodideAndPackages(){
     stateSubject.next(PyodideWorkerState.INSTALLING)
@@ -35,7 +29,7 @@ async function loadPyodideAndPackages(){
 
     await pyodide.loadPackage("micropip");
     const micropip = await pyodide.pyimport("micropip");
-    await micropip.install(dependencies)
+    await micropip.install(requirements)
     
     await pyodide.FS.writeFile("dft.py", dftCode, { encoding: "utf8" });
     
@@ -45,55 +39,50 @@ async function loadPyodideAndPackages(){
     return pyodide
 }
 
+type WithPyodideCallback<T> = (pyodide: PyodideInterface) => T
+async function withPyodide<T>(state: PyodideWorkerState, callback: WithPyodideCallback<T>){
+    stateSubject.next(state)
+    const pyodide = await pyodideReadyPromise
+    const res = await callback(pyodide)
+    stateSubject.next(PyodideWorkerState.IDLE)
+    return res
+}
+
 const worker = {
     state: ()=> Observable.from(stateSubject),
     stdout: () => Observable.from(stdoutSubject),
     loadChallenge: async (classFile: String, testFile: String) => {
-        stateSubject.next(PyodideWorkerState.LOADING_CHALLENGE)
-        const pyodide = await pyodideReadyPromise
-        await pyodide.FS.writeFile("test_.py", testFile, {encoding: "utf8"})
-        await pyodide.FS.writeFile("challenge.py", classFile, {encoding: "utf8"})
-        console.log('🦆: A new Challenge was successfully loaded')
-        
-        stateSubject.next(PyodideWorkerState.IDLE)
+        return withPyodide(PyodideWorkerState.LOADING_CHALLENGE, async (pyodide)=>{
+            await pyodide.FS.writeFile("test_.py", testFile, {encoding: "utf8"})
+            await pyodide.FS.writeFile("challenge.py", classFile, {encoding: "utf8"})
+            console.log('🦆: A new Challenge was successfully loaded')
+        })
     },
-    testCode: async (code: String) => {
-        stateSubject.next(PyodideWorkerState.TESTING)
-        const pyodide = await pyodideReadyPromise
-        await pyodide.FS.writeFile("submission.py", code, {encoding: "utf8"})
-        const dftModule = await pyodide.pyimport("dft");
-        const res = await dftModule.test_code()
-        stateSubject.next(PyodideWorkerState.IDLE)
-        return res
+    testCode: (code: String) => {
+        return withPyodide(PyodideWorkerState.TESTING, async pyodide=>{
+            await pyodide.FS.writeFile("submission.py", code, {encoding: "utf8"})
+            const res = await pyodide.pyimport("dft").test_code()
+            const testResult: PytestResult = JSON.parse(res)
+            return testResult
+        })
     },
     runCode: async (code: String) => {
-        stateSubject.next(PyodideWorkerState.RUNNING)
-        const pyodide = await pyodideReadyPromise
-        await pyodide.FS.writeFile("submission.py", code, {encoding: "utf8"})
-        const dftModule = await pyodide.pyimport("dft");
-        const res = dftModule.run_code()
-        stateSubject.next(PyodideWorkerState.IDLE)
-        return res
+        return withPyodide(PyodideWorkerState.RUNNING, async pyodide => {
+            await pyodide.FS.writeFile("submission.py", code, {encoding: "utf8"})
+            await pyodide.pyimport("dft").run_code()
+        })
     },
-    generateExample: async (): Promise<ChallengeExample> => {
-        stateSubject.next(PyodideWorkerState.GENERATING_EXAMPLE)
-        const pyodide = await pyodideReadyPromise
-        const dftModule = await pyodide.pyimport("dft");
-        const res = dftModule.generate_example()
-        stateSubject.next(PyodideWorkerState.IDLE)
-        return JSON.parse(res)
+    generateExample: async () => {
+        return withPyodide(PyodideWorkerState.GENERATING_EXAMPLE, async pyodide =>{
+            const res = await pyodide.pyimport("dft").generate_example()
+            const example: ChallengeExample = JSON.parse(res)
+            return example
+        })
     }
 }
 
 export type PyodideWorker = typeof worker
-export enum PyodideWorkerState{
-    LOADING_CHALLENGE = 'loading challenge',
-    IDLE = 'idle',
-    RUNNING = 'running',
-    TESTING = 'testing',
-    INSTALLING = 'installing pyodidie',
-    GENERATING_EXAMPLE = 'generating example'
-}
+
 export interface ChallengeExample {
     result: string;
     params: Record<string, string>;
