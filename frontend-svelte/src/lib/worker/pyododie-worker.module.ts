@@ -1,4 +1,5 @@
 import { PyodideWorkerState } from '$lib/worker/types'
+import type { PytestResult } from '$lib/components/TestTab/pytest-result'
 import { Observable, Subject } from 'observable-fns'
 import * as pyodidePackage from 'pyodide'
 const {loadPyodide} = pyodidePackage
@@ -7,7 +8,6 @@ import {expose} from 'threads/worker'
 import requirements from './requirements/requirements.json'
 import dftCode from './dft.py?raw'
 import pyodideLockFileURL from './requirements/repodata.json?url'
-import type { PytestResult } from '$lib/components/TestResult/pytest-result'
 
 const stateSubject = new Subject<PyodideWorkerState>()
 const stdoutSubject = new Subject<string>()

@@ -4,6 +4,7 @@ import type {  PyodideWorker } from '$lib/worker/pyododie-worker.module';
 import MyWorker from '$lib/worker/pyododie-worker.module?worker'
 import { spawn, Worker, type ModuleThread} from 'threads'
 import { PyodideWorkerState } from '$lib/worker/types';
+import type { PytestResult } from '$lib/components/TestTab/pytest-result';
 
 let resolvePyodideReadyPromise: (worker: ModuleThread<PyodideWorker>) => void
 let rejectPyodideReadyPromise
@@ -14,6 +15,8 @@ export let pyodideWorkerPromise: Promise<ModuleThread<PyodideWorker>> = new Prom
 export const pyodideStdout: Writable<string[]> = writable([])
 
 export const pyodideState = writable('loading')
+
+export const testResult: Writable<PytestResult> = writable()
 
 export const isPyodideReady = derived(
     pyodideState,
