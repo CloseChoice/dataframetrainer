@@ -1,22 +1,9 @@
-<style>
- pre {
-    color: purple;
-    font-family: 'Comic Sans MS', cursive;
-    font-size: 2em;
-  }
-
-  .codeOutput {
-    border: solid 1px red;
-  }
-</style>
 <script>
-export let resultUserCode;
+import {pyodideStdout} from '$lib/stores/pyodide-store'
 </script>
 
-<div class="codeOutput">
-    {#if resultUserCode !== undefined}
-    <pre>
-        {resultUserCode}
-    </pre>
-    {/if}
+<div class="max-height-100">
+    {#each $pyodideStdout as line}
+      <div>{line}</div>
+    {/each}
 </div>

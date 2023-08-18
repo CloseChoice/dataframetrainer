@@ -18,7 +18,6 @@
 
     const description = data.intro;
     let code = data.default_code;
-    let resultUserCode = "";
 
     let didChallengeLoad = false;
     let testResult: PytestResult | null = null;
@@ -74,6 +73,7 @@
                 <TabPane tabId="tests" tab="Tests" active={activeTab == 'tests'}>
                     <TestResults bind:testResult={testResult}/>
                 </TabPane>
+                
             </TabContent>
             {/key}
         </div>
@@ -92,7 +92,7 @@
                     </div>
             </div>
             <div bind:this={splitConsole} style="min-height: 200px; background: green" >
-                <CodeOutput resultUserCode={resultUserCode}/>
+                <CodeOutput/>
             </div>
         </div>
 </div>

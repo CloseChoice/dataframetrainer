@@ -1,9 +1,9 @@
 import { derived, writable, get, readable } from 'svelte/store'
 import type { Writable } from 'svelte/store';
-import type { PyodideWorker } from '$lib/worker/pyododie-worker.module';
+import type {  PyodideWorker } from '$lib/worker/pyododie-worker.module';
 import MyWorker from '$lib/worker/pyododie-worker.module?worker'
 import { spawn, Worker, type ModuleThread} from 'threads'
-
+import { PyodideWorkerState } from '$lib/worker/types';
 
 let resolvePyodideReadyPromise: (worker: ModuleThread<PyodideWorker>) => void
 let rejectPyodideReadyPromise
@@ -34,6 +34,14 @@ export async function initPyodideStore(){
 
     worker.state().subscribe(state => {
         pyodideState.set(state)
+        const statesThatResetConsole = [
+            PyodideWorkerState.RUNNING, 
+            PyodideWorkerState.LOADING_CHALLENGE, 
+            PyodideWorkerState.TESTING
+        ]
+        if (statesThatResetConsole.includes(state)){
+            pyodideStdout.set([])
+        }
     })
 
     resolvePyodideReadyPromise(worker)
