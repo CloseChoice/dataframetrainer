@@ -59,10 +59,10 @@ export const actions = {
         if (!password || !name){
           throw Error("Invalid Password or Username")
         }
-        console.log('password', password);
-        console.log('name', name);
         const key = await auth.useKey("username", name, password);
         session = await auth.createSession({userId: key.userId, attributes: {}});
+        await locals.auth.setSession(session);
+        
       }catch (e){
         return fail(400, {password: {
           isValid: false,
