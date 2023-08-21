@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { type QueryResult, Pool} from 'pg'
-import {DB_NAME, DB_USER, DB_HOST, PASSWORD, PORT} from '$env/static/private'
+import {DB_NAME, DB_USER, PASSWORD, PORT} from '$env/static/private'
 
-if (!(DB_NAME && DB_USER && DB_HOST && PASSWORD && PORT)){
+if (!(DB_NAME && DB_USER && PASSWORD && PORT)){
   throw new Error("Not all environment variables are defined")
 }
-export const PG_CONNECTION_STRING = `postgres://${DB_USER}:${PASSWORD}@${DB_HOST}:${PORT}/${DB_NAME}`
+export const PG_CONNECTION_STRING = `postgres://${DB_USER}:${PASSWORD}@localhost:${PORT}/${DB_NAME}`
 
 console.log(PG_CONNECTION_STRING);
 
