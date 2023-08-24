@@ -82,6 +82,11 @@ def get_challenge(id):
 def get_intro(id):
     return send_from_directory(f"challenges/{id}", f"intro.md")
 
+@app.route("/get_challenge_test/<string:id>/", methods=["GET"])
+def get_challenge_test(id):
+    challenge_file = [f for f in os.listdir(f"challenges/{id}") if f.startswith("test_")][0]
+    return send_from_directory(f"challenges/{id}", challenge_file)
+
 
 @app.route("/get_default/<string:id>/", methods=["GET"])
 def get_default(id):

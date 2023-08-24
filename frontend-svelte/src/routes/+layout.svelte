@@ -7,7 +7,7 @@
     /** @type {import('./$types').LayoutData} */
     export let data;
     // Create a store and update it when necessary...    
-
+    const user = writable(null);
 
 
     console.log(data);
@@ -17,9 +17,14 @@
     import { signIn, signOut } from "@auth/sveltekit/client"
 
     console.log('session through layout server:', $page.data.session);
+    import CookieBanner from '$lib/components/CookieBanner.svelte';
 </script>
 
-<nav style="z-index:1030" class="w-100 position-fixed zindex-fixed top-0 navbar navbar-expand-md navbar-dark bg-dark">
+
+<CookieBanner/>
+
+
+<nav style="z-index:1030" class="shadow border-bottom w-100 position-fixed zindex-fixed top-0 navbar navbar-expand-md">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

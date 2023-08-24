@@ -3,6 +3,7 @@ Treat missing values as np.nan. If a Customer does not appear in the initial dat
 import pandas as pd
 import numpy as np
 import hypothesis
+from collections.abc import Callable
 
 from hypothesis.extra.pandas import data_frames, column, range_indexes, series
 from hypothesis.extra.numpy import arrays
@@ -11,8 +12,8 @@ import hypothesis.strategies as st
 
 class Pivot1:
     @staticmethod
-    def initial() -> pd.DataFrame:
-        return data_frames(
+    def create_df_func() -> dict[str, Callable]:
+        return {"df": data_frames(
             columns=[
                 column("Customer", dtype=np.dtype(str)),
                 column("Type", dtype=np.dtype(str)),
@@ -24,7 +25,7 @@ class Pivot1:
                 st.integers(min_value=-1, max_value=1000),
             ),
             index=range_indexes(min_size=3, max_size=12),
-        ).example()
+        )}
 
     @staticmethod
     def transform(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
