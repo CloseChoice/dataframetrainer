@@ -8,9 +8,10 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       NODE_ENV: development
-      POSTGRES_PASSWORD: ${PASSWORD}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_DB: ${DB_NAME}
+      PASSWORD: ${PASSWORD}
+      DB_USER: ${DB_USER}
+      PORT: ${PORT}
+      DB_NAME: ${DB_NAME}
       AUTH_SECRET: ${AUTH_SECRET}
     ports:
       # The port of the website
