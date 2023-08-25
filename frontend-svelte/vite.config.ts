@@ -14,6 +14,13 @@ export default defineConfig({
 			// secure: false,
 			// agent: new http.Agent(),
 			rewrite: (path) => path.replace(/^\/files/, '')
+		  },
+		  '/backend': {
+			target: 'http://127.0.0.1:5000',
+			changeOrigin: true,
+			// secure: false,
+			// agent: new http.Agent(),
+			rewrite: (path) => path.replace(/^\/backend/, '')
 		  }
 		}
 	  }

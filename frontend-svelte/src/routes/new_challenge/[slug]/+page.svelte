@@ -2,7 +2,9 @@
     /** @type {import('./$types').PageData} */
     export let data;
 
-
+    import { goto } from '$app/navigation';
+    import {page} from '$app/stores'
+    import axios from 'axios'
     import CodeMirror from "./CodeMirror.svelte";
     import { isPyodideReady, pyodideWorker } from "$lib/stores/pyodide-store";
     import CodeOutput from "./CodeOutput.svelte";
@@ -29,6 +31,25 @@
         const testResultString = await pyodideWorker.testUserCode(code, data)
         testResult = JSON.parse(testResultString)
     }
+
+    async function handleNewChallenge(){
+        const userId = $page.data.session?.user?.id
+
+        if (! userId) {
+            alert("yer gotta be signed in for datt")
+        }
+
+        const res = await axios.post('/backend/get_next_challenge', {
+            data: {
+                user_id: userId
+            }
+        })
+        const nextChallenge = res.data.next_challenge
+        goto('/new_challenge/' + nextChallenge)
+
+        
+    }
+
 
     let splitEditor : HTMLElement;
     let splitConsole: HTMLElement;
@@ -79,6 +100,7 @@
                 </div>
               </div>
         </div>
+
         <div bind:this={splitRight} class="h-100 col-6 d-flex flex-column" >
             <!-- min height:0 is necessary to prevent overflow  -->
             <div bind:this={splitEditor} class="flex-grow-1 position-relative" style="min-height:0">
