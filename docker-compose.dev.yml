@@ -7,7 +7,7 @@ services:
       context: ./frontend-svelte
       dockerfile: Dockerfile.dev
     environment:
-      - NODE_ENV=development
+      - NODE_ENV: development
       - POSTGRES_PASSWORD: ${PASSWORD}
       - POSTGRES_USER: ${DB_USER}
       - POSTGRES_DB: ${DB_NAME}
