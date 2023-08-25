@@ -6,10 +6,13 @@ from challenges.SumSpendings.SumSpendings import (
 )
 import pandas.testing as tm
 from hypothesis import given
-from challenges.SumSpendings.submission import transform
+import challenges.SumSpendings.submission as submission
+
+import importlib
+importlib.reload(submission)
 
 @given(**SumSpendings.create_df_func())
 def test_transform(df):
     expected_df = SumSpendings.transform(df)
-    user_df = transform(df)
+    user_df = submission.transform(df)
     tm.assert_series_equal(user_df, expected_df)

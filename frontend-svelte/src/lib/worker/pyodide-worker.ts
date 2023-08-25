@@ -80,10 +80,10 @@ class MyWorkerClass extends EventEmitter {
             pyodide.FS.mkdir('/home/pyodide/userSolutions'),
             pyodide.FS.mkdir('/home/pyodide/tests')
         ])
-        // await pyodide.FS.syncfs(true, function (err) {
-        //     console.log(err);
-        //     // handle callback
-        // });
+        await pyodide.FS.syncfs(true, function (err) {
+            console.log(err);
+            // handle callback
+        });
         return pyodide;
     }
 
@@ -99,11 +99,21 @@ class MyWorkerClass extends EventEmitter {
         this.emit('stateChange', 'running')
         const pyodide = await this.pyodideReadyPromise
         const resultUserCode = pyodide.runPython(userCode);
+        pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
+        // pyodide.runPython("import os; print(os.listdir('/home/pyodide/ActuallyWorkingChallenge'))");
         console.log("executing user code: ", userCode);
         console.log("this is resultUserCode", resultUserCode);
         this.emit('stateChange', 'idle')
         return resultUserCode
     // todo: fill!
+    }
+
+    async showStuff(path) {
+      const pyodide = await this.pyodideReadyPromise;
+      console.log("This is the path of which we should print stuff", path);
+      pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
+      pyodide.runPython(`import os; print(os.listdir('${path}'))`);
+      return true
     }
 
     async testUserCode(userCode, data){
@@ -115,17 +125,24 @@ class MyWorkerClass extends EventEmitter {
         // pyodide.FS.writeFile(userCode, '/mnt/usercode.py');
         console.log('root dir', pyodide.FS.readdir('.'));
         
-        // pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
+        pyodide.runPython("import os; print(os.listdir('/home/pyodide/'))");
         // await pyodide.FS.mkdir('/home/pyodide/challenges');
         try {
           await pyodide.FS.mkdir(`/home/pyodide/challenges/${data.challenge_name}`);
+          console.log(`created file at /home/pyodide/challenges/${data.challenge_name}`);
         } catch (error) {
           console.error(`Failed to create dir with name "/challenges/${data.challenge_name}"`)
         }
         await pyodide.FS.writeFile(`./challenges/${data.challenge_name}/submission.py`, userCode);
         await pyodide.FS.writeFile(`./challenges/${data.challenge_name}/test_${data.challenge_name}.py`, data.challenge_test);
         await pyodide.FS.writeFile(`./challenges/${data.challenge_name}/${data.challenge_name}.py`, data.challenge_class);
-        console.log('challenge dir', pyodide.FS.readdir(`./challenges/${data.challenge_name}`));
+        await pyodide.FS.syncfs(true, function (err) {
+            console.log(err);
+            // handle callback
+        });
+
+        console.log('challenge dir', pyodide.FS.readdir(`./challenges/`));
+        console.log(`challenge dir ${data.challenge_name}`, pyodide.FS.readdir(`./challenges/${data.challenge_name}`));
 
         pyodide.runPython(userCode);
         // console.log("ran usercode", userCode);

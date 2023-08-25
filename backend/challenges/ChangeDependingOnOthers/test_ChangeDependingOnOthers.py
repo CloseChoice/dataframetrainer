@@ -6,10 +6,13 @@ from challenges.ChangeDependingOnOthers.ChangeDependingOnOthers import (
 )
 import pandas.testing as tm
 from hypothesis import given
-from challenges.ChangeDependingOnOthers.submission import transform
+import challenges.ChangeDependingOnOthers.submission as submission
+
+import importlib
+importlib.reload(submission)
 
 @given(**ChangeDependingOnOthers.create_df_func())
 def test_transform(df):
     expected_df = ChangeDependingOnOthers.transform(df)
-    user_df = transform(df)
+    user_df = submission.transform(df)
     tm.assert_frame_equal(user_df, expected_df)

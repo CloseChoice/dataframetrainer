@@ -85,12 +85,16 @@ def serve_static(filepath):
 @app.route("/get_challenge/<string:id>/", methods=["GET"])
 @cross_origin(supports_credentials=True)
 def get_challenge(id):
-    return send_from_directory(f"challenges/{id}", f"challenge.py")
+    return send_from_directory(f"challenges/{id}", f"{id}.py")
 
 
 @app.route("/get_intro/<string:id>/", methods=["GET"])
 def get_intro(id):
     return send_from_directory(f"challenges/{id}", f"intro.md")
+
+@app.route("/get_submission/<string:id>/", methods=["GET"])
+def get_submission(id):
+    return send_from_directory(f"challenges/{id}", f"submission.py")
 
 @app.route("/get_challenge_test/<string:id>/", methods=["GET"])
 def get_challenge_test(id):

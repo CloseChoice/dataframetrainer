@@ -1,4 +1,4 @@
-from challenge import Challenge
+from challenges.ActuallyWorkingChallenge.ActuallyWorkingChallenge import Challenge
 
 
 def transform(df):

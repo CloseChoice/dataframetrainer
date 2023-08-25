@@ -6,10 +6,13 @@ from challenges.TransformWithMultipleConditions.TransformWithMultipleConditions 
 )
 import pandas.testing as tm
 from hypothesis import given
-from challenges.TransformWithMultipleConditions.submission import transform
+import challenges.TransformWithMultipleConditions.submission as submission
+
+import importlib
+importlib.reload(submission)
 
 @given(**TransformWithMultipleConditions.create_df_func())
 def test_transform(df):
     expected_df = TransformWithMultipleConditions.transform(df)
-    user_df = transform(df)
+    user_df = submission.transform(df)
     tm.assert_frame_equal(user_df, expected_df)
