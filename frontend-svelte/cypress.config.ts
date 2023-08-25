@@ -38,5 +38,9 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       on('task', tasks)
     },
+    retries: {
+      "runMode": 2,
+      "openMode": 2
+    }
   },
 })

@@ -44,8 +44,8 @@ jobs:
       - name: Install dependencies
         working-directory: ./frontend-svelte
         run: npm ci
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
       -
         name: Run docker compose
         working-directory: .
@@ -71,9 +71,10 @@ jobs:
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
         run: npx cypress run --browser chrome
-      - name: Run Cypress tests Firefox
-        working-directory: ./frontend-svelte
-        run: npx cypress run --browser firefox
+      # Currently only chrome is supported
+      # - name: Run Cypress tests Firefox
+      #   working-directory: ./frontend-svelte
+      #   run: npx cypress run --browser firefox
       -
         name: Run docker compose dev
         working-directory: .
