@@ -7,11 +7,11 @@ services:
       context: ./frontend-svelte
       dockerfile: Dockerfile.dev
     environment:
-      - NODE_ENV: development
-      - POSTGRES_PASSWORD: ${PASSWORD}
-      - POSTGRES_USER: ${DB_USER}
-      - POSTGRES_DB: ${DB_NAME}
-      - AUTH_SECRET: ${AUTH_SECRET}
+      NODE_ENV: development
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+      AUTH_SECRET: ${AUTH_SECRET}
     ports:
       # The port of the website
       - 5173:5173

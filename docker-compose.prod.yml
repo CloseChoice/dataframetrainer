@@ -7,7 +7,7 @@ services:
       context: ./frontend-svelte
       dockerfile: Dockerfile.prod
     environment:
-      - NODE_ENV=production
+      NODE_ENV: production
     ports:
       # The port of the website
       - 3000:3000
