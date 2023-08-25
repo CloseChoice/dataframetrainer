@@ -1,21 +1,19 @@
 version: "3.1"
 
 services:
-  frontend-dev:
+  frontend-prod:
     restart: on-failure
     build:
       context: ./frontend-svelte
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     environment:
-      NODE_ENV: development
-      PASSWORD: ${PASSWORD}
-      DB_USER: ${DB_USER}
-      PORT: ${PORT}
-      DB_NAME: ${DB_NAME}
-      AUTH_SECRET: ${AUTH_SECRET}
+      NODE_ENV: production
     ports:
       # The port of the website
-      - 5173:5173
+      - 3000:3000
+
+    # This will make all variables inside the root .env accessible inside the container
+    env_file: .env
     volumes:
       - ./frontend-svelte:/frontend-svelte
     working_dir: /frontend-svelte

@@ -21,6 +21,7 @@ This starts the backend and the database. To start the frontend, use
 cd frontend-svelte && npm run dev
 ```
 
+
 #### Architecture of this repository
 ##### CI Pipelines
 todo
@@ -31,5 +32,3 @@ To improve the learning experience for the users and to tailer user-specific lea
 - we provide just one endpoint `get_next_challenge` which takes the `user_id` as input and returns the id of the next challenge
 - in the backend we implement a strategy per group, this is done in the implementation of `get_next_challenge`
 - in the future we also plan to provide transparency over which strategy is applied to the user
-
-

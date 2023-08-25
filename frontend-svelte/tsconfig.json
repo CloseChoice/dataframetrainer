@@ -11,7 +11,7 @@
 		"strict": true,
 		"module": "es2020"
 	},
-	"include": ["src/**/*"],
+	"include": ["src/**/*", ".svelte-kit/ambient.d.ts"],
 	"exclude": ["node_modules", "**/*.spec.ts"]
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//
