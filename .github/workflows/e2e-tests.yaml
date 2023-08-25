@@ -52,9 +52,9 @@ jobs:
         run: |
           ls -la
           docker compose -f docker-compose.yml up -d
-      - name: Start frontend
-        working-directory: ./frontend-svelte
-        run: npm run dev &
+      # - name: Start frontend
+      #   working-directory: ./frontend-svelte
+      #   run: npm run dev &
       - name: Wait for server to start
         run: sleep 10
       - name: Run Cypress tests Chrome
