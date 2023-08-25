@@ -7,10 +7,8 @@ on:
     paths:
       - backend/**
   pull_request:
-    paths:
-      - backend/**
   workflow_call:
-  pull_request_target:
+  workflow_dispatch:
 
 jobs:
   run-pytest-on-backend:
@@ -32,4 +30,4 @@ jobs:
           pip install -r requirements.txt
       - name: Test with pytest
         run: |
-          python -m pytest tests
+          python -m pytest challenges

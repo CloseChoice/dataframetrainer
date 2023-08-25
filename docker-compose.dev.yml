@@ -25,4 +25,3 @@ services:
     volumes:
       - ./database/tests_docker/sql:/app/sql
       - ./database/tests_docker/fill_for_local_test.py:/app/fill_for_local_test.py
-

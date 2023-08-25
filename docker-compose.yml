@@ -5,12 +5,17 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-    # image: dftrainer-backend
     ports:
       - 5000:5000
     working_dir: /app
     volumes:
       - ./backend:/app
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      HOST: db
+      PASSWORD: ${PASSWORD}
+      PORT: ${PORT}
 
   db-fill-or-update-tables:
     build:
@@ -20,6 +25,13 @@ services:
       - ./backend/challenges:/app/challenges
       - ./database/fill_or_update_tables.py:/app/fill_or_update_tables.py
       - ./database/sql:/app/sql
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      HOST: db
+      PASSWORD: ${PASSWORD}
+      PORT: ${PORT}
+
 
   db:
     image: postgres
@@ -27,14 +39,15 @@ services:
     build:
       context: .
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
-      # - ./database/sql:/docker-entrypoint-initdb.d
       - ./backend/challenges:/challenges
       - ./database/sql_scripts:/sql_scripts
       - sql:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${PORT}:5432"
 
   adminer:
     image: adminer

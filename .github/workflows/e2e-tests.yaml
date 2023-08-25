@@ -17,6 +17,11 @@ jobs:
       NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
       GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      PORT: ${{ secrets.PORT }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      HOST: ${{ secrets.HOST }}
     defaults:
       run:
         working-directory: ./backend
@@ -39,17 +44,37 @@ jobs:
       - name: Install dependencies
         working-directory: ./frontend-svelte
         run: npm ci
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
       -
         name: Run docker compose
         working-directory: .
         run: |
           ls -la
-          docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+          docker compose -f docker-compose.yml up -d
+      - name: Start frontend
+        working-directory: ./frontend-svelte
+        run: npm run dev &
+      - name: Wait for server to start
+        run: sleep 10
+      - name: Run Cypress tests Chrome
+        working-directory: ./frontend-svelte
+        run: npx cypress run --browser chrome
+      # Currently only chrome is supported
+      # - name: Run Cypress tests Firefox
+      #   working-directory: ./frontend-svelte
+      #   run: npx cypress run --browser firefox
+      -
+        name: Run docker compose dev
+        working-directory: .
+        run: |
+          ls -la
+          docker compose -f docker-compose.dev.yml up -d
       -
         name: Check curl response of backend
         run: |
           # wait till the fill-db-with-test-input finished writing to db
-          sleep 30
+          sleep 15
           docker container ls
           response_code=$(curl -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/get_all_challenges/)
           if [ "$response_code" -ne 200 ]; then
@@ -66,14 +91,3 @@ jobs:
             echo $response_code
             exit 1
           fi
-      - name: Start frontend
-        working-directory: ./frontend-svelte
-        run: npm run dev &
-      - name: Wait for server to start
-        run: sleep 10
-      - name: Run Cypress tests Chrome
-        working-directory: ./frontend-svelte
-        run: npx cypress run --browser chrome
-      - name: Run Cypress tests Firefox
-        working-directory: ./frontend-svelte
-        run: npx cypress run --browser firefox

@@ -1,16 +1,20 @@
 import psycopg2
 
-import click
 import os
 import time
 
 DEFAULT_ELO = 700
-TABLE_ORDER = ["users", "accounts", "sessions", "verification_tokens", "challenges", "users_challenges", 
+
+EXTENSIONS = ["uuid_ossp"]
+
+TABLE_ORDER = ["users", "challenges", "users_challenges", 
                # THESE ARE THE A/B TESTING TABLES
                 "a_b_testing/groups", "a_b_testing/users_groups",
                 "a_b_testing/strategies/challenges_elo", "a_b_testing/strategies/users_elo"]
+
 ROLES = ["roles"]
-FUNCTIONS = ["authentication_functions"]
+FUNCTIONS = []
+
 
 def check_ping(hostname):
     while True:
@@ -24,32 +28,29 @@ def check_ping(hostname):
             return
         time.sleep(5)
 
-@click.command()
-@click.option("--port", default=5432, help="Port of the database")
-@click.option("--password", default="example", help="Password of the database")
-@click.option("--user", default="postgres", help="User of the database")
-@click.option("--host", default="db", help="Host of the database")
-@click.option("--dbname", default="postgres", help="Name of the database")
-def run(port, dbname, password, user, host):
+
+def run():
     # read the sql file to create challenges
+    host = os.environ["HOST"]
     check_ping(host)
     conn = psycopg2.connect(
-        host=host, dbname=dbname, user=user, password=password, port=port
+        host=host,
+        dbname=os.environ["DB_NAME"],
+        user=os.environ["DB_USER"],
+        password=os.environ["PASSWORD"],
+        port=os.environ["PORT"],
     )
     # make sure that all tables are created
     cursor = conn.cursor()
-    for role in ROLES:
-        with open(f"sql/{role}.sql") as f:
-            # todo: this wastes the cursor if the role already exists,
-            # and there is no possibility to add something like `if not exists` to a role definition AFAIK
+    print("Creating extensions")
+    for extension in EXTENSIONS:
+        with open(f"sql/{extension}.sql") as f:
             try:
                 cursor.execute(f.read())
-            except psycopg2.errors.DuplicateObject as e:
-                # roles are already defined
-                conn.rollback()
-            except Exception as e:
-                print(e)
-                raise ValueError(e)
+            except psycopg2.errors.DuplicateFunction:
+                print("function already exists. Initiating rollback...")
+                cursor.rollback()
+                pass
 
     print("Creating functions")
     for function in FUNCTIONS:
@@ -59,6 +60,7 @@ def run(port, dbname, password, user, host):
     print("Creating tables")
     for table in TABLE_ORDER:
         with open(f"sql/{table}.sql") as f:
+            print(f"create table {table}")
             cursor.execute(f.read())
 
     print("Update challenges")
@@ -71,7 +73,9 @@ def run(port, dbname, password, user, host):
         if (k := cursor.fetchone()) is None:
             cursor.execute(f"insert into challenges (id) values ('{challenge}')")
         # Update challenges_elo table
-        cursor.execute(f"select * from challenges_elo where challenge_id = '{challenge}'")
+        cursor.execute(
+            f"select * from challenges_elo where challenge_id = '{challenge}'"
+        )
         fetched_elo = cursor.fetchone()
         if fetched_elo is None:
             cursor.execute(

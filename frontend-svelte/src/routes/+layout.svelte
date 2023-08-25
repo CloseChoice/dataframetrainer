@@ -1,26 +1,48 @@
 <script>
-    import { setContext } from 'svelte';
+    import { onMount, setContext } from 'svelte';
     import { writable } from 'svelte/store';
     import {page} from '$app/stores'
+
+    import {initPyodideStore} from '$lib/stores/pyodide-store'
+    /** @type {import('./$types').LayoutData} */
+    export let data;
+    // Create a store and update it when necessary...    
+    const user = writable(null);
+
+
+    console.log(data);
+    // ...and add it to the context for child components to access    setContext('user', user);
+
+    onMount(initPyodideStore)
     import { signIn, signOut } from "@auth/sveltekit/client"
+
+    console.log('session through layout server:', $page.data.session);
+    import CookieBanner from '$lib/components/CookieBanner.svelte';
 </script>
 
-<nav style="z-index:1030" class="w-100 position-fixed zindex-fixed top-0 navbar navbar-expand-md navbar-dark bg-dark">
+
+<CookieBanner/>
+
+
+<nav style="z-index:1030" class="shadow border-bottom w-100 position-fixed zindex-fixed top-0 navbar navbar-expand-md">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="">
-        <span class="navbar-text me-3">
+        <span data-test="username-display" class="navbar-text me-3">
           {#if $page.data.session}
             {$page.data.session.user?.name ?? "User"}
           {/if}
         </span>
         {#if $page.data.session}
-        <button class="btn btn-primary" on:click={()=> signOut()}>Sign Out</button>
+        <form method="POST" action="/authentication?/logout">
+          <!-- A Logout Link has to be POST because some clients prefetch links and therefore a simple GET link would instantly log users out -->
+          <button class="btn btn-primary">Sign Out</button>
+        </form>
         {:else}
-        <button class="btn btn-primary" on:click={()=> signIn()}>Sign In</button>
+        <a href="/authentication" class="btn btn-primary" role="button">Sign In</a>
         {/if}
       </div>
       <!-- <a class="navbar-brand" href="#">Dataframetrainer</a> -->
