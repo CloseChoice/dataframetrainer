@@ -1,6 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; -- This enables the uuid-ossp extension for UUID functions
-
-
 DO $$ BEGIN
     CREATE TYPE user_role AS ENUM ('user', 'admin');
 EXCEPTION

@@ -49,7 +49,7 @@ jobs:
         working-directory: .
         run: |
           ls -la
-          docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+          docker compose -f docker-compose.yml up -d
       -
         name: Check curl response of backend
         run: |
@@ -59,16 +59,6 @@ jobs:
           response_code=$(curl -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/get_all_challenges/)
           if [ "$response_code" -ne 200 ]; then
             echo "Response code is not 200. Failing the pipeline."
-            exit 1
-          fi
-
-          echo "start testing elo endpoints"
-          response_code=$(curl -X POST http://127.0.0.1:5000/get_next_challenge -H "Content-Type: application/json" -d '{"user_id": "d037ce8d-0381-471f-bfa5-98467685a335"}')
-          next_challenge=$(echo "$response_code" | grep "next_challenge")
-          # check if GroupTerms is in the next_challenge string
-          if [[ "$next_challenge" != *"GroupTerms"* ]]; then
-            echo "Expected next_challenge to be GroupTerms. Received $next_challenge instead."
-            echo $response_code
             exit 1
           fi
       - name: Start frontend
@@ -82,3 +72,21 @@ jobs:
       - name: Run Cypress tests Firefox
         working-directory: ./frontend-svelte
         run: npx cypress run --browser firefox
+      -
+        name: Run docker compose dev
+        working-directory: .
+        run: |
+          ls -la
+          docker compose -f docker-compose.dev.yml up -d
+      -
+        name: Check curl response of backend
+        run: |
+          echo "start testing elo endpoints"
+          response_code=$(curl -X POST http://127.0.0.1:5000/get_next_challenge -H "Content-Type: application/json" -d '{"user_id": "d037ce8d-0381-471f-bfa5-98467685a335"}')
+          next_challenge=$(echo "$response_code" | grep "next_challenge")
+          # check if GroupTerms is in the next_challenge string
+          if [[ "$next_challenge" != *"GroupTerms"* ]]; then
+            echo "Expected next_challenge to be GroupTerms. Received $next_challenge instead."
+            echo $response_code
+            exit 1
+          fi

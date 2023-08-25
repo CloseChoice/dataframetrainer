@@ -5,6 +5,8 @@ import time
 
 DEFAULT_ELO = 700
 
+EXTENSIONS = ["uuid_ossp"]
+
 TABLE_ORDER = ["users", "challenges", "users_challenges", 
                # THESE ARE THE A/B TESTING TABLES
                 "a_b_testing/groups", "a_b_testing/users_groups",
@@ -40,18 +42,15 @@ def run():
     )
     # make sure that all tables are created
     cursor = conn.cursor()
-    # for role in ROLES:
-    #     with open(f"sql/{role}.sql") as f:
-    #         # todo: this wastes the cursor if the role already exists,
-    #         # and there is no possibility to add something like `if not exists` to a role definition AFAIK
-    #         try:
-    #             cursor.execute(f.read())
-    #         except psycopg2.errors.DuplicateObject as e:
-    #             # roles are already defined
-    #             conn.rollback()
-    #         except Exception as e:
-    #             print(e)
-    #             raise ValueError(e)
+    print("Creating extensions")
+    for extension in EXTENSIONS:
+        with open(f"sql/{extension}.sql") as f:
+            try:
+                cursor.execute(f.read())
+            except psycopg2.errors.DuplicateFunction:
+                print("function already exists. Initiating rollback...")
+                cursor.rollback()
+                pass
 
     print("Creating functions")
     for function in FUNCTIONS:
@@ -61,6 +60,7 @@ def run():
     print("Creating tables")
     for table in TABLE_ORDER:
         with open(f"sql/{table}.sql") as f:
+            print(f"create table {table}")
             cursor.execute(f.read())
 
     print("Update challenges")
