@@ -1,0 +1,11 @@
+version: "3.1"
+### File only needed for test setup
+
+services:
+  fill-db-with-test-input:
+    build:
+      context: ./database/tests_docker
+      dockerfile: Dockerfile_fill_db_with_test_inputs
+    volumes:
+      - ./database/tests_docker/sql:/app/sql
+      - ./database/tests_docker/fill_for_local_test.py:/app/fill_for_local_test.py

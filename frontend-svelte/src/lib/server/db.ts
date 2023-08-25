@@ -5,7 +5,7 @@ import {DB_NAME, DB_USER, PASSWORD, PORT} from '$env/static/private'
 if (!(DB_NAME && DB_USER && PASSWORD && PORT)){
   throw new Error("Not all environment variables are defined")
 }
-export const PG_CONNECTION_STRING = `postgres://${DB_USER}:${PASSWORD}@localhost:${PORT}/${DB_NAME}`
+export const PG_CONNECTION_STRING = `postgres://${DB_USER}:${PASSWORD}@db:${PORT}/${DB_NAME}`
 
 console.log(PG_CONNECTION_STRING);
 

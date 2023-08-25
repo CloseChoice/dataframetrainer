@@ -51,7 +51,7 @@ jobs:
         working-directory: .
         run: |
           ls -la
-          docker compose -f docker-compose.yml up -d
+          docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
       # - name: Start frontend
       #   working-directory: ./frontend-svelte
       #   run: npm run dev &
@@ -65,11 +65,11 @@ jobs:
       #   working-directory: ./frontend-svelte
       #   run: npx cypress run --browser firefox
       -
-        name: Run docker compose dev
+        name: Run docker compose test
         working-directory: .
         run: |
           ls -la
-          docker compose -f docker-compose.dev.yml up -d
+          docker compose -f docker-compose.test.yml up -d
       -
         name: Check curl response of backend
         run: |
