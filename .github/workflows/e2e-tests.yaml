@@ -44,6 +44,8 @@ jobs:
       - name: Install dependencies
         working-directory: ./frontend-svelte
         run: npm ci
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       -
         name: Run docker compose
         working-directory: .
