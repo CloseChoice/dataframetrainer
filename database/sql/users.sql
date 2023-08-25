@@ -1,10 +1,24 @@
-CREATE TABLE IF NOT EXISTS public.users (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    name character varying,
-    email character varying,
-    email_verified character varying,
-    image character varying,
+DO $$ BEGIN
+    CREATE TYPE user_role AS ENUM ('user', 'admin');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
-    CONSTRAINT "users_pk" PRIMARY KEY (id),
-    CONSTRAINT "users_unique_email" UNIQUE (email)
+CREATE TABLE IF NOT EXISTS public.users (
+    id TEXT PRIMARY KEY,
+    name character varying NOT NULL UNIQUE,
+    role user_role DEFAULT 'user' NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.passwords (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    hashed_password TEXT
+);
+
+CREATE TABLE IF NOT EXISTS public.sessions (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    active_expires BIGINT NOT NULL,
+    idle_expires BIGINT NOT NULL
 );

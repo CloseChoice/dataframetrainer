@@ -1,29 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { QueryResult} from 'pg'
-import pg from 'pg'
-import { env } from '$env/dynamic/private';
-// import { DATABASE_URL } from '$env/static/private'
+import { type QueryResult, Pool} from 'pg'
+import {DB_NAME, DB_USER, PASSWORD, PORT} from '$env/static/private'
 
-// This makes the keys in dotenv available 
-import 'dotenv/config'
+if (!(DB_NAME && DB_USER && PASSWORD && PORT)){
+  throw new Error("Not all environment variables are defined")
+}
+export const PG_CONNECTION_STRING = `postgres://${DB_USER}:${PASSWORD}@db:${PORT}/${DB_NAME}`
 
-const PGUSER="postgres"
-const PGPASSWORD="example"
-const PGPORT="5432"
-const PGHOST="127.0.0.1"
-const PGDATABASE="postgres"
+console.log(PG_CONNECTION_STRING);
 
-const pool = new pg.Pool({
-  max: 10, // default
-  password:PGPASSWORD,
-  host: PGHOST,
-  database: PGDATABASE,
-  port: PGPORT,
-  user: PGUSER,
-//   ssl: { // If your postgresql.conf does not have `ssl = on`, remove the entire ssl property or you will get an error
-//     rejectUnauthorized: false
-//   }
+if (!PG_CONNECTION_STRING){
+  throw new Error(`missing PG_CONNECTION_STRING environment variable`)
+}
+
+export const pool = new Pool({
+  connectionString : PG_CONNECTION_STRING
 })
-
-type PostgresQueryResult = (sql: string, params?: any[]) => Promise<QueryResult<any>>
-export const query: PostgresQueryResult = (sql, params?) => pool.query(sql, params)

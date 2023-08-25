@@ -1,35 +1,22 @@
-import type { Handle, RequestEvent} from '@sveltejs/kit';
-import { SvelteKitAuth } from "@auth/sveltekit";
-import GitHub from "@auth/core/providers/github";
-import Google from "@auth/core/providers/google"
-import { 
-  GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET,
-  GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET,
-  AUTH_SECRET,
-  PGPASSWORD, PGPORT, PGUSER, PGHOST
-} from "$env/static/private";
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
-import type { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { TypeORMAdapter } from '@auth/typeorm-adapter';
+import { auth } from "$lib/server/lucia";
+import type { Handle } from "@sveltejs/kit";
 
-const connection: PostgresConnectionOptions = {
-    type: "postgres",
-    host: PGHOST,
-    port: PGPORT,
-    username: PGUSER,
-    password: PGPASSWORD,
-    database: "postgres",
-    namingStrategy: new SnakeNamingStrategy()
-}
+export const handle: Handle = async ({ event, resolve }) => {
+	// we can pass `event` because we used the SvelteKit middleware
+	event.locals.auth = auth.handleRequest(event);
+	return await resolve(event);
+};
 
-export const handle = SvelteKitAuth({
-  secret: AUTH_SECRET,
-  adapter: TypeORMAdapter(connection),
-  providers: [
-    GitHub({ clientId: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET }),
-    Google({clientId: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET})
-  ],
-});
+
+// export const handle = SvelteKitAuth({
+//   secret: AUTH_SECRET,
+//   adapter: TypeORMAdapter(connection),
+//   providers: [
+//     GitHub({ clientId: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET }),
+//     Google({clientId: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET})
+//   ],
+//   trustHost: true,
+// });
 
 // export const handle: Handle = async ({ resolve, event }) => {
 
