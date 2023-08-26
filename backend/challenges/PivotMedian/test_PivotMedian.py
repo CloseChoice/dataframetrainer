@@ -6,10 +6,13 @@ from challenges.PivotMedian.PivotMedian import (
 )
 import pandas.testing as tm
 from hypothesis import given
-from challenges.PivotMedian.submission import transform
+import challenges.PivotMedian.submission as submission
+
+import importlib
+importlib.reload(submission)
 
 @given(**PivotMedian.create_df_func())
 def test_transform(df):
     expected_df = PivotMedian.transform(df)
-    user_df = transform(df)
+    user_df = submission.transform(df)
     tm.assert_frame_equal(user_df, expected_df)

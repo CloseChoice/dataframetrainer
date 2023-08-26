@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import type { ServerLoad } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, fetch }) {

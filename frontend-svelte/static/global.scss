@@ -1,0 +1,28 @@
+
+.splitpanes.default-theme {
+	.splitpanes__pane {
+		background-color: unset !important;
+	}
+	.splitpanes__splitter {
+		background-color: #b1b1b1 !important;
+		border: none !important;
+		// box-sizing: border-box;
+		// position: relative;
+		// flex-shrink: 0;
+		// &:before,
+		// &:after {
+		// 	content: '';
+		// 	position: absolute;
+		// 	top: 50%;
+		// 	left: 50%;
+		// 	background-color: rgba(0, 0, 0, 0.15);
+		// 	transition: background-color 0.3s;
+		// }
+		&:hover{
+			background-color: lightblue !important;
+		}
+		// &:first-child {
+		// 	cursor: auto;
+		// }
+	}
+}

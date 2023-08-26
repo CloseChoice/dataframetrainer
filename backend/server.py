@@ -72,6 +72,16 @@ def site_response():
     return jsonify({"success": "ok"})
 
 
+@app.route('/files/<path:filepath>')
+def serve_static(filepath):
+    
+    # Check if the requested file exists
+    if os.path.exists(filepath) and os.path.isfile(filepath):
+        return send_from_directory('.', filepath)
+    else:
+        return "File not found", 404
+
+
 @app.route("/get_challenge/<string:id>/", methods=["GET"])
 @cross_origin(supports_credentials=True)
 def get_challenge(id):
@@ -81,6 +91,10 @@ def get_challenge(id):
 @app.route("/get_intro/<string:id>/", methods=["GET"])
 def get_intro(id):
     return send_from_directory(f"challenges/{id}", f"intro.md")
+
+@app.route("/get_submission/<string:id>/", methods=["GET"])
+def get_submission(id):
+    return send_from_directory(f"challenges/{id}", f"submission.py")
 
 @app.route("/get_challenge_test/<string:id>/", methods=["GET"])
 def get_challenge_test(id):

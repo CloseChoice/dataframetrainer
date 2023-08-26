@@ -49,7 +49,7 @@ def run():
                 cursor.execute(f.read())
             except psycopg2.errors.DuplicateFunction:
                 print("function already exists. Initiating rollback...")
-                cursor.rollback()
+                conn.rollback()
                 pass
 
     print("Creating functions")

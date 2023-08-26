@@ -5,15 +5,15 @@
     import { goto } from '$app/navigation';
     import {page} from '$app/stores'
     import axios from 'axios'
-    import CodeMirror from "./CodeMirror.svelte";
+    import CodeMirror from "../../new_challenge/[slug]/CodeMirror.svelte";
     import { isPyodideReady, pyodideWorker } from "$lib/stores/pyodide-store";
-    import CodeOutput from "./CodeOutput.svelte";
+    import CodeOutput from "../../new_challenge/[slug]/CodeOutput.svelte";
 
     // https://github.com/nathancahill/split/tree/master/packages/splitjs
     import Split from 'split.js'
     import { onMount } from "svelte";
-    import TestResults from "$lib/components/TestResult/index.svelte";
-    import type { PytestResult } from "$lib/components/TestResult/pytest-result";
+    import TestResults from "$lib/components/TestTab/TestResults.svelte";
+    import type { PytestResult } from "$lib/components/TestTab/pytest-result";
 
 
     const description = data.intro;
@@ -21,13 +21,16 @@
     let test_challenge = data.test_challenge;
     let resultUserCode = "";
     let challengeName = data.challengeName;
+    let submission = data.submission;
 
     let testResult: PytestResult | null = null;
 
     async function handleRun(){
+        pyodideWorker.showStuff('/home/pyodide');
         resultUserCode = await pyodideWorker.executeUserCode(code)
     }
     async function handleTest(){
+        pyodideWorker.showStuff('/home/pyodide');
         const testResultString = await pyodideWorker.testUserCode(code, data)
         testResult = JSON.parse(testResultString)
     }

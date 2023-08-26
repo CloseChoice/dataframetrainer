@@ -1,6 +1,7 @@
 import * as Comlink from 'comlink'
 import { derived, writable, get, readable } from 'svelte/store'
 import type { Writable } from 'svelte/store';
+import type { PytestResult } from '$lib/components/TestTab/pytest-result';
 
 export let pyodideWorker: null | Comlink.Remote<any> = null
 
@@ -19,13 +20,14 @@ function stateChangeCallback(state: PyodideState){
 
 // const initialStdout: = []:string[]
 export const pyodideStdout: Writable<string[]> = writable([])
+export const testResult: Writable<PytestResult | null> = writable(null);
 
 function stdoutCallback(line: string){
     pyodideStdout.update((stdout) => {
         stdout.push(line)
         return stdout
     })
-    
+
 }
 
 

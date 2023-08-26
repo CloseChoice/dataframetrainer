@@ -1,7 +1,5 @@
-import { error, json, redirect, fail } from '@sveltejs/kit'
-import * as bcrypt from 'bcrypt'
+import { redirect, fail } from '@sveltejs/kit'
 import {pool} from '$lib/server/db'
-import {signIn} from '@auth/sveltekit/client'
 import { auth } from "$lib/server/lucia";
 
 function validateFormData(userData){

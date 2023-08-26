@@ -6,6 +6,9 @@ const require = createRequire(import.meta.url);
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	worker: {
+		format: 'es'
+	},
 	server: {
 		// Listen on all ip addresses
 		host: true,
@@ -18,6 +21,11 @@ export default defineConfig({
 			// secure: false,
 			// agent: new http.Agent(),
 			rewrite: (path) => path.replace(/^\/files/, '')
+		  },
+		  '/pyodide-indexurl': {
+			target: 'https://cdn.jsdelivr.net',
+			changeOrigin: true,
+			rewrite: (path) => path.replace(/^\/pyodide-indexurl/, '/pyodide/v0.23.4/full/')
 		  },
 		  '/backend': {
 			target: 'http://backend:5000',
