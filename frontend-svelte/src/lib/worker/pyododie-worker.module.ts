@@ -6,7 +6,8 @@ const {loadPyodide} = pyodidePackage
 import type { PyodideInterface } from 'pyodide'
 import {expose} from 'threads/worker'
 import requirements from './requirements/requirements.json'
-import dftCode from './dft.py?raw'
+// get rid of this
+// import dftCode from './dft.py?raw'
 import pyodideLockFileURL from './requirements/repodata.json?url'
 
 const stateSubject = new Subject<PyodideWorkerState>()
@@ -30,8 +31,12 @@ async function loadPyodideAndPackages(){
     await pyodide.loadPackage("micropip");
     const micropip = await pyodide.pyimport("micropip");
     await micropip.install(requirements)
-    
-    await pyodide.FS.writeFile("dft.py", dftCode, { encoding: "utf8" });
+
+    const mountDir = ".";
+    await pyodide.FS.mount(pyodide.FS.filesystems.MEMFS, { root: "." }, mountDir);
+    await Promise.all([
+        pyodide.FS.mkdir('/home/pyodide/challenges'),
+    ])
     
     console.log('🦆: Pyodidie and Modules were successfully installed')
 
@@ -51,28 +56,50 @@ async function withPyodide<T>(state: PyodideWorkerState, callback: WithPyodideCa
 const worker = {
     state: ()=> Observable.from(stateSubject),
     stdout: () => Observable.from(stdoutSubject),
-    loadChallenge: async (classFile: String, testFile: String) => {
+    loadChallenge: async (className: String, classFile: String, testFile: String) => {
         return withPyodide(PyodideWorkerState.LOADING_CHALLENGE, async (pyodide)=>{
-            await pyodide.FS.writeFile("test_.py", testFile, {encoding: "utf8"})
-            await pyodide.FS.writeFile("challenge.py", classFile, {encoding: "utf8"})
+            await pyodide.FS.writeFile(`challenges/${className}/test_${className}.py`, testFile, {encoding: "utf8"})
+            await pyodide.FS.writeFile(`challenges/${className}/challenge.py`, classFile, {encoding: "utf8"})
             console.log('🦆: A new Challenge was successfully loaded')
         })
     },
-    testCode: (code: String) => {
-        return withPyodide(PyodideWorkerState.TESTING, async pyodide=>{
-            await pyodide.FS.writeFile("submission.py", code, {encoding: "utf8"})
-            const res = await pyodide.pyimport("dft").test_code()
-            const testResult: PytestResult = JSON.parse(res)
+    testCode: (className: String, code: String) => {
+        return withPyodide(PyodideWorkerState.TESTING, async pyodide => {
+            await pyodide.FS.writeFile(`challenges/${className}/submission.py`, code, {encoding: "utf8"})
+            const pytestCode = `
+            from importlib import reload
+            import challenges.${className}.submission
+
+            reload(challenges.${className}.submission)
+
+            import pytest
+            pytest.main(['--json-report', '--json-report-file' ,'challenges/${className}/report.json', '--capture=tee-sys', 'challenges/${className}'])`
+            pyodide.runPython(pytestCode)
+            // todo: where is the result saved? At best it would be saved in the challenge folder
+
+            const testResult: PytestResult = JSON.parse(`challenges/${className}/report.json`)
             return testResult
         })
     },
-    runCode: async (code: String) => {
+    runCode: async (className: String, code: String) => {
         return withPyodide(PyodideWorkerState.RUNNING, async pyodide => {
             await pyodide.FS.writeFile("submission.py", code, {encoding: "utf8"})
-            await pyodide.pyimport("dft").run_code()
+            const pythonCode = `
+                from importlib import reload
+                import challenges.${className}.submission as submission
+                from challenges.${className}.${className} import ${className}
+
+                reload(challenges.${className}.submission)
+
+                params_dict = ${className}.create_df_func()
+                params = _get_params(params_dict)
+                submission.transform(**params)
+            `
+            await pyodide.runPython(pythonCode)
         })
     },
     generateExample: async () => {
+        // todo: get rid of dft here.
         return withPyodide(PyodideWorkerState.GENERATING_EXAMPLE, async pyodide =>{
             const res = await pyodide.pyimport("dft").generate_example()
             const example: ChallengeExample = JSON.parse(res)

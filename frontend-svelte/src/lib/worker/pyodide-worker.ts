@@ -155,19 +155,11 @@ class MyWorkerClass extends EventEmitter {
         }
 
 
-        const literalShit = `import importlib
+        const literalShit = `
 from importlib import reload
-importlib.invalidate_caches()
-import challenges
-import challenges.${data.challenge_name}
 import challenges.${data.challenge_name}.submission
-from challenges.${data.challenge_name}.submission import transform
-import challenges.${data.challenge_name}.test_${data.challenge_name}
 
-reload(challenges)
-reload(challenges.${data.challenge_name})
 reload(challenges.${data.challenge_name}.submission)
-reload(challenges.${data.challenge_name}.test_${data.challenge_name})
 
 import pytest
 pytest.main(['--json-report', '--json-report-file' ,'report.json', '--capture=tee-sys', 'challenges/${data.challenge_name}'])`
