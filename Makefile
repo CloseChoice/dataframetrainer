@@ -24,7 +24,7 @@ up:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 up_test:
-	docker compose -f docker-compose.yml up
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.test.yml up
 
 recreate:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up --force-recreate
