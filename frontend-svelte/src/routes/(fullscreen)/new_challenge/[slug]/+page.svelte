@@ -3,8 +3,9 @@
     export let data;
 
     import { goto } from '$app/navigation';
-    import {page} from '$app/stores'
-    import axios from 'axios'
+    import { page } from '$app/stores';
+    import axios from 'axios';
+    import { sessionState } from '$lib/stores/pyodide-store';
     import CodeMirror from "../../new_challenge/[slug]/CodeMirror.svelte";
     import { isPyodideReady, pyodideWorker } from "$lib/stores/pyodide-store";
     import CodeOutput from "../../new_challenge/[slug]/CodeOutput.svelte";
@@ -14,7 +15,7 @@
     import { onMount } from "svelte";
     import TestResults from "$lib/components/TestTab/TestResults.svelte";
     import type { PytestResult } from "$lib/components/TestTab/pytest-result";
-
+    console.log('session through page.svelte', $page.data.session);
 
     const description = data.intro;
     let code = data.default_code;
@@ -36,11 +37,13 @@
     }
 
     async function handleNewChallenge(){
-        const userId = $page.data.session?.user?.id
+        console.log("handleNewChallenge", $page.data);
+        const userId = $page.data.session?.user?.userId
 
         if (! userId) {
             alert("yer gotta be signed in for datt")
         }
+        console.log("This is the userid", userId);
 
         const res = await axios.post('/backend/get_next_challenge', {
             data: {
@@ -74,10 +77,11 @@
     })
 
 </script>
+// todo: remove
+<p>1</p>
 
 <div class="h-100 d-flex">
         <div bind:this={splitLeft} class="position-relative h-100 pt-5">
-
             <ul style="z-index:100" class="position-absolute top-0 nav nav-tabs w-100 bg-dark" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                   <button class="nav-link " id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="false">Description</button>
@@ -87,6 +91,9 @@
                 </li>
                 <li class="nav-item" role="presentation">
                   <button class="nav-link active" id="tests-tab" data-bs-toggle="tab" data-bs-target="#tests" type="button" role="tab" aria-controls="tests" aria-selected="true">Test</button>
+                </li>
+                <li class="nav-item">
+                    <button on:click={handleNewChallenge} class="btn btn-sm btn-primary" id="new_challenge">New Challenge</button>
                 </li>
               </ul>
               <div class="tab-content h-100 overflow-y-auto" id="myTabContent">

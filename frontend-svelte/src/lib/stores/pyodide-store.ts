@@ -27,7 +27,6 @@ function stdoutCallback(line: string){
         stdout.push(line)
         return stdout
     })
-
 }
 
 
@@ -44,7 +43,8 @@ export async function initPyodideStore(){
     // isPyodideReady.set(true)
 }
 
-export const pyodideState = writable(PyodideState.LOADING)
+export const pyodideState = writable(PyodideState.LOADING);
+export const sessionState = writable(null);
 
 export const isPyodideReady = derived(
     pyodideState,
