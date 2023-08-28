@@ -1,3 +1,4 @@
+import { redirect, fail } from '@sveltejs/kit';
 import {pool} from '$lib/server/db';
 import { auth } from "$lib/server/lucia";
 import { sessionState } from "$lib/stores/pyodide-store";
@@ -14,6 +15,7 @@ function validateFormData(userData){
 }
 
 async function checkUserExists(username) {
+    console.log("in checkUserExists");
     try {
       const query = 'SELECT COUNT(*) AS count FROM users WHERE name = $1';
       const values = [username];
@@ -28,6 +30,7 @@ async function checkUserExists(username) {
 
 
 async function createUser(username: String, password: String){
+  console.log("in createUser");
   const user = await auth.createUser({
     key: {
       providerId: "username", // auth method
@@ -45,9 +48,9 @@ async function createUser(username: String, password: String){
   console.log("Session created", session);
 
 console.log("set user group", user.userId, session.sessionId);
-  const res = await axios.post('http://127.0.0.1:5000/set_user_group', {
+  const res = await axios.post('http://backend:5000/set_user_group', {
     user_id: user.userId,
-    session_id: session.sessionId,
+    session_id: session.sessionId
   })
   // const res = await axios.post('/backend/set_user_group', {
   //     data: {

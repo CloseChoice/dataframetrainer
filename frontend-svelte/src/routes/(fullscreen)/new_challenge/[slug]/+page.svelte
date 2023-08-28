@@ -45,12 +45,11 @@
         }
         console.log("This is the userid", userId);
 
-        const res = await axios.post('/backend/get_next_challenge', {
-            data: {
-                user_id: userId
-            }
+        const res = await axios.post('http://127.0.0.1:5000/get_next_challenge', {
+            user_id: userId
         })
-        const nextChallenge = res.data.next_challenge
+        console.log("this is the response", res);
+        const nextChallenge = res.data.response.next_challenge
         goto('/new_challenge/' + nextChallenge)
 
         
@@ -77,9 +76,6 @@
     })
 
 </script>
-// todo: remove
-<p>1</p>
-
 <div class="h-100 d-flex">
         <div bind:this={splitLeft} class="position-relative h-100 pt-5">
             <ul style="z-index:100" class="position-absolute top-0 nav nav-tabs w-100 bg-dark" id="myTab" role="tablist">

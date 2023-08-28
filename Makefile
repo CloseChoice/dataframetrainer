@@ -5,6 +5,7 @@ build:
 cleanup:
 	docker image rm -f dataframetrainer-db-fill-or-update-tables
 	docker image rm -f dataframetrainer-backend
+	docker image rm -f dataframetrainer-frontend-dev
 	docker rm dataframetrainer-db-1
 	docker volume rm -f dataframetrainer_sql
 
