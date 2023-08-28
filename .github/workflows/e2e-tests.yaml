@@ -73,7 +73,8 @@ jobs:
       -
         name: Check curl response of backend
         run: |
-          # wait till the fill-db-with-test-input finished writing to db
+          # todo: move this into a python script to make this a bit more readable
+          # wait till the fill-db-with-test-input finished writing to db! todo: this can be done dynamically by checking if the container is still running
           sleep 15
           docker container ls
           response_code=$(curl -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/get_all_challenges/)
@@ -89,5 +90,12 @@ jobs:
           if [[ "$next_challenge" != *"GroupTerms"* ]]; then
             echo "Expected next_challenge to be GroupTerms. Received $next_challenge instead."
             echo $response_code
+            exit 1
+          fi
+
+          echo "test set_user_group endpoint"
+          response_code=$(curl -X POST http://127.0.0.1:5000/set_user_group -H "Content-Type: application/json" -d '{"user_id": "user_elo_id", "session_id": "session_id_user_elo"}')
+          if [[ "$response_code" != *"success"* ]]; then
+            echo "Response code is not 200. ."
             exit 1
           fi

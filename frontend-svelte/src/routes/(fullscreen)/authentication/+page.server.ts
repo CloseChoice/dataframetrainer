@@ -1,6 +1,8 @@
-import { redirect, fail } from '@sveltejs/kit'
-import {pool} from '$lib/server/db'
+import { redirect, fail } from '@sveltejs/kit';
+import {pool} from '$lib/server/db';
 import { auth } from "$lib/server/lucia";
+import { sessionState } from "$lib/stores/pyodide-store";
+import axios from 'axios';
 
 function validateFormData(userData){
     const isValid = {}
@@ -13,6 +15,7 @@ function validateFormData(userData){
 }
 
 async function checkUserExists(username) {
+    console.log("in checkUserExists");
     try {
       const query = 'SELECT COUNT(*) AS count FROM users WHERE name = $1';
       const values = [username];
@@ -26,7 +29,8 @@ async function checkUserExists(username) {
   }
 
 
-async function createUser(username, password){
+async function createUser(username: String, password: String){
+  console.log("in createUser");
   const user = await auth.createUser({
     key: {
       providerId: "username", // auth method
@@ -41,6 +45,23 @@ async function createUser(username, password){
     userId: user.userId,
     attributes: {}
   });
+  console.log("Session created", session);
+
+console.log("set user group", user.userId, session.sessionId);
+  const res = await axios.post('http://backend:5000/set_user_group', {
+    user_id: user.userId,
+    session_id: session.sessionId
+  })
+  // const res = await axios.post('/backend/set_user_group', {
+  //     data: {
+  //         user_id: user.userId,
+  //         session_id: session.sessionId,
+  //     }
+  // })
+  console.log("set user group return", res);
+  // write session to store
+  console.log("WRITE SESSION TO SESSIONSTORE 1", session);
+  sessionState.set(session);
   return session
 }
 
@@ -59,9 +80,11 @@ export const actions = {
         }
         const key = await auth.useKey("username", name, password);
         session = await auth.createSession({userId: key.userId, attributes: {}});
+        console.log("WRITE SESSION TO SESSIONSTORE 2", session);
+        sessionState.set(session);
         await locals.auth.setSession(session);
         
-      }catch (e){
+      } catch (e) {
         return fail(400, {password: {
           isValid: false,
           feedback: "Invalid Password or Username"
@@ -77,6 +100,7 @@ export const actions = {
     register: async (event) => {
         const {request, cookies, locals} = event
         const data = await request.formData();
+        console.log("register data", data);
 
         const userData = {
             name: data.get('name'),
@@ -90,9 +114,14 @@ export const actions = {
             feedback: "This username is already taken"
           } });
         }
+        console.log("after check if user exists");
         
         const session = await createUser(userData.name, userData.password)
+        console.log("after create user");
+
         await locals.auth.setSession(session);
+        console.log("WRITE SESSION TO SESSIONSTORE 3", session);
+        sessionState.set(session);
 
         return {
             success: true,

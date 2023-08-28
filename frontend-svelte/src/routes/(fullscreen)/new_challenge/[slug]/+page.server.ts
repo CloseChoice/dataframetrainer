@@ -7,13 +7,13 @@ export async function load({ params, fetch }) {
 
     const challengeName = params.slug
 
-    let url = `/backend/get_challenge/${challengeName}`;
+    let url = `http://backend:5000/get_challenge/${challengeName}`;
 
     const challengeClass = await fetch(url);
-    const intro = await fetch(`/backend/get_intro/${challengeName}`);
-    const defaultCode = await fetch(`/backend/get_default/${challengeName}`)
-    const challengeTest = await fetch(`/backend/get_challenge_test/${challengeName}`)
-    const submission = await fetch(`/backend/get_submission/${challengeName}`)
+    const intro = await fetch(`http://backend:5000/get_intro/${challengeName}`);
+    const defaultCode = await fetch(`http://backend:5000/get_default/${challengeName}`)
+    const challengeTest = await fetch(`http://backend:5000/get_challenge_test/${challengeName}`)
+    const submission = await fetch(`http://backend:5000/get_submission/${challengeName}`)
 
     if (challengeClass.status != 200) {
         throw error(404, `challenge ${challengeName} no exist you stupiddo. This is the url ${url}`);

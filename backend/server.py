@@ -17,6 +17,7 @@ import hypothesis.strategies as st
 import os
 import time
 from flask import send_from_directory
+from datetime import datetime
 
 from elo.entities.ChallengeElo import ChallengeElo
 from elo.entities.UserElo import UserElo
@@ -26,6 +27,13 @@ app = Flask(__name__)
 CORS(app, support_credentials=True)
 app.debug = True
 
+DEFAULT_GROUP = 'elo_group'
+
+### Later on we can use probabilities to determine group of a new user
+# group_probabilities = {
+#     'elo_group': 0.9,
+#     'other_group': 0.1
+# }
 
 @app.route("/login")
 @cross_origin(supports_credentials=True)
@@ -113,6 +121,37 @@ def get_all_challenges():
     cursor.execute(f"select id from challenges")
     result = cursor.fetchall()
     return json.dumps([k[0] for k in result])
+
+@app.route("/set_user_group", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def set_user_group() -> Response:
+    print("IN USER GROUP")
+    user_id = request.json.get("user_id")
+    session_id = request.json.get("session_id")
+    cursor.execute(f"select * from sessions where id = '{session_id}'")
+    result = cursor.fetchall()
+    match len(result):
+        case 0:
+            return jsonify({"error": f"session not found {request.json}"})
+        case 1:
+            current_session = result[0]
+            print(current_session)
+            expires_at = current_session[2]
+            if datetime.utcfromtimestamp(expires_at / 1000) < datetime.now():
+                return jsonify({"error": f"session expired {datetime.utcfromtimestamp(expires_at / 1000)} vs. {datetime.now()}"})
+            # todo: this part should be refactored into a function and moved to elo/utils.py
+            # right now, we just set the group to the default group
+            # later on, we can use probabilities to determine group of a new user
+            # so we need some kind of group_probabilities dict
+            group = DEFAULT_GROUP
+            cursor.execute(f"select id from groups where description = '{group}'")
+            group_id = cursor.fetchone()[0]
+            cursor.execute("insert into users_groups (user_id, group_id) values (%s, %s)", (user_id, group_id))
+            cursor.execute("insert into users_elo (elo, user_id, time) values (%s, %s, %s)", (700, user_id, datetime.now()))
+            conn.commit()
+            return jsonify({"success": "ok"})
+        case _:
+            return jsonify({"error": "multiple sessions found"})
 
 
 # todo: differentiate between logged in and guests
