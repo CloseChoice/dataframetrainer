@@ -95,7 +95,7 @@ jobs:
 
           echo "test set_user_group endpoint"
           response_code=$(curl -X POST http://127.0.0.1:5000/set_user_group -H "Content-Type: application/json" -d '{"user_id": "user_elo_id", "session_id": "session_id_user_elo"}')
-          if [[ "$response_code" != '{"success": "ok"}']]; then
+          if [[ "$response_code" != '{"success": "ok"}' ]]; then
             echo "Response code is not 200. ."
             exit 1
           fi
