@@ -17,7 +17,6 @@
     // ...and add it to the context for child components to access    setContext('user', user);
 
     onMount(initPyodideStore)
-    console.log('session through layout server:', $page.data.session);
     import CookieBanner from '$lib/components/CookieBanner.svelte';
 </script>
 
