@@ -1,15 +1,28 @@
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ params, fetch }) {
+export async function load({ params, fetch, cookies }) {
     console.log(params.slug);
 
+    const session_id = cookies.get('auth_session');
+    console.log("\n\nTHESE ARE THE COOKIES", session_id);
+    console.log("\n\n");
+
+    const requestOptions: RequestInit = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'session_id': session_id // Set any necessary headers
+            }) // Add any needed body params
+    };
 
     const challengeName = params.slug
+    let url = `http://backend:5000/post_challenge/${challengeName}/`;
 
-    let url = `http://backend:5000/get_challenge/${challengeName}`;
-
-    const challengeClass = await fetch(url);
+    const challengeClass = await fetch(url, requestOptions);
+    console.log("challenge Class", challengeClass);
     const intro = await fetch(`http://backend:5000/get_intro/${challengeName}`);
     const defaultCode = await fetch(`http://backend:5000/get_default/${challengeName}`)
     const challengeTest = await fetch(`http://backend:5000/get_challenge_test/${challengeName}`)
