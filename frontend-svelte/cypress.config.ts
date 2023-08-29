@@ -4,8 +4,8 @@ import pg from 'pg'
 import * as dotenv from 'dotenv'
 dotenv.config({path: '../.env'})
 
-const {DB_NAME, DB_USER, PASSWORD, PORT} = process.env
-const PG_CONNECTION_STRING = `postgres://${DB_USER}:${PASSWORD}@localhost:${PORT}/${DB_NAME}`
+const {DB_NAME, DB_USER, PASSWORD, DB_PORT} = process.env
+const PG_CONNECTION_STRING = `postgres://${DB_USER}:${PASSWORD}@localhost:${DB_PORT}/${DB_NAME}`
 const pool = new pg.Pool({connectionString : PG_CONNECTION_STRING})
 
 

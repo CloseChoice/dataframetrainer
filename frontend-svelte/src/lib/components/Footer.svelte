@@ -1,7 +1,3 @@
-<script>
-    import githubCat from '$lib/assets/github-mark.svg'
-    import info from '$lib/assets/info.svg'
-</script>
 <footer class="w-100 bg-black p-5 position-absolute bottom-0">
     <div class="mb-3">
         <a href="/impressum"><i class="fa-solid fa-circle-info me-2"></i> Impressum </a>

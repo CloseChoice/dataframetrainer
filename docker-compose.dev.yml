@@ -10,7 +10,7 @@ services:
       NODE_ENV: development
       PASSWORD: ${PASSWORD}
       DB_USER: ${DB_USER}
-      PORT: ${PORT}
+      DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}
       AUTH_SECRET: ${AUTH_SECRET}
     ports:
