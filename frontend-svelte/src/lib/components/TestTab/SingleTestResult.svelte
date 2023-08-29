@@ -2,7 +2,7 @@
     import type {PyTest} from './pytest-result'
     export let test: PyTest;
 
-    let hasPassed = test.outcome.includes('passed')
+    $: hasPassed = test.outcome.includes('passed')
     $: color = hasPassed ? 'success' : 'danger';
 </script>
 
