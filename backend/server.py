@@ -21,7 +21,7 @@ from datetime import datetime
 
 from elo.entities.ChallengeElo import ChallengeElo
 from elo.entities.UserElo import UserElo
-from elo.utils import get_best_suited_challenge
+from elo.utils import get_best_suited_challenge, get_random_challenge
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -159,17 +159,25 @@ def set_user_group() -> Response:
 @cross_origin(supports_credentials=True)
 def get_next_challenge():
     user_id = request.json.get("user_id")
+    cursor.execute(f"select elo, challenge_id from challenges_elo")
+    challenges_elo = cursor.fetchall()
+    challenges_elo = [
+        ChallengeElo(elo=ce[0], challenge_id=ce[1]) for ce in challenges_elo
+    ]
+    if user_id == "" or user_id is None:
+        next_challenge = get_random_challenge(challenges_elo) 
+        return jsonify(
+            response={
+                "success": "first ok",
+                "next_challenge": next_challenge,
+            }
+        )
     cursor.execute(
         f"select elo from users_elo where user_id = '{user_id}' order by time desc limit 1"
     )
     # todo: test if this is really the current elo
     current_user_elo = cursor.fetchone()
     user_elo = UserElo(elo=current_user_elo[0], user_id=user_id)
-    cursor.execute(f"select elo, challenge_id from challenges_elo")
-    challenges_elo = cursor.fetchall()
-    challenges_elo = [
-        ChallengeElo(elo=ce[0], challenge_id=ce[1]) for ce in challenges_elo
-    ]
     cursor.execute(
         f"select description from users_groups ug join groups g on ug.group_id = g.id where ug.user_id = '{user_id}' limit 1"
     )
