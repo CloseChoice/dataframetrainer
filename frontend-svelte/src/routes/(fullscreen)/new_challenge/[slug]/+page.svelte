@@ -14,6 +14,16 @@
     import { onMount } from "svelte";
     import TestResults from "$lib/components/TestTab/TestResults.svelte";
     import type { PytestResult } from "$lib/components/TestTab/pytest-result";
+    import { setContext } from 'svelte';
+  
+    const userId = $page.data.session?.user?.userId;
+    const sessionId = $page.data.session?.sessionId;
+    const user_id = userId ?? "";
+    const session_id = sessionId ?? "";
+    console.log("$page", $page.data.session);
+
+    setContext('user_id', user_id);
+    setContext('session_id', session_id);
     console.log('session through page.svelte', $page.data.session);
 
     const description = data.intro;
