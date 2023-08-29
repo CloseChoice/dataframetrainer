@@ -1,7 +1,6 @@
 import { redirect, fail } from '@sveltejs/kit';
 import {pool} from '$lib/server/db';
 import { auth } from "$lib/server/lucia";
-import { sessionState } from "$lib/stores/pyodide-store";
 import axios from 'axios';
 
 function validateFormData(userData){
@@ -61,7 +60,6 @@ console.log("set user group", user.userId, session.sessionId);
   console.log("set user group return", res);
   // write session to store
   console.log("WRITE SESSION TO SESSIONSTORE 1", session);
-  sessionState.set(session);
   return session
 }
 
@@ -81,7 +79,6 @@ export const actions = {
         const key = await auth.useKey("username", name, password);
         session = await auth.createSession({userId: key.userId, attributes: {}});
         console.log("WRITE SESSION TO SESSIONSTORE 2", session);
-        sessionState.set(session);
         await locals.auth.setSession(session);
         
       } catch (e) {
@@ -121,7 +118,6 @@ export const actions = {
 
         await locals.auth.setSession(session);
         console.log("WRITE SESSION TO SESSIONSTORE 3", session);
-        sessionState.set(session);
 
         return {
             success: true,

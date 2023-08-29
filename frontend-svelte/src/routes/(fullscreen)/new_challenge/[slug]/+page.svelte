@@ -5,7 +5,6 @@
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
     import axios from 'axios';
-    import { sessionState } from '$lib/stores/pyodide-store';
     import CodeMirror from "../../new_challenge/[slug]/CodeMirror.svelte";
     import { isPyodideReady, pyodideWorker } from "$lib/stores/pyodide-store";
     import CodeOutput from "../../new_challenge/[slug]/CodeOutput.svelte";
@@ -38,21 +37,19 @@
 
     async function handleNewChallenge(){
         console.log("handleNewChallenge", $page.data);
-        const userId = $page.data.session?.user?.userId
+        const userId = $page.data.session?.user?.userId;
 
-        if (! userId) {
-            alert("yer gotta be signed in for datt")
-        }
-        console.log("This is the userid", userId);
-
+        const user_id = userId ?? "";
+        // for some reason this is not working.
         const res = await axios.post('http://127.0.0.1:5000/get_next_challenge', {
-            user_id: userId
-        })
+            user_id: user_id
+        });
+        // const res = await axios.post('/backend_server/get_next_challenge', {
+        //     user_id: user_id,
+        // });
         console.log("this is the response", res);
         const nextChallenge = res.data.response.next_challenge
         goto('/new_challenge/' + nextChallenge)
-
-        
     }
 
 

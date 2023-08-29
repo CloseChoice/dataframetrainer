@@ -44,7 +44,6 @@ export async function initPyodideStore(){
 }
 
 export const pyodideState = writable(PyodideState.LOADING);
-export const sessionState = writable(null);
 
 export const isPyodideReady = derived(
     pyodideState,
