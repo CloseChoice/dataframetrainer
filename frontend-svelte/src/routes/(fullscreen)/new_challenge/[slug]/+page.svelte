@@ -41,10 +41,10 @@
 
         const user_id = userId ?? "";
         // for some reason this is not working.
-        const res = await axios.post('http://127.0.0.1:5000/get_next_challenge', {
+        const res = await axios.post('http://127.0.0.1:5000/post_next_challenge', {
             user_id: user_id
         });
-        // const res = await axios.post('/backend_server/get_next_challenge', {
+        // const res = await axios.post('/backend_server/post_next_challenge', {
         //     user_id: user_id,
         // });
         console.log("this is the response", res);

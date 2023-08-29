@@ -84,7 +84,7 @@ jobs:
           fi
 
           echo "start testing elo endpoints"
-          response_code=$(curl -X POST http://127.0.0.1:5000/get_next_challenge -H "Content-Type: application/json" -d '{"user_id": "d037ce8d-0381-471f-bfa5-98467685a335"}')
+          response_code=$(curl -X POST http://127.0.0.1:5000/post_next_challenge -H "Content-Type: application/json" -d '{"user_id": "d037ce8d-0381-471f-bfa5-98467685a335"}')
           next_challenge=$(echo "$response_code" | grep "next_challenge")
           # check if GroupTerms is in the next_challenge string
           if [[ "$next_challenge" != *"GroupTerms"* ]]; then

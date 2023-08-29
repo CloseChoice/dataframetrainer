@@ -168,9 +168,9 @@ def set_user_group() -> Response:
 
 
 # todo: differentiate between logged in and guests
-@app.route("/get_next_challenge", methods=["POST"])
+@app.route("/post_next_challenge", methods=["POST"])
 @cross_origin(supports_credentials=True)
-def get_next_challenge():
+def post_next_challenge():
     user_id = request.json.get("user_id")
     cursor.execute(f"select elo, challenge_id from challenges_elo")
     challenges_elo = cursor.fetchall()
