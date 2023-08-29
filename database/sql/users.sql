@@ -1,3 +1,4 @@
+-- todo: split into seperate files
 DO $$ BEGIN
     CREATE TYPE user_role AS ENUM ('user', 'admin');
 EXCEPTION

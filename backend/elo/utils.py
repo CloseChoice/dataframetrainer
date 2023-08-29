@@ -9,6 +9,10 @@ def calculate_elo(challenge_elo: ChallengeElo, user_elo: UserElo, div: float) ->
     prob_success = 1 / (1 + 10 ** ((challenge_elo.elo - user_elo.elo) / div))
     return prob_success
 
+def get_random_challenge(challenges: list[ChallengeElo]) -> str:
+    from random import choice
+    return choice(challenges).challenge_id
+
 def get_best_suited_challenge(challenges: list[ChallengeElo], user_elo: UserElo, past_challenges: list[str]) -> tuple[str, float]:
     success_probs = {}
     for challenge in challenges:
