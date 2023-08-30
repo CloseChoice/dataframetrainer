@@ -4,6 +4,19 @@ declare global {
 	namespace App {
 		interface Locals {
 			auth: import("lucia").AuthRequest;
+			// Lucia doesn't provide a type for the session so this is hard coded for now
+			session: {
+				activePeriodExpiresAt: Date;
+				fresh: Boolean;
+				idlePeriodExpiresAt: Date;
+				sessionId: string;
+				state: string;
+				user: {
+					name: string;
+					role: string;
+					userId: string;
+				}
+			}
 		}
 		// interface Error {}
 		// interface PageData {}
