@@ -38,7 +38,7 @@ export default defineConfig({
 		//	rewrite: (path) => path.replace(/^\/backend/, '')
 		//  },    
 		  '/backend_server': {
-			target: 'http://127.0.0.1:5000',
+			target: 'http://backend:5000',
 			changeOrigin: true,
 			rewrite: (path) => path.replace(/^\/backend_server\//, '/'),
 			secure: false,
