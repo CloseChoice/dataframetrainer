@@ -20,7 +20,7 @@
     let code = data.default_code;
     let test_challenge = data.test_challenge;
     let resultUserCode = "";
-    let challengeName = data.challengeName;
+    let challengeName = data.challenge_name;
     let submission = data.submission;
 
     let testResult: PytestResult | null = null;
@@ -32,7 +32,18 @@
     async function handleTest(){
         pyodideWorker.showStuff('/home/pyodide');
         const testResultString = await pyodideWorker.testUserCode(code, data)
-        testResult = JSON.parse(testResultString)
+        testResult = JSON.parse(testResultString);
+        console.log("testResult", testResult["tests"][0]["call"]["outcome"]);
+        const result = testResult["tests"][0]["call"]["outcome"] == "passed" ? true : false;
+        const sessionId = $page.data.session?.sessionId;
+
+        const session_id = sessionId ?? "";
+        // for some reason this is not working with dynamic routes.
+        await axios.post(`http://127.0.0.1:5000/post_challenge_results/${challengeName}/`, {
+            session_id,
+            // todo: change this with the correct result
+            challenge_result: result
+        });
     }
 
     async function handleNewChallenge(){
@@ -115,7 +126,7 @@
                             Loading Pyodide...
                         {/if}
                         <button disabled='{!$isPyodideReady}' type="button" on:click={handleRun} class="btn btn-primary btn-sm">Run</button>
-                        <button disabled='{!$isPyodideReady}' type="button" on:click={handleTest} class="btn btn-secondary btn-sm">Test</button>
+                        <button disabled='{!$isPyodideReady}' type="button" data-test="testButton" on:click={handleTest} class="btn btn-secondary btn-sm">Test</button>
                     </div>
             </div>
             <div bind:this={splitConsole} style="min-height: 200px; background: green" >
