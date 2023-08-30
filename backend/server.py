@@ -22,6 +22,11 @@ from datetime import datetime
 from elo.entities.ChallengeElo import ChallengeElo
 from elo.entities.UserElo import UserElo
 from elo.utils import get_best_suited_challenge, get_random_challenge
+from flask.logging import default_handler
+import logging
+
+root = logging.getLogger()
+root.addHandler(default_handler)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -90,9 +95,17 @@ def serve_static(filepath):
         return "File not found", 404
 
 
-@app.route("/get_challenge/<string:id>/", methods=["GET"])
+@app.route("/post_challenge/<string:id>/", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def get_challenge(id):
+    session_id = request.json.get("session_id")
+    # todo: maybe do this asynchronously
+    if session_id is not None:
+        cursor.execute(f"select user_id from sessions where id = '{session_id}'")
+        user_id = cursor.fetchone()[0]
+        cursor.execute("insert into users_challenges (user_id, challenge_id, session_id, timestamp) values (%s, %s, %s, %s)",
+                       (user_id, id, session_id, datetime.now()))
+        conn.commit()
     return send_from_directory(f"challenges/{id}", f"{id}.py")
 
 
@@ -155,9 +168,9 @@ def set_user_group() -> Response:
 
 
 # todo: differentiate between logged in and guests
-@app.route("/get_next_challenge", methods=["POST"])
+@app.route("/post_next_challenge", methods=["POST"])
 @cross_origin(supports_credentials=True)
-def get_next_challenge():
+def post_next_challenge():
     user_id = request.json.get("user_id")
     cursor.execute(f"select elo, challenge_id from challenges_elo")
     challenges_elo = cursor.fetchall()
