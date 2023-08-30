@@ -19,25 +19,6 @@
     onMount(initPyodideStore)
     import CookieBanner from '$lib/components/CookieBanner.svelte';
 
-    import axios from 'axios'
-    import {goto} from '$app/navigation'
-
-    async function handleNewChallenge(){
-        console.log("handleNewChallenge", $page.data);
-        const userId = $page.data.session?.user?.userId;
-
-        const user_id = userId ?? "";
-        // for some reason this is not working.
-        const res = await axios.post('/backend_server/post_next_challenge', {
-            user_id: user_id
-        });
-        // const res = await axios.post('/backend_server/get_next_challenge', {
-        //     user_id: user_id,
-        // });
-        console.log("this is the response", res);
-        const nextChallenge = res.data.response.next_challenge
-        goto('/new_challenge/' + nextChallenge)
-    }
 </script>
 
 
@@ -56,7 +37,8 @@
           <a class="nav-link" class:active={$page.url.pathname === "/browse_challenges"} href="/browse_challenges">Browse</a>
         </li>
         <li>
-          <button on:click={handleNewChallenge} type="button" class="btn btn-light">Random Challenge</button>
+          <!-- <button data-test="new-challenge-button" on:click={handleNewChallenge} type="button" class="btn btn-light">Random Challenge</button> -->
+          <a data-test="new-challenge-button" class="nav-link" href="/random_challenge">Random Challenge</a>
         </li>
       </ul>
       
