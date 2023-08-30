@@ -11,7 +11,7 @@ import pyodideLockFileURL from './requirements/repodata.json?url'
 
 const stateSubject = new Subject<PyodideWorkerState>()
 const stdoutSubject = new Subject<string>()
-
+const stderrSubject = new Subject<Error>()
 
 async function loadPyodideAndPackages(){
     stateSubject.next(PyodideWorkerState.INSTALLING)
@@ -50,9 +50,20 @@ type WithPyodideCallback<T> = (pyodide: PyodideInterface) => T
 async function withPyodide<T>(state: PyodideWorkerState, callback: WithPyodideCallback<T>){
     stateSubject.next(state)
     const pyodide = await pyodideReadyPromise
-    const res = await callback(pyodide)
-    stateSubject.next(PyodideWorkerState.IDLE)
-    return res
+    try {
+        const res = await callback(pyodide)
+        stateSubject.next(PyodideWorkerState.IDLE)
+        return res
+    } catch (error) {
+        // Here we would like to check if the error is a PythonError but since pyodide only exports the type and not the class this is not possible right away
+        if (error instanceof Error) {
+            console.error(error)
+            stderrSubject.next(error)
+            stateSubject.next(PyodideWorkerState.IDLE)
+            return false
+        }
+        
+    }
 }
 
 let challengeName: string;
@@ -60,6 +71,7 @@ let challengeName: string;
 const worker = {
     state: ()=> Observable.from(stateSubject),
     stdout: () => Observable.from(stdoutSubject),
+    stderr: () => Observable.from(stderrSubject),
     loadChallenge: async (classFile: string, testFile: string, name: string) => {
         challengeName = name;
         return withPyodide(PyodideWorkerState.LOADING_CHALLENGE, async (pyodide)=>{

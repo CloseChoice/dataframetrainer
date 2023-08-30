@@ -14,6 +14,7 @@ export let pyodideWorkerPromise: Promise<ModuleThread<PyodideWorker>> = new Prom
 })
 
 export const pyodideStdout: Writable<string[]> = writable([])
+export const pyodideStderr: Writable<Error|null> = writable(null)
 
 export const pyodideState = writable('loading')
 
@@ -37,8 +38,13 @@ export async function initPyodideStore(){
         })
     })
 
+    worker.stderr().subscribe(err => {
+        pyodideStderr.set(err)
+    })
+
     worker.state().subscribe(state => {
         pyodideState.set(state)
+        // We don't want to reset the output on idle and generating examples
         const statesThatResetConsole = [
             PyodideWorkerState.RUNNING, 
             PyodideWorkerState.LOADING_CHALLENGE, 
@@ -46,6 +52,7 @@ export async function initPyodideStore(){
         ]
         if (statesThatResetConsole.includes(state)){
             pyodideStdout.set([])
+            pyodideStderr.set(null)
         }
     })
 
