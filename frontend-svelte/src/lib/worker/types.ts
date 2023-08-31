@@ -5,5 +5,6 @@ export enum PyodideWorkerState{
     RUNNING = 'running',
     TESTING = 'testing',
     INSTALLING = 'installing pyodidie',
-    GENERATING_EXAMPLE = 'generating example'
+    GENERATING_EXAMPLE = 'generating example',
+    ERROR = 'error'
 }

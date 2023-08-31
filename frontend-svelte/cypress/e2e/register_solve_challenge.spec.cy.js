@@ -1,13 +1,7 @@
 describe('Register and Test Challenge', () => {
     it('Register new user and get a new challenge for her', () => {
         cy.setup()
-
-        cy.visit('/authentication')
-  
-        cy.getByData('name-input').type('HermineGranger')
-        cy.getByData('password-input').type('somepassword')
-        cy.getByData('register-button').click()
-
+        cy.request('POST', 'http://localhost:5173/testapi/user', {username: 'Hildegard', password: '123456789'})
         cy.visit('/new_challenge/RenameColumn')
         let userCode = `
         import pandas as pd

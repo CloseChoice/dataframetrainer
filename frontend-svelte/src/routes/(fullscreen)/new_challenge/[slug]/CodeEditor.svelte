@@ -4,8 +4,13 @@
     import { isPyodideReady, pyodideState, pyodideWorkerPromise, testResult } from "$lib/stores/pyodide-store";
     import type { PageData } from "./$types";
     import CodeOutput from "./CodeOutput.svelte";
-
+    import type { PytestResult } from "$lib/components/TestTab/pytest-result";
+    import axios from "axios";
     export let code: string;
+    import {page} from '$app/stores'
+    import {getContext} from 'svelte'
+
+    const data = getContext('data')
 
     async function handleRun(){
         const worker = await pyodideWorkerPromise
@@ -14,7 +19,16 @@
 
     async function handleTest(){
         const worker = await pyodideWorkerPromise
-        $testResult = await worker.testCode(code)
+        const res = await worker.testCode(code)
+        if (res){
+            const outcome = res.tests[0].call?.outcome;
+            const haveAllTestsPassed = outcome === "passed";
+            testResult.set(res)
+            axios.post(`http://127.0.0.1:5000/post_challenge_results/${data.challenge_name}/`, {
+            session_id: $page.data?.session.sessionId || "",
+            challenge_result: haveAllTestsPassed
+        });
+        }
     }
     
 </script>
@@ -27,7 +41,7 @@
                 {$pyodideState}...
             {/if}
             <button disabled='{!$isPyodideReady}' type="button" on:click={handleRun} class="btn btn-primary btn-sm">Run</button>
-            <button disabled='{!$isPyodideReady}' type="button" on:click={handleTest} class="btn btn-secondary btn-sm">Test</button>
+            <button data-test="testButton" disabled='{!$isPyodideReady}' type="button" on:click={handleTest} class="btn btn-secondary btn-sm">Test</button>
         </div>
     </Pane>
     <Pane>

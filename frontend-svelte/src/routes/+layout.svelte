@@ -17,10 +17,8 @@
     // ...and add it to the context for child components to access    setContext('user', user);
 
     onMount(initPyodideStore)
-    import { signIn, signOut } from "@auth/sveltekit/client"
-
-    console.log('session through layout server:', $page.data.session);
     import CookieBanner from '$lib/components/CookieBanner.svelte';
+
 </script>
 
 
@@ -37,6 +35,10 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" class:active={$page.url.pathname === "/browse_challenges"} href="/browse_challenges">Browse</a>
+        </li>
+        <li>
+          <!-- <button data-test="new-challenge-button" on:click={handleNewChallenge} type="button" class="btn btn-light">Random Challenge</button> -->
+          <a data-test="new-challenge-button" class="nav-link" href="/random_challenge">Random Challenge</a>
         </li>
       </ul>
       

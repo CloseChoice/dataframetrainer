@@ -1,5 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
@@ -10,6 +10,11 @@ export default defineConfig({
 		format: 'es'
 	},
 	server: {
+		fs:{
+			allow: [searchForWorkspaceRoot(process.cwd()),
+			'/node_modules',
+			'/.svelte-kit']
+		},
 		// Listen on all ip addresses
 		host: true,
 		// The port on which the website is accessible
@@ -33,7 +38,7 @@ export default defineConfig({
 		//	rewrite: (path) => path.replace(/^\/backend/, '')
 		//  },    
 		  '/backend_server': {
-			target: 'http://127.0.0.1:5000',
+			target: 'http://backend:5000',
 			changeOrigin: true,
 			rewrite: (path) => path.replace(/^\/backend_server\//, '/'),
 			secure: false,
