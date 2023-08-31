@@ -8,9 +8,9 @@
     {#each data.challenges as challenge}
  
         <li class="list-item">
-            <a href={`/new_challenge/${challenge}`}>{challenge}</a>
+            <a href={`/new_challenge/${challenge.id}`}>{challenge.id}</a>
+            status: {challenge.status}
         </li>
-
     {/each}
 </ul>
 <style>
