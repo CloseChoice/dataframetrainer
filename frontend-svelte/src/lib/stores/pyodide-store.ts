@@ -1,53 +1,60 @@
-import * as Comlink from 'comlink'
 import { derived, writable, get, readable } from 'svelte/store'
 import type { Writable } from 'svelte/store';
+import type {  PyodideWorker } from '$lib/worker/pyododie-worker.module';
+import MyWorker from '$lib/worker/pyododie-worker.module?worker'
+// import MyWorker from '$lib/worker/fuck.ts?worker'
+import { spawn, Worker, type ModuleThread} from 'threads'
+import { PyodideWorkerState } from '$lib/worker/types';
 import type { PytestResult } from '$lib/components/TestTab/pytest-result';
 
-export let pyodideWorker: null | Comlink.Remote<any> = null
+let resolvePyodideReadyPromise: (worker: ModuleThread<PyodideWorker>) => void
+let rejectPyodideReadyPromise
+export let pyodideWorkerPromise: Promise<ModuleThread<PyodideWorker>> = new Promise((resolve, reject) => {
+    resolvePyodideReadyPromise = resolve
+})
 
-
-
-enum PyodideState {
-    LOADING = "loading",
-    TESTING = "testing",
-    RUNNING = "running",
-    IDLE = "idle"
-}
-
-function stateChangeCallback(state: PyodideState){    
-    pyodideState.set(state)
-}
-
-// const initialStdout: = []:string[]
 export const pyodideStdout: Writable<string[]> = writable([])
-export const testResult: Writable<PytestResult | null> = writable(null);
+export const pyodideStderr: Writable<Error|null> = writable(null)
 
-function stdoutCallback(line: string){
-    pyodideStdout.update((stdout) => {
-        stdout.push(line)
-        return stdout
-    })
-}
+export const pyodideState = writable('loading')
 
-
-export async function initPyodideStore(){
-    const worker = new Worker(new URL('../worker/pyodide-worker.ts', import.meta.url))
-    pyodideWorker = Comlink.wrap(worker)
-
-    // Make sure to set the callbacks before initializing the web worker
-    // pyodideWorker.stateChangeCallback = Comlink.proxy(stateChangeCallback)
-    pyodideWorker.on('stateChange', Comlink.proxy(stateChangeCallback))
-    pyodideWorker.on('stdout', Comlink.proxy(stdoutCallback))
-    pyodideWorker.initialize()
-    
-    // isPyodideReady.set(true)
-}
-
-export const pyodideState = writable(PyodideState.LOADING);
+export const testResult: Writable<PytestResult> = writable()
 
 export const isPyodideReady = derived(
     pyodideState,
     ($pyodideState) => {
-        return $pyodideState === PyodideState.IDLE
+        return $pyodideState === 'idle'
     }
 )
+
+export async function initPyodideStore(){
+    console.log('store was initted as fuck')
+    const worker = await spawn<PyodideWorker>(new MyWorker())
+
+    worker.stdout().subscribe(newLine => {
+        pyodideStdout.update(lines => {
+            lines.push(newLine)
+            return lines
+        })
+    })
+
+    worker.stderr().subscribe(err => {
+        pyodideStderr.set(err)
+    })
+
+    worker.state().subscribe(state => {
+        pyodideState.set(state)
+        // We don't want to reset the output on idle and generating examples
+        const statesThatResetConsole = [
+            PyodideWorkerState.RUNNING, 
+            PyodideWorkerState.LOADING_CHALLENGE, 
+            PyodideWorkerState.TESTING
+        ]
+        if (statesThatResetConsole.includes(state)){
+            pyodideStdout.set([])
+            pyodideStderr.set(null)
+        }
+    })
+
+    resolvePyodideReadyPromise(worker)
+}

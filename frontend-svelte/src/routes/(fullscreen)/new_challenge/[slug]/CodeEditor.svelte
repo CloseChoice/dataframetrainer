@@ -14,7 +14,10 @@
 
     async function handleTest(){
         const worker = await pyodideWorkerPromise
-        $testResult = await worker.testCode(code)
+        const res = await worker.testCode(code)
+        if (res){
+            testResult.set(res)
+        }
     }
     
 </script>

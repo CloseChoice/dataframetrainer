@@ -18,4 +18,7 @@ services:
       - 5173:5173
     volumes:
       - ./frontend-svelte:/frontend-svelte
+      # This excludes the node_modules folder from docker volume
+      - /frontend-svelte/node_modules
+      - /frontend-svelte/.svelte-kit
     working_dir: /frontend-svelte
