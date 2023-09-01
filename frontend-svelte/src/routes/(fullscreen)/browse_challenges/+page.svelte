@@ -1,27 +1,23 @@
 <script>
     // import { slide } from "svelte/transition";
-
     export let data;
 </script>
 
-<ul class="list">
+<div class="container mt-5">
     {#each data.challenges as challenge}
- 
-        <li class="list-item">
-            <a href={`/new_challenge/${challenge.id}`}>{challenge.id}</a>
-            status: {challenge.status}
-        </li>
+    <a class="text-decoration-none" href="/new_challenge/{challenge.id}">
+        <div data-test="challenge-card" data-challenge-status="{challenge.status}" data-challenge-id="{challenge.id}" class="card mb-3">
+            <div class="card-body">
+                <h5 class="me-2 d-inline-block card-title">{challenge.id}</h5>
+                {#if challenge.status == 0}
+                    <span class="badge rounded-pill bg-dark">visited</span>
+                {:else if challenge.status == 1}
+                    <span class="badge rounded-pill bg-danger">tried</span>
+                {:else if challenge.status == 2}
+                    <span class="badge rounded-pill bg-success">succeeded</span>
+                {/if}
+            </div>
+          </div>
+    </a>
     {/each}
-</ul>
-<style>
-    .list {
-      list-style-type: none; /* Sets the bullet style */
-      padding-left: 1.5em; /* Adds left indentation */
-    }
-    
-    .list-item {
-      border:1px solid #000;
-      width: 50%;
-    }
-</style>
-  
+</div>
