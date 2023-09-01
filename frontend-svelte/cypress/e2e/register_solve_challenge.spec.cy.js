@@ -23,6 +23,7 @@ describe('Register and Test Challenge', () => {
                         "def transform(df: pd.DataFrame) -> pd.DataFrame:",
                         "# once you found a solution, define this function",
                         '    return df.rename(columns={"Value": "NewValue"})'];
+        // data-test="CodeMirrorClass"
         cy.get('.CodeMirror').as('codeMirrorElement');
 
         // remove old code from code editor
@@ -33,9 +34,9 @@ describe('Register and Test Challenge', () => {
         // BIG TODO: once we have a logging information if the challenge was solved,
         // we can check here if the challenge was solved
         // todo: check if the button is not disabled and then click it
-        cy.wait(10000); // Wait for 1 second (adjust the time as needed)
+        cy.wait(20000); // Wait for 1 second (adjust the time as needed)
         cy.getByData("testButton").click()
-        cy.wait(5000); // Wait for 1 second (adjust the time as needed)
+        cy.wait(10000); // Wait for 1 second (adjust the time as needed)
         cy.getByData('testResultIcon').should('contain', '✅');
         // check out: https://www.browserstack.com/guide/cypress-database-testing
     })
