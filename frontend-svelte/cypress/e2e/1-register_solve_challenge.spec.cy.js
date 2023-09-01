@@ -1,3 +1,4 @@
+// todo: remove the 1- from the filename, once the test is fixed when other tests are run before
 describe('Register and Test Challenge', () => {
     it('Register new user and get a new challenge for her', () => {
         cy.setup()
