@@ -1,13 +1,9 @@
-import { error } from '@sveltejs/kit';
+import { error, type ServerLoad } from '@sveltejs/kit';
 
-/** @type {import('./$types').PageServerLoad} */
-export async function load({ params, fetch, cookies }) {
+export const load: ServerLoad =  async ({ params, fetch, cookies, locals }) =>{
     console.log(params.slug);
 
-    const session_id = cookies.get('auth_session');
-    console.log("\n\nTHESE ARE THE COOKIES", session_id);
-    console.log("\n\n");
-
+    const session_id = locals?.session?.sessionId
     const requestOptions: RequestInit = {
         method: 'POST',
         headers: {
