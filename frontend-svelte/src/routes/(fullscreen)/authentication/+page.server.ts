@@ -1,4 +1,4 @@
-import { redirect, fail } from '@sveltejs/kit';
+import { redirect, fail, type Actions } from '@sveltejs/kit';
 import {pool} from '$lib/server/db';
 import { auth } from "$lib/server/lucia";
 import axios from 'axios';
@@ -16,8 +16,7 @@ function validateFormData(userData){
 
 
 
-/** @type {import('./$types').Actions} */
-export const actions = {
+export const actions: Actions = {
     login: async (event) => {
       const {request, cookies, locals} = event
       const data = await request.formData();
@@ -66,7 +65,7 @@ export const actions = {
         }
         console.log("after check if user exists");
         
-        const session = await createUser(userData.name, userData.password)
+        const session = await createUser(userData.name, userData.password, event)
         console.log("after create user");
 
         await locals.auth.setSession(session);
