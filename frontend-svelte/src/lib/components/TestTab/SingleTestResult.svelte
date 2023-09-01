@@ -6,9 +6,9 @@
     $: color = hasPassed ? 'success' : 'danger';
 </script>
 
-<div class="card mb-3 border-1 border-{color}">
+<div class="card mb-3 border-1 border-{color}" id="testResultContainer">
     <div class="card-header border-0  bg-{color} bg-opacity-25">
-        <span class="me-2">{hasPassed? "✅" : "❌"}</span>
+        <span data-test="testResultIcon">{hasPassed? "✅" : "❌"}</span>
         <span>{test.nodeid}</span>
     </div>
     {#if !hasPassed}

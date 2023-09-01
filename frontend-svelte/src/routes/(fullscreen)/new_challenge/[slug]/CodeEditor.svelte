@@ -30,7 +30,7 @@
                 {$pyodideState}...
             {/if}
             <button disabled='{!$isPyodideReady}' type="button" on:click={handleRun} class="btn btn-primary btn-sm">Run</button>
-            <button disabled='{!$isPyodideReady}' type="button" on:click={handleTest} class="btn btn-secondary btn-sm">Test</button>
+            <button disabled='{!$isPyodideReady}' type="button" on:click={handleTest} class="btn btn-secondary btn-sm" data-test="testButton">Test</button>
         </div>
     </Pane>
     <Pane>
