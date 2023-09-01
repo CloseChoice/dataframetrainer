@@ -36,7 +36,7 @@ export async function createUser(username: string, password: string){
   console.log("Session created", session);
 
 console.log("set user group", user.userId, session.sessionId);
-  const res = await axios.post('/backend_server/set_user_group', {
+  const res = await axios.post('http://backend:5000/set_user_group', {
     user_id: user.userId,
     session_id: session.sessionId
   })
