@@ -21,7 +21,7 @@ from datetime import datetime
 
 from elo.entities.ChallengeElo import ChallengeElo
 from elo.entities.UserElo import UserElo
-from elo.utils import get_best_suited_challenge, get_random_challenge
+from elo.utils import get_best_suited_challenge, get_random_challenge, handle_elo_update
 from flask.logging import default_handler
 import logging
 
@@ -134,11 +134,16 @@ def get_default(id):
 def post_challenge_results(id):
     session_id = request.json.get("session_id")
     challenge_result = request.json.get("challenge_result")
+    user_id = request.json.get("user_id")
     if session_id is not None:
+        # this order is actually important because each insert updates the users_challenges_status table
+        # and in the previous steps we rely on the status table to not be updated
+        handle_elo_update(id, user_id, challenge_result, conn)
         cursor.execute("update users_challenges set successful = %s where session_id = %s and challenge_id = %s",
                        (challenge_result, session_id, id)
                        )
         conn.commit()
+        # handle elo
     # todo: handle the groups in here
     return jsonify({"success": "ok"})
 
@@ -174,7 +179,7 @@ def set_user_group() -> Response:
             cursor.execute(f"select id from groups where description = '{group}'")
             group_id = cursor.fetchone()[0]
             cursor.execute("insert into users_groups (user_id, group_id) values (%s, %s)", (user_id, group_id))
-            cursor.execute("insert into users_elo (elo, user_id, time) values (%s, %s, %s)", (700, user_id, datetime.now()))
+            cursor.execute("insert into users_elo (elo, user_id) values (%s, %s)", (700, user_id))
             conn.commit()
             return jsonify({"success": "ok"})
         case _:
