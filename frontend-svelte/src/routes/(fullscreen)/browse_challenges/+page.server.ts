@@ -1,13 +1,16 @@
-import { error } from '@sveltejs/kit';
-import type { ServerLoad } from '@sveltejs/kit';
+import { pool } from '$lib/server/db';
+import type { PageServerLoad } from '../new_challenge/[slug]/$types';
 
-/** @type {import('./$types').PageServerLoad} */
-export async function load({ params, fetch }) {
-    let challenges = await fetch(`/backend_server/get_all_challenges/`);
-    let challengesText = await challenges.text();
-    challengesText = JSON.parse(challengesText);
-
+export const load: PageServerLoad = async({ params, fetch , locals}) => {
+    const userId = locals?.session?.user?.userId || "NULL"
+    console.log('usaaaaaaaaaaaaaaaaaaaaaaaaaa id', userId)
+    let challenges = await pool.query(`
+        SELECT * 
+        FROM challenges c
+        LEFT JOIN (SELECT * FROM users_challenges_status WHERE user_id = $1) ucs
+        ON c.id = ucs.challenge_id;`, [userId])
+    console.log(challenges.rows)
     return {
-        challenges: challengesText,
+        challenges: challenges.rows,
     };
 }

@@ -46,7 +46,7 @@
                 </TabPane>
                 {#if displayMobile}
                 <TabPane class="flex-grow-1" tabId="editor" tab="Editor" active={activeTab == TabIDs.EDITOR}>
-                    <CodeEditor bind:code={code}/>
+                    <CodeEditor bind:code={code} bind:challengeName={data.challenge_name}/>
                 </TabPane>
                 {/if}
             </TabContent>
@@ -54,7 +54,7 @@
         </Pane>
         {#if !displayMobile}
         <Pane>
-            <CodeEditor bind:code={code}/>
+            <CodeEditor bind:code={code} bind:challengeName={data.challenge_name}/>
         </Pane>
         {/if}
     </Splitpanes>

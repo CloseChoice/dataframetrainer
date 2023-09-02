@@ -1,5 +1,3 @@
-
-
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
 import { createUser } from '$lib/server/auth';

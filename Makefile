@@ -3,6 +3,7 @@ build:
 	cd database && $(MAKE) new
 
 cleanup:
+	docker rm -f dataframetrainer-db-fill-or-update-tables-1
 	docker rm dataframetrainer-frontend-dev-1
 	docker image rm -f dataframetrainer-db-fill-or-update-tables
 	docker image rm -f dataframetrainer-backend

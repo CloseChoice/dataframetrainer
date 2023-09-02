@@ -1,7 +1,6 @@
 import {pool} from '$lib/server/db'
 import {auth} from '$lib/server/lucia'
 import type { RequestEvent } from '@sveltejs/kit';
-import axios from 'axios'
 
 export async function checkUserExists(username: string) {
     console.log("in checkUserExists");
@@ -36,8 +35,7 @@ export async function createUser(username: string, password: string, event: Requ
   });
   console.log("Session created", session);
 
-console.log("set user group", user.userId, session.sessionId);
-  // const moped = await axios.get('/backend_server/get_all_challenges')
+  console.log("set user group", user.userId, session.sessionId);
 
   const res = await event.fetch('/backend_server/set_user_group', {
     method: "POST",
@@ -49,18 +47,5 @@ console.log("set user group", user.userId, session.sessionId);
       'Content-Type': 'application/json',
     }
   })
-  // const res = await axios.post('/backend_server/set_user_group', {
-  //   user_id: user.userId,
-  //   session_id: session.sessionId
-  // })
-  // const res = await axios.post('/backend/set_user_group', {
-  //     data: {
-  //         user_id: user.userId,
-  //         session_id: session.sessionId,
-  //     }
-  // })
-  console.log("set user group return", res);
-  // write session to store
-  console.log("WRITE SESSION TO SESSIONSTORE 1", session);
   return session
 }

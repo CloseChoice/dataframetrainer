@@ -1,7 +1,5 @@
 import { redirect, fail, type Actions } from '@sveltejs/kit';
-import {pool} from '$lib/server/db';
 import { auth } from "$lib/server/lucia";
-import axios from 'axios';
 import { createUser, checkUserExists } from '$lib/server/auth';
 
 function validateFormData(userData){

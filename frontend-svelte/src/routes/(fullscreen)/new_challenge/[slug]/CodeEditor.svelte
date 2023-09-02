@@ -2,10 +2,15 @@
     import { Splitpanes, Pane } from "svelte-splitpanes";
     import CodeMirror from "./CodeMirror.svelte";
     import { isPyodideReady, pyodideState, pyodideWorkerPromise, testResult } from "$lib/stores/pyodide-store";
-    import type { PageData } from "./$types";
     import CodeOutput from "./CodeOutput.svelte";
-
+    import axios from "axios";
     export let code: string;
+    export let challengeName: string;
+
+    import {page} from '$app/stores'
+    import {getContext} from 'svelte'
+
+    const data = getContext('data')
 
     async function handleRun(){
         const worker = await pyodideWorkerPromise
@@ -15,8 +20,15 @@
     async function handleTest(){
         const worker = await pyodideWorkerPromise
         const res = await worker.testCode(code)
+        console.log("THIS IS THE RESULT", challengeName);
         if (res){
-            testResult.set(res)
+             const outcome = res.tests[0].call?.outcome;
+             const haveAllTestsPassed = outcome === "passed";
+             testResult.set(res)
+             axios.post(`http://127.0.0.1:5000/post_challenge_results/${challengeName}/`, {
+             session_id: $page.data?.session.sessionId || "",
+             challenge_result: haveAllTestsPassed
+         });
         }
     }
     

@@ -103,9 +103,11 @@ def get_challenge(id):
     if session_id is not None:
         cursor.execute(f"select user_id from sessions where id = '{session_id}'")
         user_id = cursor.fetchone()[0]
-        cursor.execute("insert into users_challenges (user_id, challenge_id, session_id, timestamp) values (%s, %s, %s, %s)",
-                       (user_id, id, session_id, datetime.now()))
-        conn.commit()
+        cursor.execute(f"select * from users_challenges where session_id = '{session_id}' and challenge_id = '{id}'")
+        if cursor.fetchone() is None:
+            cursor.execute("insert into users_challenges (user_id, challenge_id, session_id, timestamp) values (%s, %s, %s, %s)",
+                        (user_id, id, session_id, datetime.now()))
+            conn.commit()
     return send_from_directory(f"challenges/{id}", f"{id}.py")
 
 
@@ -128,6 +130,19 @@ def get_default(id):
     return send_from_directory(f"challenges/{id}", f"defaultCode.py")
 
 
+@app.route("/post_challenge_results/<string:id>/", methods=["POST"])
+def post_challenge_results(id):
+    session_id = request.json.get("session_id")
+    challenge_result = request.json.get("challenge_result")
+    if session_id is not None:
+        cursor.execute("update users_challenges set successful = %s where session_id = %s and challenge_id = %s",
+                       (challenge_result, session_id, id)
+                       )
+        conn.commit()
+    # todo: handle the groups in here
+    return jsonify({"success": "ok"})
+
+
 @app.route("/get_all_challenges/", methods=["GET"])
 @cross_origin(supports_credentials=True)
 def get_all_challenges():
@@ -138,7 +153,6 @@ def get_all_challenges():
 @app.route("/set_user_group", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def set_user_group() -> Response:
-    print("IN USER GROUP")
     user_id = request.json.get("user_id")
     session_id = request.json.get("session_id")
     cursor.execute(f"select * from sessions where id = '{session_id}'")
