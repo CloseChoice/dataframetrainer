@@ -205,7 +205,7 @@ def post_next_challenge():
             }
         )
     cursor.execute(
-        f"select elo from users_elo where user_id = '{user_id}' order by time desc limit 1"
+        f"select elo from users_elo where user_id = '{user_id}'"
     )
     # todo: test if this is really the current elo
     current_user_elo = cursor.fetchone()
