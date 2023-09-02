@@ -1,6 +1,6 @@
 from elo.entities.ChallengeElo import ChallengeElo
 from elo.entities.UserElo import UserElo
-from elo.utils import get_best_suited_challenge
+from elo.utils import get_best_suited_challenge, calculate_elo_update
 
 def test_get_best_suited_challenge():
     challenges = [
@@ -35,3 +35,15 @@ def test_get_best_suited_challenge_ignore():
     user_elo = UserElo(elo=1700, user_id="1")
     d = get_best_suited_challenge(challenges, user_elo, past_challenges=["1", "4"])
     assert d == ("3", 0.6400649998028851)
+
+def test_calculate_elo_update():
+    challenge_elo = ChallengeElo(elo=2077, challenge_id="2")
+    user_elo = UserElo(elo=2306, user_id="1")
+    new_challenge_elo, new_user_elo = calculate_elo_update(challenge_elo, user_elo, success=True)
+    assert new_challenge_elo.elo == 2076.5777741364204
+    assert new_user_elo.elo == 2312.755613817275
+
+    new_challenge_elo, new_user_elo = calculate_elo_update(challenge_elo, user_elo, success=False)
+    assert new_challenge_elo.elo == 2078.5777741364204
+    assert new_user_elo.elo == 2280.755613817275
+
