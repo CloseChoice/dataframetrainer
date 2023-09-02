@@ -1,5 +1,3 @@
-
-
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
 import { createUser } from '$lib/server/auth';
@@ -12,7 +10,7 @@ export const POST: RequestHandler = async (event)=> {
     }
     let session = null
 
-    session = await createUser(username, password)
+    session = await createUser(username, password, event)
     await event.locals.auth.setSession(session);
     return new Response(JSON.stringify(session))
 }

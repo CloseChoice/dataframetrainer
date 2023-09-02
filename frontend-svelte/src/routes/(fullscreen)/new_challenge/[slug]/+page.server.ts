@@ -1,13 +1,9 @@
-import { error } from '@sveltejs/kit';
+import { error, type ServerLoad } from '@sveltejs/kit';
 
-/** @type {import('./$types').PageServerLoad} */
-export async function load({ params, fetch, cookies }) {
+export const load: ServerLoad =  async ({ params, fetch, cookies, locals }) =>{
     console.log(params.slug);
 
-    const session_id = cookies.get('auth_session');
-    console.log("\n\nTHESE ARE THE COOKIES", session_id);
-    console.log("\n\n");
-
+    const session_id = locals?.session?.sessionId
     const requestOptions: RequestInit = {
         method: 'POST',
         headers: {
@@ -19,14 +15,14 @@ export async function load({ params, fetch, cookies }) {
     };
 
     const challengeName = params.slug
-    let url = `http://backend:5000/post_challenge/${challengeName}/`;
+    let url = `/backend_server/post_challenge/${challengeName}/`;
 
     const challengeClass = await fetch(url, requestOptions);
     console.log("challenge Class", challengeClass);
-    const intro = await fetch(`http://backend:5000/get_intro/${challengeName}`);
-    const defaultCode = await fetch(`http://backend:5000/get_default/${challengeName}`)
-    const challengeTest = await fetch(`http://backend:5000/get_challenge_test/${challengeName}`)
-    const submission = await fetch(`http://backend:5000/get_submission/${challengeName}`)
+    const intro = await fetch(`/backend_server/get_intro/${challengeName}`);
+    const defaultCode = await fetch(`/backend_server/get_default/${challengeName}`)
+    const challengeTest = await fetch(`/backend_server/get_challenge_test/${challengeName}`)
+    const submission = await fetch(`/backend_server/get_submission/${challengeName}`)
 
     if (challengeClass.status != 200) {
         throw error(404, `challenge ${challengeName} no exist you stupiddo. This is the url ${url}`);

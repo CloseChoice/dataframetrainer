@@ -8,7 +8,6 @@
     import { onMount } from 'svelte';
     import { pyodideWorkerPromise, testResult } from '$lib/stores/pyodide-store';
     import type { ChallengeExample } from '$lib/worker/pyododie-worker.module';
-    import { setContext } from 'svelte';
     export let data: PageData;
 
     enum TabIDs {DESCRIPTION = 'description', TESTS = "tests", EDITOR = "editor"}
@@ -30,8 +29,6 @@
         const worker = await pyodideWorkerPromise
         await worker.loadChallenge(data.challenge_class, data.challenge_test, data.challenge_name)
     })
-
-    setContext('data', data)
 </script>
 
 <svelte:window bind:innerWidth={windowInnerWidth} />
@@ -49,7 +46,7 @@
                 </TabPane>
                 {#if displayMobile}
                 <TabPane class="flex-grow-1" tabId="editor" tab="Editor" active={activeTab == TabIDs.EDITOR}>
-                    <CodeEditor bind:code={code}/>
+                    <CodeEditor bind:code={code} bind:challengeName={data.challenge_name}/>
                 </TabPane>
                 {/if}
             </TabContent>
@@ -57,7 +54,7 @@
         </Pane>
         {#if !displayMobile}
         <Pane>
-            <CodeEditor bind:code={code}/>
+            <CodeEditor bind:code={code} bind:challengeName={data.challenge_name}/>
         </Pane>
         {/if}
     </Splitpanes>

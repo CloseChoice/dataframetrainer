@@ -2,11 +2,11 @@
     import { Splitpanes, Pane } from "svelte-splitpanes";
     import CodeMirror from "./CodeMirror.svelte";
     import { isPyodideReady, pyodideState, pyodideWorkerPromise, testResult } from "$lib/stores/pyodide-store";
-    import type { PageData } from "./$types";
     import CodeOutput from "./CodeOutput.svelte";
-    import type { PytestResult } from "$lib/components/TestTab/pytest-result";
     import axios from "axios";
     export let code: string;
+    export let challengeName: string;
+
     import {page} from '$app/stores'
     import {getContext} from 'svelte'
 
@@ -20,14 +20,15 @@
     async function handleTest(){
         const worker = await pyodideWorkerPromise
         const res = await worker.testCode(code)
+        console.log("THIS IS THE RESULT", challengeName);
         if (res){
-            const outcome = res.tests[0].call?.outcome;
-            const haveAllTestsPassed = outcome === "passed";
-            testResult.set(res)
-            axios.post(`http://127.0.0.1:5000/post_challenge_results/${data.challenge_name}/`, {
-            session_id: $page.data?.session.sessionId || "",
-            challenge_result: haveAllTestsPassed
-        });
+             const outcome = res.tests[0].call?.outcome;
+             const haveAllTestsPassed = outcome === "passed";
+             testResult.set(res)
+             axios.post(`http://127.0.0.1:5000/post_challenge_results/${challengeName}/`, {
+             session_id: $page.data?.session.sessionId || "",
+             challenge_result: haveAllTestsPassed
+         });
         }
     }
     
@@ -41,7 +42,7 @@
                 {$pyodideState}...
             {/if}
             <button disabled='{!$isPyodideReady}' type="button" on:click={handleRun} class="btn btn-primary btn-sm">Run</button>
-            <button data-test="testButton" disabled='{!$isPyodideReady}' type="button" on:click={handleTest} class="btn btn-secondary btn-sm">Test</button>
+            <button disabled='{!$isPyodideReady}' type="button" on:click={handleTest} class="btn btn-secondary btn-sm" data-test="testButton">Test</button>
         </div>
     </Pane>
     <Pane>
