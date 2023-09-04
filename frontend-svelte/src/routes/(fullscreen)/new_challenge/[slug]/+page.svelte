@@ -32,6 +32,7 @@
         const worker = await pyodideWorkerPromise
         await worker.loadChallenge(data.challenge_class, data.challenge_test, data.challenge_name)
         code = data.default_code
+        testResult.set(null)
     })
 </script>
 

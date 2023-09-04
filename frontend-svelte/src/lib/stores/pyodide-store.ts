@@ -18,7 +18,7 @@ export const pyodideStderr: Writable<Error|null> = writable(null)
 
 export const pyodideState = writable('loading')
 
-export const testResult: Writable<PytestResult> = writable()
+export const testResult: Writable<PytestResult|null> = writable()
 
 export const isPyodideReady = derived(
     pyodideState,
