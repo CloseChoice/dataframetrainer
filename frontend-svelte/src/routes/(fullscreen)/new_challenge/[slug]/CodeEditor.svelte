@@ -40,7 +40,9 @@
 </script>
 <Splitpanes horizontal={true}>
     <Pane class="position-relative">
-        <CodeMirror bind:value={code}/>
+        {#key code}
+            <CodeMirror bind:value={code}/>
+        {/key}
         <div class="text-light top-0 end-0 position-absolute d-flex justify-content-end gap-2 p-2 pe-4">
             {#if !$isPyodideReady}
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
