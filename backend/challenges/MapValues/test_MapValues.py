@@ -13,6 +13,7 @@ importlib.reload(submission)
 
 @given(**MapValues.create_df_func())
 def test_transform(df):
-    expected_df = MapValues.transform(df)
-    user_df = submission.transform(df)
+    expected_df = MapValues.transform(df.copy(deep=True))
+    user_df = submission.transform(df.copy(deep=True))
     tm.assert_frame_equal(user_df, expected_df)
+

@@ -30,7 +30,7 @@ class Pivot1:
     @staticmethod
     def transform(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
         df = df.pivot_table(
-            index="Customer", columns="Type", values="Expense", aggfunc=np.max
+            index="Customer", columns="Type", values="Expense", aggfunc="sum"
         )
         return df
 
@@ -55,8 +55,8 @@ class Pivot1:
     def expected_static() -> pd.DataFrame:
         return pd.DataFrame(
             [
-                [np.nan, np.nan, 10.0],
-                [20.0, 20.0, 1000.0],
+                [np.nan, np.nan, 9.],
+                [20.0, 40.0, 1101.],
                 [np.nan, 20.0, 4.0],
             ],
             columns=["Electronics", "Entertainment", "Groceries"],

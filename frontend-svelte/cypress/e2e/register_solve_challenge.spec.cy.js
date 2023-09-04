@@ -35,7 +35,7 @@ describe('Register and Test Challenge', () => {
         // BIG TODO: once we have a logging information if the challenge was solved,
         // we can check here if the challenge was solved
         // todo: check if the button is not disabled and then click it
-        cy.wait(10000); // Wait for 1 second (adjust the time as needed)
+        cy.wait(20000); // Wait for 1 second (adjust the time as needed)
         cy.getByData("testButton").click()
         cy.wait(10000); // Wait for 1 second (adjust the time as needed)
         cy.getByData('testResultIcon').should('contain', '✅');

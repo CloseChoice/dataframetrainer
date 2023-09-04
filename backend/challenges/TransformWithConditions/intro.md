@@ -1,1 +1,1 @@
-!todo
+Transform the `value` column and consider the order. If the value is less than 3, use the previously valid value. If the first rows of the group start with values smaller than 3, use the average of the group.

@@ -1,1 +1,1 @@
-!todo
+Add an additional column `Color`, whose values depend on `Set`. If `Set` contains `Z` then set the value of `Color` to `green`, otherwise to `red`.
