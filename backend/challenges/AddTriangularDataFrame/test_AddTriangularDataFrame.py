@@ -16,5 +16,4 @@ importlib.reload(submission)
 def test_transform(df):
     expected_df = AddTriangularDataFrame.transform(df)
     user_df = submission.transform(df)
-    import pdb; pdb.set_trace()
     tm.assert_frame_equal(user_df, expected_df)
