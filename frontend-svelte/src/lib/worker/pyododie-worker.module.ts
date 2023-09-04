@@ -88,7 +88,6 @@ const worker = {
 
             // await pyodide.FS.writeFile("submission.py", code, {encoding: "utf8"})
             await pyodide.FS.writeFile(`./challenges/${challengeName}/submission.py`, code);
-            console.log(pyodide.FS.readdir(`challenges/${challengeName}`))
             const res = await pyodide.pyimport("dft").test_code(challengeName)
             const testResult: PytestResult = JSON.parse(res)
             return testResult

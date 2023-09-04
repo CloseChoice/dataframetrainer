@@ -55,8 +55,6 @@
     // console.log('pyodideWorkerschmorker', pyodideWorkerPromise)
     let staticExample = {}
     pyodideWorkerPromise.then(async worker => {
-        console.log('loaded data schmata');
-        
         await worker.loadChallenge(data.challenge_class, data.challenge_test)
         didChallengeLoad = true
         // staticExample = worker.getStatic()

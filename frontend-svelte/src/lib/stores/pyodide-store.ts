@@ -28,7 +28,6 @@ export const isPyodideReady = derived(
 )
 
 export async function initPyodideStore(){
-    console.log('store was initted as fuck')
     const worker = await spawn<PyodideWorker>(new MyWorker())
 
     worker.stdout().subscribe(newLine => {

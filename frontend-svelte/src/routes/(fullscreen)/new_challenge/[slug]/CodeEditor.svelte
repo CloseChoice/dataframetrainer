@@ -20,12 +20,11 @@
     async function handleTest(){
         const worker = await pyodideWorkerPromise
         const res = await worker.testCode(code)
-        console.log("THIS IS THE RESULT", challengeName);
-        console.log("This is the user name", $page)
+        // console.log("THIS IS THE RESULT", challengeName);
+        // console.log("This is the user name", $page)
         if (res){
              const outcome = res.tests[0].call?.outcome;
              const userId = $page.data?.session?.user.userId;
-             console.log("This is the user name", userId);
              const haveAllTestsPassed = outcome === "passed";
              testResult.set(res)
              axios.post(`/backend_server/post_challenge_results/${challengeName}/`, {

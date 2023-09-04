@@ -18,7 +18,6 @@ export const load: ServerLoad =  async ({ params, fetch, cookies, locals }) =>{
     let url = `http://backend:5000/post_challenge/${challengeName}/`;
 
     const challengeClass = await fetch(url, requestOptions);
-    console.log("challenge Class", challengeClass);
     const intro = await fetch(`http://backend:5000/get_intro/${challengeName}`);
     const defaultCode = await fetch(`http://backend:5000/get_default/${challengeName}`)
     const challengeTest = await fetch(`http://backend:5000/get_challenge_test/${challengeName}`)
@@ -33,7 +32,7 @@ export const load: ServerLoad =  async ({ params, fetch, cookies, locals }) =>{
     const defaultCodeText = await defaultCode.text();
     const challengeTestTExt = await challengeTest.text();
     const submissionText = await submission.text();
-    console.log("SERVER SIDE: this is the default Code text", defaultCodeText);
+    // console.log("SERVER SIDE: this is the default Code text", defaultCodeText);
     return {
         challenge_class: challengeClassText ,
         intro: introText,
