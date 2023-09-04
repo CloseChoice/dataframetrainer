@@ -28,7 +28,7 @@
              console.log("This is the user name", userId);
              const haveAllTestsPassed = outcome === "passed";
              testResult.set(res)
-             axios.post(`http://127.0.0.1:5000/post_challenge_results/${challengeName}/`, {
+             axios.post(`/backend_server/post_challenge_results/${challengeName}/`, {
                 session_id: $page.data?.session.sessionId || "",
                 challenge_result: haveAllTestsPassed,
                 challenge_name: challengeName,
