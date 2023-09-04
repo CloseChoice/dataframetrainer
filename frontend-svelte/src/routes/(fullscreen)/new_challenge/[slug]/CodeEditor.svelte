@@ -39,7 +39,7 @@
 </script>
 <Splitpanes horizontal={true}>
     <Pane class="position-relative">
-        {#key code}
+            {#key challengeName}
             <CodeMirror bind:value={code}/>
         {/key}
         <div class="text-light top-0 end-0 position-absolute d-flex justify-content-end gap-2 p-2 pe-4">
