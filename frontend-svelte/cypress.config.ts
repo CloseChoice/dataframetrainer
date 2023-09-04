@@ -26,6 +26,7 @@ export default defineConfig({
   // setupNodeEvents can be defined in either
   // the e2e or component configuration
   defaultCommandTimeout: 4000,
+  video: true,
   env: {
     user: {
       // The User is inserted in the cypress/seed.sql script
