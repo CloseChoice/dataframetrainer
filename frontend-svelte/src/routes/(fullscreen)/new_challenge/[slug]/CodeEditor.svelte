@@ -28,7 +28,7 @@
              const haveAllTestsPassed = outcome === "passed";
              testResult.set(res)
              axios.post(`/backend_server/post_challenge_results/${challengeName}/`, {
-                session_id: $page.data?.session?.sessionId || "",
+                session_id: $page.data?.session?.sessionId || null,
                 challenge_result: haveAllTestsPassed,
                 challenge_name: challengeName,
                 user_id: userId,
