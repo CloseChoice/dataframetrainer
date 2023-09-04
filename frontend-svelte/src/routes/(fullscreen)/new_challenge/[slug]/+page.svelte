@@ -9,6 +9,7 @@
     import { pyodideWorkerPromise, testResult } from '$lib/stores/pyodide-store';
     import type { ChallengeExample } from '$lib/worker/pyododie-worker.module';
     export let data: PageData;
+    import { afterNavigate } from '$app/navigation';
 
     enum TabIDs {DESCRIPTION = 'description', TESTS = "tests", EDITOR = "editor"}
     let activeTab: string | number = 'description'
@@ -25,9 +26,13 @@
 
     let code = data.default_code
     let staticExample: ChallengeExample
-    onMount(async ()=>{
+
+    afterNavigate(async ()=>{
+        // This cannot be in onMount because onMount is not triggered on navigations to the same page e.g clicking the random challenge button while on the new_challenge page
         const worker = await pyodideWorkerPromise
         await worker.loadChallenge(data.challenge_class, data.challenge_test, data.challenge_name)
+        code = data.default_code
+        testResult.set(null)
     })
 </script>
 

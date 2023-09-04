@@ -37,7 +37,7 @@ export async function createUser(username: string, password: string, event: Requ
 
   console.log("set user group", user.userId, session.sessionId);
 
-  const res = await event.fetch('/backend_server/set_user_group', {
+  const res = await event.fetch('http://backend:5000/set_user_group', {
     method: "POST",
     body: JSON.stringify({
       user_id: user.userId,

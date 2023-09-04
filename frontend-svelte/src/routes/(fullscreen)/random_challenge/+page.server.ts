@@ -20,7 +20,7 @@ import axios from 'axios'
 
 
 export const load: PageServerLoad = async (event) =>{
-    const res = await event.fetch('/backend_server/post_next_challenge', {
+    const res = await event.fetch('http://backend:5000/post_next_challenge', {
         method: "POST",
         body: JSON.stringify({user_id: event.locals?.session?.user.userId || ""}),
         headers: {

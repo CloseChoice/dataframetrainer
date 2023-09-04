@@ -7,8 +7,6 @@ if (!(DB_NAME && DB_USER && PASSWORD && PORT)){
 }
 export const PG_CONNECTION_STRING = `postgres://${DB_USER}:${PASSWORD}@db:${PORT}/${DB_NAME}`
 
-console.log(PG_CONNECTION_STRING);
-
 if (!PG_CONNECTION_STRING){
   throw new Error(`missing PG_CONNECTION_STRING environment variable`)
 }

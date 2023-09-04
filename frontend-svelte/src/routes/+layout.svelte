@@ -12,8 +12,6 @@
     // Create a store and update it when necessary...    
     const user = writable(null);
 
-
-    console.log(data);
     // ...and add it to the context for child components to access    setContext('user', user);
 
     onMount(initPyodideStore)

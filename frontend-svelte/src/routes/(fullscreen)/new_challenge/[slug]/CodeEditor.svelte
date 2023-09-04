@@ -20,16 +20,15 @@
     async function handleTest(){
         const worker = await pyodideWorkerPromise
         const res = await worker.testCode(code)
-        console.log("THIS IS THE RESULT", challengeName);
-        console.log("This is the user name", $page)
+        // console.log("THIS IS THE RESULT", challengeName);
+        // console.log("This is the user name", $page)
         if (res){
              const outcome = res.tests[0].call?.outcome;
-             const userId = $page.data?.session.user.userId;
-             console.log("This is the user name", userId);
+             const userId = $page.data?.session?.user.userId;
              const haveAllTestsPassed = outcome === "passed";
              testResult.set(res)
-             axios.post(`http://127.0.0.1:5000/post_challenge_results/${challengeName}/`, {
-                session_id: $page.data?.session.sessionId || "",
+             axios.post(`/backend_server/post_challenge_results/${challengeName}/`, {
+                session_id: $page.data?.session?.sessionId || null,
                 challenge_result: haveAllTestsPassed,
                 challenge_name: challengeName,
                 user_id: userId,
@@ -40,7 +39,9 @@
 </script>
 <Splitpanes horizontal={true}>
     <Pane class="position-relative">
-        <CodeMirror bind:value={code}/>
+            {#key challengeName}
+            <CodeMirror bind:value={code}/>
+        {/key}
         <div class="text-light top-0 end-0 position-absolute d-flex justify-content-end gap-2 p-2 pe-4">
             {#if !$isPyodideReady}
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
