@@ -24,12 +24,12 @@
         console.log("This is the user name", $page)
         if (res){
              const outcome = res.tests[0].call?.outcome;
-             const userId = $page.data?.session.user.userId;
+             const userId = $page.data?.session?.user.userId;
              console.log("This is the user name", userId);
              const haveAllTestsPassed = outcome === "passed";
              testResult.set(res)
              axios.post(`/backend_server/post_challenge_results/${challengeName}/`, {
-                session_id: $page.data?.session.sessionId || "",
+                session_id: $page.data?.session?.sessionId || "",
                 challenge_result: haveAllTestsPassed,
                 challenge_name: challengeName,
                 user_id: userId,
