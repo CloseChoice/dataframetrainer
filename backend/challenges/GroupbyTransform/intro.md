@@ -1,1 +1,1 @@
-!todo
+Add a column named `size` that contains the number how often the value appears.

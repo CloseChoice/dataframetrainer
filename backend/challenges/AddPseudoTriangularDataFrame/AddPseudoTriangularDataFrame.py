@@ -12,6 +12,8 @@ class AddPseudoTriangularDataFrame:
     @staticmethod
     def create_df_func() -> dict[str, Callable]:
         # todo: this somehow generates floats in the number column, this should be changed
+        # todo: this generates weird df, maybe we should limit the max_value to 10 or sort the values
+        #       but I have no clue how to do that
         return {"df": data_frames(
             columns=[
                 column("number", dtype=np.dtype(int)),

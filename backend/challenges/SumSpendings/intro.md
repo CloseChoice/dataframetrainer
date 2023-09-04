@@ -1,1 +1,1 @@
-!todo
+Sum the spendings for each customer and return a dataframe with the customer as index and the total spendings as the `Spendings` column.
