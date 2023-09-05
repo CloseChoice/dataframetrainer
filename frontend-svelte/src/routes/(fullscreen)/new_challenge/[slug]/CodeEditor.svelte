@@ -35,20 +35,21 @@
          });
         }
     }
-    
 </script>
 <Splitpanes horizontal={true}>
     <Pane class="position-relative">
             {#key challengeName}
             <CodeMirror bind:value={code}/>
-        {/key}
+            {/key}
         <div class="text-light top-0 end-0 position-absolute d-flex justify-content-end gap-2 p-2 pe-4">
-            {#if !$isPyodideReady}
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                {$pyodideState}...
-            {/if}
-            <button disabled='{!$isPyodideReady}' type="button" on:click={handleRun} class="btn btn-primary btn-sm">Run</button>
-            <button disabled='{!$isPyodideReady}' type="button" on:click={handleTest} class="btn btn-secondary btn-sm" data-test="testButton">Test</button>
+            <div data-test='pyodide-state' data-state={$pyodideState}>
+                {#if !$isPyodideReady}
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    {$pyodideState}...
+                {/if}
+            </div>
+            <button data-test="run-button" disabled='{!$isPyodideReady}' type="button" on:click={handleRun} class="btn btn-primary btn-sm">Run</button>
+            <button data-test="test-button" disabled='{!$isPyodideReady}' type="button" on:click={handleTest} class="btn btn-secondary btn-sm" >Test</button>
         </div>
     </Pane>
     <Pane>
