@@ -47,5 +47,5 @@ interface UserProperties {
   
 type User = UserProperties | undefined | null
 
-// THIS IS IMDB_PORTANT!!!
+// THIS IS IMPORTANT!!!
 export {};
