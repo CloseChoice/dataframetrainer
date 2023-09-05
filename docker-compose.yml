@@ -15,7 +15,7 @@ services:
       DB_USER: ${DB_USER}
       HOST: db
       PASSWORD: ${PASSWORD}
-      PORT: ${PORT}
+      DB_PORT: ${DB_PORT}
 
   db-fill-or-update-tables:
     build:
@@ -30,7 +30,7 @@ services:
       DB_USER: ${DB_USER}
       HOST: db
       PASSWORD: ${PASSWORD}
-      PORT: ${PORT}
+      DB_PORT: ${DB_PORT}
 
 
   db:
@@ -47,7 +47,7 @@ services:
       - ./database/sql_scripts:/sql_scripts
       - sql:/var/lib/postgresql/data
     ports:
-      - "${PORT}:5432"
+      - "${DB_PORT}:5432"
 
   adminer:
     image: adminer
