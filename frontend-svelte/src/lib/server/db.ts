@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import pg from 'pg'
+// import {DB_NAME, DB_USER, PASSWORD, DB_PORT} from '$env/static/private'
 import {DB_NAME, DB_USER, PASSWORD, DB_PORT} from '$env/static/private'
 
 if (!(DB_NAME && DB_USER && PASSWORD && DB_PORT)){
