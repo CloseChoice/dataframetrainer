@@ -1,7 +1,7 @@
 FROM nginx:alpine
 
 # the public folder is built with `npm run build`. This step is executed in the pipeline
-COPY ./public /usr/share/nginx/html
+COPY ./build /usr/share/nginx/html
 
 EXPOSE 80
 # Copying the package files allows docker to cache node modules
