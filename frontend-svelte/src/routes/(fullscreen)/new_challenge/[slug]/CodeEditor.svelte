@@ -10,7 +10,7 @@
     import {page} from '$app/stores'
     import {getContext} from 'svelte'
 
-    const data = getContext('data')
+    // const data = getContext('data')
 
     async function handleRun(){
         const worker = await pyodideWorkerPromise
@@ -39,7 +39,7 @@
 </script>
 <Splitpanes horizontal={true}>
     <Pane class="position-relative">
-            {#key challengeName}
+        {#key challengeName}
             <CodeMirror bind:value={code}/>
         {/key}
         <div class="text-light top-0 end-0 position-absolute d-flex justify-content-end gap-2 p-2 pe-4">
