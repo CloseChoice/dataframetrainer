@@ -49,7 +49,7 @@
 </script>
 
 
-<div class="CodeMirror" bind:this={codeMirrorRef}></div>
+<div data-test="code-mirror-root" class="CodeMirror" bind:this={codeMirrorRef}></div>
 
 <style>
     .CodeMirror {
