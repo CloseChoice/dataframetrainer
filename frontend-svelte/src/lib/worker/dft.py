@@ -36,9 +36,13 @@ def _get_params(paramGeneratorDict):
     return {key: generator.example() for (key, generator) in paramGeneratorDict.items()}
 
 def to_html(object):
-    try:
+    res = None
+    if hasattr(object, 'to_html'):
+        # the 'table' css class is used by bootstrap
+        res = object.to_html(classes=['table'], justify="initial")
+    elif hasattr(object, '_repr_html_'): 
         res = object._repr_html_()
-    except:
+    else:
         res = object.__repr__()
     return res
 
