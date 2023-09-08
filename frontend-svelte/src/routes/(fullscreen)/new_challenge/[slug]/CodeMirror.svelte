@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import {EditorState} from "@codemirror/state"
     import {EditorView, keymap} from "@codemirror/view"
     import {defaultKeymap} from "@codemirror/commands"
@@ -12,7 +12,7 @@
     import { highlightSelectionMatches } from "@codemirror/search";
     import { python } from "@codemirror/lang-python";
 
-    let codeMirrorRef
+    let codeMirrorRef: HTMLElement;
 
     export let value = ""
 
@@ -32,20 +32,21 @@
       autocompletion(),
       highlightSelectionMatches(),
       python()
-    ]
-
+    ] 
+    
+    let editorState: EditorState;
+    let editorView: EditorView;
     onMount(()=>{
-        let editorState = EditorState.create({
+        editorState = EditorState.create({
             doc: value,
             extensions: extensions
         })
 
-        let editorView = new EditorView({
+        editorView = new EditorView({
             state: editorState,
             parent: codeMirrorRef
         })
-    })
-
+    })    
 </script>
 
 

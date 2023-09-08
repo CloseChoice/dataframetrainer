@@ -27,13 +27,15 @@
     let code = data.default_code
     let staticExample: ChallengeExample
 
-    afterNavigate(async ()=>{
-        // This cannot be in onMount because onMount is not triggered on navigations to the same page e.g clicking the random challenge button while on the new_challenge page
+
+    async function update(){
+        code = data.default_code;
         const worker = await pyodideWorkerPromise
         await worker.loadChallenge(data.challenge_class, data.challenge_test, data.challenge_name)
         code = data.default_code
         testResult.set(null)
-    })
+    }
+    $: data, update()
 </script>
 
 <svelte:window bind:innerWidth={windowInnerWidth} />
