@@ -55,6 +55,8 @@ jobs:
       #   run: npm run dev &
       - name: Wait for server to start
         run: sleep 30
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
         run: npx cypress run --browser chrome
