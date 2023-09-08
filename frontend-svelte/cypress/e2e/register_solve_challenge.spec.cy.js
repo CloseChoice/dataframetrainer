@@ -3,12 +3,6 @@ describe('Register and Test Challenge', () => {
         cy.setup()
         cy.request('POST', 'http://localhost:5173/testapi/user', {username: 'Hildegard', password: '123456789'})
         cy.visit('/authentication')
-        // cy.visit('/', {
-        // onBeforeLoad(win) {
-        //     cy.stub(win.console, 'log').as('consoleLog')
-        //     cy.stub(win.console, 'error').as('consoleError')
-        // }
-        // })
 
         cy.visit('/new_challenge/RenameColumn')
         let userCode = ["import pandas as pd",
@@ -19,8 +13,7 @@ describe('Register and Test Challenge', () => {
                         "# once you found a solution, define this function",
                         '  df_return = df.rename(columns={"Value": "NewValue"})',
                         '  return df_return'];
-                        // '    return df.rename(columns={"Value": "NewValue"})'];
-        // data-test="CodeMirrorClass"
+
         cy.get('.CodeMirror').as('codeMirrorElement');
         const cm = cy.getByData('code-mirror-root')
         cm.type("{selectall}{backspace}")
@@ -32,8 +25,6 @@ describe('Register and Test Challenge', () => {
         testBtn.click()
 
         cy.getByData('test-result', {timeout: 20000}).should('have.attr', 'data-exit-code', '0')
-        // cy.wait(10000); // Wait for 1 second (adjust the time as needed)
-        // cy.getByData('testResultIcon').should('contain', '✅');
         // check out: https://www.browserstack.com/guide/cypress-database-testing
     })
     }

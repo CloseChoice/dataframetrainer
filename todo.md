@@ -83,5 +83,6 @@ Dokumentation:
  - npm und node muss installiert sein (node: v20.6.0, npm: 9.8.1)
  - 
 
-- Beim build der svelte app hat es aus irgendeinem Grund die proxy sachen nicht korrekt ersetzt. Checke das.
+- [x] Beim Build der Svelte App hat es aus irgendeinem Grund die Proxy Sachen nicht korrekt ersetzt. Checke das.
+  -> ersetzt
 - Bringe die App auf dem Server ohne Docker zum Laufen, anschließend baue einen Container (wahrscheinlich muss in diesem node + nginx laufen aber das müssen wir nochmals checken), in dem man nur das Frontend laufen lassen kann und dann schließe alles zusammen.

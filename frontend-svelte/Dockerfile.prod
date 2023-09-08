@@ -1,9 +1,14 @@
-FROM nginx:alpine
+FROM node:alpine
+
+# see https://stackoverflow.com/questions/73790956/cross-site-post-form-submissions-are-forbidden
+# to get this to run
+
+ARG ORIGIN=http://localhost:3000
+RUN echo "THIS IS ORIGIN $ORIGIN"
 
 # the public folder is built with `npm run build`. This step is executed in the pipeline
-COPY ./build /usr/share/nginx/html
+# COPY ./build /usr/share/nginx/html
 
-EXPOSE 80
 # Copying the package files allows docker to cache node modules
 # Installation will only run when dependencies changed
 COPY package.json .
@@ -11,8 +16,8 @@ COPY package-lock.json .
 
 COPY . .
 
-RUN npm run build
+RUN ORIGIN=http://localhost:3000 npm run build
 
-CMD ["node", "build"]
+CMD ["node", "build/index.js"]
 
 # CMD ["npm","run", "dev", "--host"]
