@@ -7,12 +7,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-e2e-tests:
+  deploy-to-server:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
       PEGSOLITAIRE_KEY: ${{ secrets.PEGSOLITAIRE_KEY }}
     steps:
     - uses: actions/checkout@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
+    - name: echo something
+      run: echo "dummy"
+   
