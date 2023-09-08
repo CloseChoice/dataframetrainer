@@ -1,4 +1,4 @@
-name: e2e-tests
+name: deploy-to-server
 
 on:
   push:
