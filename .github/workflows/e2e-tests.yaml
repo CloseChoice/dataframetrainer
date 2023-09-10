@@ -54,6 +54,13 @@ jobs:
 
           mv .example.env .env
         working-directory: ./
+      - name: echo variables
+        run: |
+        echo $DB_NAME
+        echo $DB_USER
+        echo $PASSWORD
+        echo $HOST
+        echo $DB_PORT
       -
         name: Run docker compose
         working-directory: .
