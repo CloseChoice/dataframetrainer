@@ -53,6 +53,7 @@ jobs:
           sed -i "s/__DB_PORT__/$DB_PORT/g" .example.env
 
           cp .example.env .env
+        working-directory: ./
       -
         name: Run docker compose
         working-directory: .
