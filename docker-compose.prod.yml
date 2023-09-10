@@ -8,18 +8,18 @@ services:
       dockerfile: Dockerfile.prod
     environment:
       NODE_ENV: production
-      PASSWORD: ${PASSWORD}
-      DB_USER: ${DB_USER}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      AUTH_SECRET: ${AUTH_SECRET}
+      # PASSWORD: ${PASSWORD}
+      # DB_USER: ${DB_USER}
+      # DB_PORT: ${DB_PORT}
+      # DB_NAME: ${DB_NAME}
+      # AUTH_SECRET: ${AUTH_SECRET}
       ORIGIN: "http://localhost:3000"
     ports:
       # The port of the website
       - 3000:3000
     # This will make all variables inside the root .env accessible inside the container
     # try without
-    # env_file: .env
+    env_file: .env
     volumes:
       - ./frontend-svelte:/frontend-svelte
     working_dir: /frontend-svelte
