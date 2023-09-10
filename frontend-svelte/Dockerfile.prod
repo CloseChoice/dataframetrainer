@@ -17,7 +17,7 @@ COPY package-lock.json .
 COPY . .
 
 # ENTRYPOINT ["tail", "-f", "/dev/null"]
-RUN ORIGIN=http://localhost:3000 npm run build
+RUN npm run build
 # 
 CMD ["node", "build/index.js"]
 
