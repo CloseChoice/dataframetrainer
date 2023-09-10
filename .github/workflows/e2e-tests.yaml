@@ -64,7 +64,12 @@ jobs:
       - name: Wait for server to start
         run: |
           sleep 30
-          docker compose logs
+      - name: check ports
+        run: |
+          netstat -tulpn | grep LISTEN
+      - name: check ports
+        run: |
+          lsof -i -P -n | grep LISTEN
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
         run: npx cypress run --browser chrome --config baseUrl=http://localhost:3000
