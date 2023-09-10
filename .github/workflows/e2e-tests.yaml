@@ -20,6 +20,7 @@ jobs:
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USER: ${{ secrets.DB_USER }}
       PORT: ${{ secrets.PORT }}
+      DB_PORT: ${{ secrets.DB_PORT }}
       PASSWORD: ${{ secrets.PASSWORD }}
       HOST: ${{ secrets.HOST }}
     defaults:
