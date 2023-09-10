@@ -62,6 +62,9 @@ jobs:
           echo $PASSWORD
           echo $HOST
           echo $DB_PORT
+      - name: echo context
+        run: |
+          echo "$GITHUB_CONTEXT"
       -
         name: Run docker compose
         working-directory: .
