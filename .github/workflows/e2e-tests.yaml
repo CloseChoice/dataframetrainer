@@ -72,10 +72,13 @@ jobs:
           docker container ls
       - name: docker logs
         run: |
-          docker logs backend
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml logs
       - name: Again check containers
         run: |
           docker container ls
+      - name: docker logs
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml logs
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
         run: npx cypress run --browser chrome --config baseUrl=http://localhost:3000
