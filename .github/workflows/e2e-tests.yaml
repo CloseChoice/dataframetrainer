@@ -48,19 +48,10 @@ jobs:
           sed -i "s/__HOST__/$HOST/g" .example.env
           sed -i "s/__DB_PORT__/$DB_PORT/g" .example.env
 
+          # todo: do we need both???
           cp .example.env .env
           cp .example.env ./frontend-svelte/.env
         working-directory: ./
-      - name: echo variables
-        run: |
-          echo $DB_NAME
-          echo $DB_USER
-          echo $PASSWORD
-          echo $HOST
-          echo $DB_PORT
-      - name: echo context
-        run: |
-          echo "$GITHUB_CONTEXT"
       -
         name: Run docker compose
         working-directory: .

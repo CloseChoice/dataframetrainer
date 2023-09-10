@@ -12,4 +12,4 @@ hypothesis_example/.hypothesis/**
 frontend-svelte/node_modules
 node_modules
 
-.env
+**/.env
