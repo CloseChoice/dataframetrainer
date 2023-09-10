@@ -52,7 +52,7 @@ jobs:
           sed -i "s/__HOST__/$HOST/g" .example.env
           sed -i "s/__DB_PORT__/$DB_PORT/g" .example.env
 
-          mv .example.env ./frontend-svelte/.env
+          mv .example.env .env
         working-directory: ./
       -
         name: Run docker compose
