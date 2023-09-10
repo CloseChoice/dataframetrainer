@@ -11,7 +11,7 @@ COPY . .
 RUN npm install
 RUN npm run build
 # 
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
-CMD ["node", "build/index.js"]
+ENTRYPOINT ["tail", "-f", "/dev/null"]
+# CMD ["node", "build/index.js"]
 
 # CMD ["npm","run", "dev", "--host"]
