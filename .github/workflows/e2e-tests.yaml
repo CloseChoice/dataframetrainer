@@ -70,6 +70,12 @@ jobs:
       - name: check ports
         run: |
           docker container ls
+      - name: docker logs
+        run: |
+          docker logs backend
+      - name: Again check containers
+        run: |
+          docker container ls
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
         run: npx cypress run --browser chrome --config baseUrl=http://localhost:3000
