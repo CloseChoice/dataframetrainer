@@ -44,6 +44,15 @@ jobs:
       - name: Install dependencies
         working-directory: ./frontend-svelte
         run: npm ci
+      - name: Set .env file
+        run: |
+          sed -i "s/__DB_NAME__/$DB_NAME/g" .example.env
+          sed -i "s/__DB_USER__/$DB_USER/g" .example.env
+          sed -i "s/__PASSWORD__/$PASSWORD/g" .example.env
+          sed -i "s/__HOST__/$HOST/g" .example.env
+          sed -i "s/__DB_PORT__/$DB_PORT/g" .example.env
+
+          cp .example.env .env
       -
         name: Run docker compose
         working-directory: .
