@@ -16,7 +16,7 @@ services:
       ORIGIN: "http://localhost:3000"
     ports:
       # The port of the website
-      - 3000:3000
+      - 3001:3000
     # This will make all variables inside the root .env accessible inside the container
     # try without
     env_file: .env

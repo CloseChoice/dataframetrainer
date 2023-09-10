@@ -13,13 +13,8 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USER: ${{ secrets.DB_USER }}
-      PORT: ${{ secrets.PORT }}
       DB_PORT: ${{ secrets.DB_PORT }}
       PASSWORD: ${{ secrets.PASSWORD }}
       HOST: ${{ secrets.HOST }}
@@ -76,7 +71,9 @@ jobs:
       #   working-directory: ./frontend-svelte
       #   run: npm run dev &
       - name: Wait for server to start
-        run: sleep 30
+        run: |
+          sleep 30
+          docker compose logs
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
         run: npx cypress run --browser chrome --config baseUrl=http://localhost:3000
