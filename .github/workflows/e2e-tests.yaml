@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-e2e-tests:
+  run-e2e-tests-prod:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
@@ -49,17 +49,15 @@ jobs:
         working-directory: .
         run: |
           ls -la
-          docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
       # - name: Start frontend
       #   working-directory: ./frontend-svelte
       #   run: npm run dev &
       - name: Wait for server to start
         run: sleep 30
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
-        run: npx cypress run --browser chrome
+        run: npx cypress run --browser chrome --config baseUrl=http://localhost:3000
       # Currently only chrome is supported
       # - name: Run Cypress tests Firefox
       #   working-directory: ./frontend-svelte

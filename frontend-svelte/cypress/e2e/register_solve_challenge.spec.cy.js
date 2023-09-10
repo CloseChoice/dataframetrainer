@@ -1,7 +1,8 @@
 describe('Register and Test Challenge', () => {
     it('Register new user and get a new challenge for her', () => {
+        const baseUrl = Cypress.config("baseUrl");
         cy.setup()
-        cy.request('POST', 'http://localhost:5173/testapi/user', {username: 'Hildegard', password: '123456789'})
+        cy.request('POST', `${baseUrl}/testapi/user`, {username: 'Hildegard', password: '123456789'})
         cy.visit('/authentication')
 
         cy.visit('/new_challenge/RenameColumn')

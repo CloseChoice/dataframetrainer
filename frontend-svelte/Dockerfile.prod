@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:lts-alpine
 
 # see https://stackoverflow.com/questions/73790956/cross-site-post-form-submissions-are-forbidden
 # to get this to run
@@ -16,8 +16,9 @@ COPY package-lock.json .
 
 COPY . .
 
+# ENTRYPOINT ["tail", "-f", "/dev/null"]
 RUN ORIGIN=http://localhost:3000 npm run build
-
+# 
 CMD ["node", "build/index.js"]
 
 # CMD ["npm","run", "dev", "--host"]
