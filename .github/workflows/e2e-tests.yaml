@@ -52,7 +52,8 @@ jobs:
           sed -i "s/__HOST__/$HOST/g" .example.env
           sed -i "s/__DB_PORT__/$DB_PORT/g" .example.env
 
-          mv .example.env .env
+          cp .example.env .env
+          cp .example.env ./frontend-svelte/.env
         working-directory: ./
       - name: echo variables
         run: |
