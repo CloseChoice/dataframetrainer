@@ -1,23 +1,20 @@
 version: "3.1"
 
 services:
-  frontend-dev:
+  frontend-prod:
     restart: on-failure
     build:
       context: ./frontend-svelte
       dockerfile: Dockerfile.dev
     environment:
       NODE_ENV: development
-      PASSWORD: ${PASSWORD}
-      DB_USER: ${DB_USER}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
+      ORIGIN: "http://localhost:3000"
     ports:
       # The port of the website
       - 5173:5173
     volumes:
-      - ./frontend-svelte:/frontend-svelte
+      - ./frontend-svelte:/app
       # This excludes the node_modules folder from docker volume
       - /frontend-svelte/node_modules
       - /frontend-svelte/.svelte-kit
-    working_dir: /frontend-svelte
+    working_dir: /app

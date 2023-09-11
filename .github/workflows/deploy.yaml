@@ -42,7 +42,10 @@ jobs:
         cp .example.env ./frontend-svelte/.env
       working-directory: ./
     - name: Rsync to server
-      run: rsync -avz ./* dataframetrainer@${{ secrets.DATAFRAMETRAINER_SERVER_IP}}:/home/dataframetrainer/prod/
+      run: rsync -avz . dataframetrainer@${{ secrets.DATAFRAMETRAINER_SERVER_IP}}:/home/dataframetrainer/prod/
+    - name: Run docker compose
+      run: |
+        ssh dataframetrainer@${{ secrets.DATAFRAMETRAINER_SERVER_IP}} "cd /home/dataframetrainer/prod && make down && make cleanup_prod && make prod_detached"
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
       with: 

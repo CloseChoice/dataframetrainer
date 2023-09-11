@@ -2,6 +2,11 @@ build:
 	cd backend && $(MAKE) build
 	cd database && $(MAKE) new
 
+cleanup_prod:
+	docker rm -f prod-frontend-prod
+	docker rm -f prod-backend
+	docker rm -f prod-db-fill-or-update-tables
+
 cleanup:
 	docker rm -f dataframetrainer-db-fill-or-update-tables-1
 	docker rm -f dataframetrainer-frontend-prod-1
@@ -21,6 +26,9 @@ cleanup:
 # In this case the dev and prod configs extend the base docker compose config
 prod:
 	docker compose -f docker-compose.yml -f docker-compose.prod.yml up
+
+prod_detached:
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 dev:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up
