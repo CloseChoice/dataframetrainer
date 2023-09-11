@@ -58,10 +58,10 @@ jobs:
         working-directory: .
         run: |
           ls -la
-          docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+          docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
-        run: npx cypress run --browser chrome --config baseUrl=http://localhost:3000
+        run: npx cypress run --browser chrome
       # Currently only chrome is supported
       # - name: Run Cypress tests Firefox
       #   working-directory: ./frontend-svelte

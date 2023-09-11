@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile.prod
     environment:
       NODE_ENV: production
-      ORIGIN: "http://localhost:3000"
+      ORIGIN: "http://www.dataframetrainer.com"
     ports:
       # The port of the website
       - 3000:3000
