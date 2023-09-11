@@ -14,6 +14,6 @@ services:
       - 3000:3000
     # This will make all variables inside the root .env accessible inside the container
     # try without
-    volumes:
-      - ./frontend-svelte:/app
+#     volumes:
+#       - ./frontend-svelte:/app
     # working_dir: /frontend-svelte
