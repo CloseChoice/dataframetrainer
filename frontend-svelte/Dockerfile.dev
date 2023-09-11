@@ -1,5 +1,5 @@
 # Our Node base image
-FROM node:lts-alpine AS dev
+FROM node:lts-bullseye
 
 # Copying the package files allows docker to cache node modules
 # Installation will only run when dependencies changed
@@ -7,5 +7,6 @@ COPY package.json .
 COPY package-lock.json .
 
 RUN npm install
-RUN apk add --no-cache bash && apk add nmap && apk add curl
+# this is only used for debugging, so uncomment this once it is needed
+# RUN apk add --no-cache bash && apk add nmap && apk add curl
 CMD ["npm","run", "dev", "--host"]

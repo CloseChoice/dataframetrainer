@@ -38,7 +38,7 @@ def run():
         dbname=os.environ["DB_NAME"],
         user=os.environ["DB_USER"],
         password=os.environ["PASSWORD"],
-        port=os.environ["PORT"],
+        port=os.environ["DB_PORT"],
     )
     # make sure that all tables are created
     cursor = conn.cursor()

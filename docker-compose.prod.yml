@@ -8,12 +8,7 @@ services:
       dockerfile: Dockerfile.prod
     environment:
       NODE_ENV: production
+      ORIGIN: "http://localhost:3000"
     ports:
       # The port of the website
       - 3000:3000
-
-    # This will make all variables inside the root .env accessible inside the container
-    env_file: .env
-    volumes:
-      - ./frontend-svelte:/frontend-svelte
-    working_dir: /frontend-svelte

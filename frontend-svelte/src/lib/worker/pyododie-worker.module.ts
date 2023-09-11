@@ -13,10 +13,13 @@ const stateSubject = new Subject<PyodideWorkerState>()
 const stdoutSubject = new Subject<string>()
 const stderrSubject = new Subject<Error>()
 
+// see https://pyodide.org/en/stable/usage/downloading-and-deploying.html for a release url
+const PYODIDE_INDEX_URL = 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/';
+
 async function loadPyodideAndPackages(){
     stateSubject.next(PyodideWorkerState.INSTALLING)
     const pyodide = await loadPyodide({
-        indexURL: '/pyodide-indexurl',
+        indexURL: PYODIDE_INDEX_URL,
         // If you change the requirements make sure to update the repodata.json lockfile (e.g by printing micropip.freeze() to console)
         lockFileURL: pyodideLockFileURL,
     })

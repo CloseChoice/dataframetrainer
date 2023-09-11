@@ -1,15 +1,21 @@
-# Our Node base image
-FROM node:lts-alpine AS dev
+FROM node:lts-bullseye
 
+WORKDIR /app
 # Copying the package files allows docker to cache node modules
 # Installation will only run when dependencies changed
 COPY package.json .
 COPY package-lock.json .
 
-RUN npm ci
+# the important thing to copy here is the build folder and the .env file, I believe?!
+COPY .env .
+COPY vite.config.ts .
+COPY svelte.config.js .
+COPY tsconfig.json .
+COPY .npmrc .
+COPY src ./src
+COPY static ./static
 
+RUN npm install
 RUN npm run build
 
 CMD ["node", "build/index.js"]
-
-# CMD ["npm","run", "dev", "--host"]

@@ -77,3 +77,12 @@ ELO:
 Dokumentation:
  - [ ] dokumentiere wie tabellen erstellt werden
  - [ ] dokumentiere wie das elo system funktioniert
+
+- Steps um die frontend-svelte Anwendung zu bauen:
+ - .env-file erstellen (s. frontend-svelte/.env)
+ - npm und node muss installiert sein (node: v20.6.0, npm: 9.8.1)
+ - 
+
+- [x] Beim Build der Svelte App hat es aus irgendeinem Grund die Proxy Sachen nicht korrekt ersetzt. Checke das.
+  -> ersetzt
+- Bringe die App auf dem Server ohne Docker zum Laufen, anschließend baue einen Container (wahrscheinlich muss in diesem node + nginx laufen aber das müssen wir nochmals checken), in dem man nur das Frontend laufen lassen kann und dann schließe alles zusammen.

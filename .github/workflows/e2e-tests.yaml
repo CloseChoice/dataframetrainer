@@ -9,17 +9,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-e2e-tests:
+  run-e2e-tests-prod:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USER: ${{ secrets.DB_USER }}
-      PORT: ${{ secrets.PORT }}
+      DB_PORT: ${{ secrets.DB_PORT }}
       PASSWORD: ${{ secrets.PASSWORD }}
       HOST: ${{ secrets.HOST }}
     defaults:
@@ -44,20 +40,28 @@ jobs:
       - name: Install dependencies
         working-directory: ./frontend-svelte
         run: npm ci
+      - name: Set .env file
+        run: |
+          sed -i "s/__DB_NAME__/$DB_NAME/g" .example.env
+          sed -i "s/__DB_USER__/$DB_USER/g" .example.env
+          sed -i "s/__PASSWORD__/$PASSWORD/g" .example.env
+          sed -i "s/__HOST__/$HOST/g" .example.env
+          sed -i "s/__DB_PORT__/$DB_PORT/g" .example.env
+
+          # todo: do we need both???
+          cp .example.env .env
+          # this is needed since vite/sveltekit rely on this file when running in production mode
+          cp .example.env ./frontend-svelte/.env
+        working-directory: ./
       -
         name: Run docker compose
         working-directory: .
         run: |
           ls -la
-          docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-      # - name: Start frontend
-      #   working-directory: ./frontend-svelte
-      #   run: npm run dev &
-      - name: Wait for server to start
-        run: sleep 30
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
-        run: npx cypress run --browser chrome
+        run: npx cypress run --browser chrome --config baseUrl=http://localhost:3000
       # Currently only chrome is supported
       # - name: Run Cypress tests Firefox
       #   working-directory: ./frontend-svelte

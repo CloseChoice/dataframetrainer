@@ -33,6 +33,13 @@ declare global {
 	}
 }
 
+declare module '$env/static/private' {
+	export const NODE_ENV: string;
+	export const PASSWORD: string;
+	export const DB_USER: string;
+	export const DB_PORT: string;
+	export const DB_NAME: string;
+}
 
 interface UserProperties {
 	id: number
