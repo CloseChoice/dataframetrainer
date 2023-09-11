@@ -1,9 +1,12 @@
 name: deploy-to-server
 
 on:
-  pull_request:
-  workflow_call:
-  workflow_dispatch:
+  workflow_run:
+    branches:
+      - 'main'
+    workflows: ["e2e-tests"]
+    types: 
+      - completed
 
 jobs:
   deploy-to-server:
@@ -46,12 +49,6 @@ jobs:
     - name: Run docker compose
       run: |
         ssh dataframetrainer@${{ secrets.DATAFRAMETRAINER_SERVER_IP}} "cd /home/dataframetrainer/prod && make down && make cleanup_prod && make prod_detached"
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      with: 
-        detached: true
-    - name: Sleep forever
-      run: sleep 3600
     
     
    
