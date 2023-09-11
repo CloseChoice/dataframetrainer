@@ -35,13 +35,14 @@ class GroupbyTransform:
         return df
 
     @staticmethod
-    def static_example() -> pd.DataFrame:
-        return pd.DataFrame(
+    def static_example() -> dict[str, pd.DataFrame]:
+        return_df = pd.DataFrame(
             {
                 "value": [1, 1, 1, 2, 2, 2, 2],
                 "group": ["m", "n", "o", "m", "m", "n", "n"],
             }
         )
+        return {"df": return_df}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:

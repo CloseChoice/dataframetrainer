@@ -108,7 +108,7 @@ const worker = {
             const example: ChallengeExample = JSON.parse(res)
             return example
         })
-    }
+    },
 }
 
 export type PyodideWorker = typeof worker

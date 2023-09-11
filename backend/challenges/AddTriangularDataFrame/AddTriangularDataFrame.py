@@ -33,8 +33,8 @@ class AddTriangularDataFrame:
         return pd.concat([df, df_intermediate], axis=1).astype(int)
 
     @staticmethod
-    def static_example() -> pd.DataFrame:
-        return pd.DataFrame(
+    def static_example() -> dict[str, pd.DataFrame]:
+        return_df = pd.DataFrame(
             [
                 [1],
                 [2],
@@ -45,6 +45,7 @@ class AddTriangularDataFrame:
             ],
             columns=["number"],
         )
+        return {"df": return_df}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:

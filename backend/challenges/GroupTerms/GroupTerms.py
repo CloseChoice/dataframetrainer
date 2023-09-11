@@ -38,8 +38,8 @@ class GroupTerms:
         return df.groupby(["id", "group", "term"]).size().unstack(fill_value=0)
 
     @staticmethod
-    def static_example() -> pd.DataFrame:
-        return pd.DataFrame(
+    def static_example() -> dict[str, pd.DataFrame]:
+        return_df = pd.DataFrame(
             [
                 (1, 1, "term1"),
                 (1, 2, "term2"),
@@ -51,6 +51,7 @@ class GroupTerms:
             ],
             columns=["id", "group", "term"],
         )
+        return {"df": return_df}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:

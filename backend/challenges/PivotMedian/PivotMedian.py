@@ -37,8 +37,8 @@ class PivotMedian:
         return df
 
     @staticmethod
-    def static_example() -> pd.DataFrame:
-        return pd.DataFrame(
+    def static_example() -> dict[str, pd.DataFrame]:
+        return {"df": pd.DataFrame(
             [
                 ["Harald", "Groceries", 1],
                 ["Harald", "Groceries", 100],
@@ -52,7 +52,7 @@ class PivotMedian:
                 ["Friedrich", "Groceries", 10],
             ],
             columns=["Customer", "Type", "Expense"],
-        )
+        )}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:
