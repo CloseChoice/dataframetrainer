@@ -14,13 +14,8 @@ COPY tsconfig.json .
 COPY .npmrc .
 COPY src ./src
 COPY static ./static
-# COPY . .
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
 
 RUN npm install
 RUN npm run build
-# # 
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
-CMD ["node", "build/index.js"]
 
-# CMD ["npm","run", "dev", "--host"]
+CMD ["node", "build/index.js"]

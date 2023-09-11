@@ -50,6 +50,7 @@ jobs:
 
           # todo: do we need both???
           cp .example.env .env
+          # this is needed since vite/sveltekit rely on this file when running in production mode
           cp .example.env ./frontend-svelte/.env
         working-directory: ./
       -
