@@ -32,8 +32,9 @@ class MonthIndex:
         return df
 
     @staticmethod
-    def static_example() -> pd.DataFrame:
-        return pd.DataFrame([[1], [2], [3]], columns=["Value"])
+    def static_example() -> dict[str, pd.DataFrame]:
+        return_df = pd.DataFrame([[1], [2], [3]], columns=["Value"])
+        return {"df": return_df}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:

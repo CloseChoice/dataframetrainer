@@ -4,9 +4,9 @@
     import type { PageData } from "./$types";
 
     export let description: string;
-    export let staticExample: ChallengeExample;
+    // export let staticExample: ChallengeExample;
+    // export let staticExample: ChallengeExample;
     let generatedExample: ChallengeExample;
-
 
     async function handleGenerateExample(){
         const worker = await pyodideWorkerPromise;
@@ -18,9 +18,6 @@
     <div>
         {@html description}
     </div>
-    <h3>Static Example</h3>
-    {staticExample}
-    <h3>Generate Example</h3>
     <button on:click={handleGenerateExample}>GENERATE EXAMPLE</button>
     {#if generatedExample}
         <h3>Params</h3>

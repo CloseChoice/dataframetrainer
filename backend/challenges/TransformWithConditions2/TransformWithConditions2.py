@@ -34,8 +34,8 @@ class TransformWithConditions2:
         return df
 
     @staticmethod
-    def static_example() -> pd.DataFrame:
-        return pd.DataFrame(
+    def static_example() -> dict[str, pd.DataFrame]:
+        return_df = pd.DataFrame(
             [
                 ["A", "Z"],
                 ["B", "Z"],
@@ -44,6 +44,7 @@ class TransformWithConditions2:
             ],
             columns=["Type", "Set"],
         )
+        return {"df": return_df}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:

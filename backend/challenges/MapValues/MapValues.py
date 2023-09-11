@@ -26,8 +26,8 @@ class MapValues:
         return df
 
     @staticmethod
-    def static_example() -> pd.DataFrame:
-        return pd.DataFrame(
+    def static_example() -> dict[str, pd.DataFrame]:
+        return_df = pd.DataFrame(
             [
                 [1],
                 [2],
@@ -37,6 +37,7 @@ class MapValues:
             ],
             columns=["number_col"],
         )
+        return {"df": return_df}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:

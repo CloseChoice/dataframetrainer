@@ -46,7 +46,7 @@
             {#key activeTab}
             <TabContent on:tab={(e) => activeTab=e.detail} class="h-100 d-flex flex-column">
                 <TabPane class="flex-grow-1 overflow-y-auto"  tabId="description" tab="Description" active={activeTab == TabIDs.DESCRIPTION}>
-                    <DescriptionTab description={data.intro} staticExample={staticExample}/>
+                    <DescriptionTab description={data.intro}/>
                 </TabPane>
                 <TabPane class="flex-grow-1 overflow-y-auto"  tabId="tests" tab="Tests" active={activeTab == TabIDs.TESTS}>
                     <TestResult/>

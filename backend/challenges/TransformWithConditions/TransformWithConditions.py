@@ -51,8 +51,8 @@ class TransformWithConditions:
         return df
 
     @staticmethod
-    def static_example() -> pd.DataFrame:
-        return pd.DataFrame(
+    def static_example() -> dict[str, pd.DataFrame]:
+        return_df = pd.DataFrame(
             {
                 "ID": list(range(1, 21)),
                 "group": ["A"] * 10 + ["B"] * 10,
@@ -80,6 +80,7 @@ class TransformWithConditions:
                 ],
             }
         )
+        return {"df": return_df}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:

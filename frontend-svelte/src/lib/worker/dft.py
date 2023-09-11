@@ -42,7 +42,7 @@ def to_html(object):
         res = object.__repr__()
     return res
 
-def generate_example(challenge_name):
+def generate_example(challenge_name: str) -> str:
     challenge_module = importlib.import_module(f"challenges.{challenge_name}.{challenge_name}")
     challenge_class = getattr(challenge_module, challenge_name)
     params_dict = challenge_class.create_df_func()
