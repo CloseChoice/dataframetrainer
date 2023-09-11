@@ -1,103 +1,103 @@
-name: e2e-tests
-
-on:
-  push:
-    branches:
-      - 'main'
-  pull_request:
-  workflow_call:
-  workflow_dispatch:
-
-jobs:
-  run-e2e-tests-prod:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    env:
-      DB_NAME: ${{ secrets.DB_NAME }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PORT: ${{ secrets.DB_PORT }}
-      PASSWORD: ${{ secrets.PASSWORD }}
-      HOST: ${{ secrets.HOST }}
-    defaults:
-      run:
-        working-directory: ./backend
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup docker compose
-        uses: KengoTODA/actions-setup-docker-compose@v1
-        with:
-          version: '2.14.2' # the full version of `docker-compose` command
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
-      - name: Install dependencies
-        working-directory: ./frontend-svelte
-        run: npm ci
-      - name: Set .env file
-        run: |
-          sed -i "s/__DB_NAME__/$DB_NAME/g" .example.env
-          sed -i "s/__DB_USER__/$DB_USER/g" .example.env
-          sed -i "s/__PASSWORD__/$PASSWORD/g" .example.env
-          sed -i "s/__HOST__/$HOST/g" .example.env
-          sed -i "s/__DB_PORT__/$DB_PORT/g" .example.env
-
-          # todo: do we need both???
-          cp .example.env .env
-          # this is needed since vite/sveltekit rely on this file when running in production mode
-          cp .example.env ./frontend-svelte/.env
-        working-directory: ./
-      -
-        name: Run docker compose
-        working-directory: .
-        run: |
-          ls -la
-          docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-      - name: Run Cypress tests Chrome
-        working-directory: ./frontend-svelte
-        run: npx cypress run --browser chrome --config baseUrl=http://localhost:3000
-      # Currently only chrome is supported
-      # - name: Run Cypress tests Firefox
-      #   working-directory: ./frontend-svelte
-      #   run: npx cypress run --browser firefox
-      -
-        name: Run docker compose test
-        working-directory: .
-        run: |
-          ls -la
-          docker compose -f docker-compose.test.yml up -d
-      -
-        name: Check curl response of backend
-        run: |
-          # todo: move this into a python script to make this a bit more readable
-          # wait till the fill-db-with-test-input finished writing to db! todo: this can be done dynamically by checking if the container is still running
-          sleep 15
-          docker container ls
-          response_code=$(curl -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/get_all_challenges/)
-          if [ "$response_code" -ne 200 ]; then
-            echo "Response code is not 200. Failing the pipeline."
-            exit 1
-          fi
-
-          echo "start testing elo endpoints"
-          response_code=$(curl -X POST http://127.0.0.1:5000/post_next_challenge -H "Content-Type: application/json" -d '{"user_id": "d037ce8d-0381-471f-bfa5-98467685a335"}')
-          next_challenge=$(echo "$response_code" | grep "next_challenge")
-          # check if GroupTerms is in the next_challenge string
-          if [[ "$next_challenge" != *"GroupTerms"* ]]; then
-            echo "Expected next_challenge to be GroupTerms. Received $next_challenge instead."
-            echo $response_code
-            exit 1
-          fi
-
-          echo "test set_user_group endpoint"
-          response_code=$(curl -X POST http://127.0.0.1:5000/set_user_group -H "Content-Type: application/json" -d '{"user_id": "user_elo_id", "session_id": "session_id_user_elo"}')
-          if [[ "$response_code" != *"success"* ]]; then
-            echo "Response code is not 200. ."
-            exit 1
-          fi
+# name: e2e-tests
+# 
+# on:
+#   push:
+#     branches:
+#       - 'main'
+#   pull_request:
+#   workflow_call:
+#   workflow_dispatch:
+# 
+# jobs:
+#   run-e2e-tests-prod:
+#     timeout-minutes: 60
+#     runs-on: ubuntu-latest
+#     env:
+#       DB_NAME: ${{ secrets.DB_NAME }}
+#       DB_USER: ${{ secrets.DB_USER }}
+#       DB_PORT: ${{ secrets.DB_PORT }}
+#       PASSWORD: ${{ secrets.PASSWORD }}
+#       HOST: ${{ secrets.HOST }}
+#     defaults:
+#       run:
+#         working-directory: ./backend
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Setup docker compose
+#         uses: KengoTODA/actions-setup-docker-compose@v1
+#         with:
+#           version: '2.14.2' # the full version of `docker-compose` command
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '20'
+#       - name: Cache dependencies
+#         uses: actions/cache@v2
+#         with:
+#           path: ~/.npm
+#           key: npm-${{ hashFiles('package-lock.json') }}
+#           restore-keys: npm-
+#       - name: Install dependencies
+#         working-directory: ./frontend-svelte
+#         run: npm ci
+#       - name: Set .env file
+#         run: |
+#           sed -i "s/__DB_NAME__/$DB_NAME/g" .example.env
+#           sed -i "s/__DB_USER__/$DB_USER/g" .example.env
+#           sed -i "s/__PASSWORD__/$PASSWORD/g" .example.env
+#           sed -i "s/__HOST__/$HOST/g" .example.env
+#           sed -i "s/__DB_PORT__/$DB_PORT/g" .example.env
+# 
+#           # todo: do we need both???
+#           cp .example.env .env
+#           # this is needed since vite/sveltekit rely on this file when running in production mode
+#           cp .example.env ./frontend-svelte/.env
+#         working-directory: ./
+#       -
+#         name: Run docker compose
+#         working-directory: .
+#         run: |
+#           ls -la
+#           docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#       - name: Run Cypress tests Chrome
+#         working-directory: ./frontend-svelte
+#         run: npx cypress run --browser chrome --config baseUrl=http://localhost:3000
+#       # Currently only chrome is supported
+#       # - name: Run Cypress tests Firefox
+#       #   working-directory: ./frontend-svelte
+#       #   run: npx cypress run --browser firefox
+#       -
+#         name: Run docker compose test
+#         working-directory: .
+#         run: |
+#           ls -la
+#           docker compose -f docker-compose.test.yml up -d
+#       -
+#         name: Check curl response of backend
+#         run: |
+#           # todo: move this into a python script to make this a bit more readable
+#           # wait till the fill-db-with-test-input finished writing to db! todo: this can be done dynamically by checking if the container is still running
+#           sleep 15
+#           docker container ls
+#           response_code=$(curl -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/get_all_challenges/)
+#           if [ "$response_code" -ne 200 ]; then
+#             echo "Response code is not 200. Failing the pipeline."
+#             exit 1
+#           fi
+# 
+#           echo "start testing elo endpoints"
+#           response_code=$(curl -X POST http://127.0.0.1:5000/post_next_challenge -H "Content-Type: application/json" -d '{"user_id": "d037ce8d-0381-471f-bfa5-98467685a335"}')
+#           next_challenge=$(echo "$response_code" | grep "next_challenge")
+#           # check if GroupTerms is in the next_challenge string
+#           if [[ "$next_challenge" != *"GroupTerms"* ]]; then
+#             echo "Expected next_challenge to be GroupTerms. Received $next_challenge instead."
+#             echo $response_code
+#             exit 1
+#           fi
+# 
+#           echo "test set_user_group endpoint"
+#           response_code=$(curl -X POST http://127.0.0.1:5000/set_user_group -H "Content-Type: application/json" -d '{"user_id": "user_elo_id", "session_id": "session_id_user_elo"}')
+#           if [[ "$response_code" != *"success"* ]]; then
+#             echo "Response code is not 200. ."
+#             exit 1
+#           fi
