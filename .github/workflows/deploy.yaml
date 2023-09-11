@@ -10,14 +10,18 @@ jobs:
   deploy-to-server:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    env:
-      SSH_DATAFRAMETRAINER_KEY: ${{ secrets.SSH_DATAFRAMETRAINER_KEY }}
     steps:
     - uses: actions/checkout@v3
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20'
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_DATAFRAMETRAINER_KEY }}
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
       with: 
