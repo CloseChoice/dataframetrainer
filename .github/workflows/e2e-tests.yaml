@@ -59,36 +59,6 @@ jobs:
         run: |
           ls -la
           docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-      # - name: Start frontend
-      #   working-directory: ./frontend-svelte
-      #   run: npm run dev &
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
-      #   with:
-      #     detached: true
-      # - name: sleep forever
-      #   run: |
-      #     sleep 3600
-      - name: Wait for server to start
-        run: |
-          sleep 30
-      - name: check ports
-        run: |
-          netstat -tulpn | grep LISTEN
-      - name: check ports
-        run: |
-          docker container ls
-      - name: docker logs
-        run: |
-          docker compose -f docker-compose.yml -f docker-compose.prod.yml logs
-        working-directory: ./
-      - name: Again check containers
-        run: |
-          docker container ls
-      - name: docker logs
-        run: |
-          docker compose -f docker-compose.yml -f docker-compose.prod.yml logs
-        working-directory: ./
       - name: Run Cypress tests Chrome
         working-directory: ./frontend-svelte
         run: npx cypress run --browser chrome --config baseUrl=http://localhost:3000

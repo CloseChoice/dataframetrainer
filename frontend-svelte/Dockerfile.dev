@@ -1,5 +1,5 @@
 # Our Node base image
-FROM node:lts-alpine AS dev
+FROM node:lts-bullseye
 
 # Copying the package files allows docker to cache node modules
 # Installation will only run when dependencies changed
