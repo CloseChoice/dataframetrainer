@@ -61,13 +61,13 @@ jobs:
       # - name: Start frontend
       #   working-directory: ./frontend-svelte
       #   run: npm run dev &
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          detached: true
-      - name: sleep forever
-        run: |
-          sleep 3600
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     detached: true
+      # - name: sleep forever
+      #   run: |
+      #     sleep 3600
       - name: Wait for server to start
         run: |
           sleep 30
