@@ -4,8 +4,11 @@ build:
 
 cleanup_prod:
 	docker rm -f prod-frontend-prod
+	docker image rm -f prod-frontend-prod
 	docker rm -f prod-backend
+	docker image rm -f prod-backend
 	docker rm -f prod-db-fill-or-update-tables
+	docker image rm -f prod-db-fill-or-update-tables
 
 cleanup:
 	docker rm -f dataframetrainer-db-fill-or-update-tables-1
