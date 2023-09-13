@@ -19,7 +19,7 @@ class CreateDataFrameFromArray:
 
     @staticmethod
     def static_example() -> np.ndarray:
-        return np.array([[1, 2], [3, 4]])
+        return {"array": np.array([[1, 2], [3, 4]])}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:

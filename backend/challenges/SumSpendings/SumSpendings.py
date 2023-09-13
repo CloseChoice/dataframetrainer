@@ -35,4 +35,30 @@ class SumSpendings:
 
     @staticmethod
     def transform(df: pd.DataFrame) -> pd.Series:
-        return df.groupby("Customer").Spendings.sum()
+        return df.groupby("Customer")[["Spendings"]].sum()
+    
+    @staticmethod
+    def static_example() -> pd.DataFrame:
+        return {"df": pd.DataFrame(
+            [
+                ["Helmut", 100],
+                ["Greta", 200],
+                ["Siegfried", 300],
+                ["Helmut", 400],
+                ["Greta", 500],
+                ["Siegfried", 600],
+            ],
+            columns=["Customer", "Spendings"],
+        )}
+
+    @staticmethod
+    def expected_static() -> pd.DataFrame:
+        return pd.DataFrame(
+            [
+                [500],
+                [700],
+                [900],
+            ],
+            columns=["Spendings"],
+            index=pd.Index(['Greta', 'Helmut', 'Siegfried'], name='Customer')
+        )

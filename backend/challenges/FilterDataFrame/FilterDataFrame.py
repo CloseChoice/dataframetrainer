@@ -64,7 +64,7 @@ class FilterDataFrame:
             ],
             columns=["customerName", "customerEmail", "customerId", "country"],
         )
-        return df
+        return {"df": df}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:

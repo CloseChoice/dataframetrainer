@@ -42,7 +42,7 @@ class CreateDataFrameFromDict2:
 
     @staticmethod
     def static_example() -> dict[str, list[int | float | str]]:
-        return {'col_1': ["Charles", "Lisa"], 'col_2': ["Andrew", "Emily"]}
+        return {"data": {'col_1': ["Charles", "Lisa"], 'col_2': ["Andrew", "Emily"]}}
 
     @staticmethod
     def expected_static() -> pd.DataFrame:
