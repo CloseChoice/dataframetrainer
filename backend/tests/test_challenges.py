@@ -16,6 +16,8 @@ from ..challenges import (
     TransformWithConditions,
     TransformWithConditions2,
     TransformWithMultipleConditions,
+    AntiJoinDataFrames,
+    AntiJoinDataFrames2,
 )
 import pandas as pd
 import pandas.testing as tm

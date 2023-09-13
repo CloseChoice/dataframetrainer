@@ -1,0 +1,10 @@
+We want to have a DataFrame that contains the Id, Spendings and the name of customer, in that order.
+<h3> Example Input</h3>
+<h4> df1</h4>
+<div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: left;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>customerId</th>      <th>customerSpendings</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>057bdfb8-78fd-4101-8f24-17ac4bba68f8</td>      <td>100</td>    </tr>    <tr>      <th>1</th>      <td>35c8b4fe-deec-4acc-ad25-3850f29137ab</td>      <td>200</td>    </tr>  </tbody></table></div>
+
+<h4> df2</h4>
+<div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: left;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>0</th>      <th>1</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>057bdfb8-78fd-4101-8f24-17ac4bba68f8</td>      <td>Charles</td>    </tr>    <tr>      <th>1</th>      <td>35c8b4fe-deec-4acc-ad25-3850f29137ab</td>      <td>Andrew</td>    </tr>  </tbody></table></div>
+
+<h3> Expected Output</h3>
+<div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: left;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>customerId</th>      <th>customerSpendings</th>      <th>customerName</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>057bdfb8-78fd-4101-8f24-17ac4bba68f8</td>      <td>100</td>      <td>Charles</td>    </tr>    <tr>      <th>1</th>      <td>35c8b4fe-deec-4acc-ad25-3850f29137ab</td>      <td>200</td>      <td>Andrew</td>    </tr>  </tbody></table></div>

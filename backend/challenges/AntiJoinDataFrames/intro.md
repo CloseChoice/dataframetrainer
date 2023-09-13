@@ -1,0 +1,10 @@
+You are provided with two dataframes, containing the customer spendings of today and yesterday. We want to know all spendings of the customers that just spent money yesterday but not today.
+<h3> Example Input</h3>
+<h4> df_today</h4>
+<div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: left;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>customerId</th>      <th>customerSpendings</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>057bdfb8-78fd-4101-8f24-17ac4bba68f8</td>      <td>100</td>    </tr>    <tr>      <th>1</th>      <td>35c8b4fe-deec-4acc-ad25-3850f29137ab</td>      <td>200</td>    </tr>  </tbody></table></div>
+
+<h4> df_yesterday</h4>
+<div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: left;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>0</th>      <th>1</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>057bdfb8-78fd-4101-8f24-17ac4bba68f8</td>      <td>1000</td>    </tr>    <tr>      <th>1</th>      <td>35c8b4fe-deec-4acc-ad25-3850f29137ab</td>      <td>2000</td>    </tr>    <tr>      <th>2</th>      <td>0e99d745-26aa-4ba3-8f92-34b54a1a47fa</td>      <td>3000</td>    </tr>  </tbody></table></div>
+
+<h3> Expected Output</h3>
+<div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: left;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>customerId</th>      <th>customerSpendings</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>0e99d745-26aa-4ba3-8f92-34b54a1a47fa</td>      <td>3000</td>    </tr>  </tbody></table></div>
