@@ -3,6 +3,7 @@ from importlib import reload
 import pytest
 import json
 import os
+import pandas as pd
 
 
 
@@ -39,7 +40,10 @@ def to_html(object):
     try:
         res = object._repr_html_()
     except:
-        res = object.__repr__()
+        if isinstance(object, pd.Series):
+            res = object.to_frame()._repr_html_()
+        else:
+            res = object.__repr__()
     return res
 
 def generate_example(challenge_name: str) -> str:

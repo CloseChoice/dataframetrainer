@@ -1,0 +1,12 @@
+You are provided with two dataframes, containing the number of inhabitants of various cities. You trust the data of one of the dataframes, unfortunately it contains missing data for some cities, which is indicated by <b>-1</b>. The noisy dataframe
+also contains numbers, but we do not trust them as much. We want to use all available information, but both dataframes provide numbers for the same city, we go with the one provided by the trusted dataframe. <br>
+NOTE: We do not check indices or the order within each column here.
+<h3> Example Input</h3>
+<h4> df_trusted</h4>
+<div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: left;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>city</th>      <th>inhabitants</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>Las Vegas</td>      <td>650000</td>    </tr>    <tr>      <th>1</th>      <td>Tokyo</td>      <td>13900000</td>    </tr>    <tr>      <th>2</th>      <td>Berlin</td>      <td>-1</td>    </tr>  </tbody></table></div>
+
+<h4> df_noisy</h4>
+<div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: left;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>city</th>      <th>inhabitants</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>Berlin</td>      <td>3800000</td>    </tr>    <tr>      <th>1</th>      <td>Tokyo</td>      <td>14900000</td>    </tr>  </tbody></table></div>
+
+<h3> Expected Output</h3>
+<div><style scoped>    .dataframe tbody tr th:only-of-type {        vertical-align: middle;    }    .dataframe tbody tr th {        vertical-align: top;    }    .dataframe thead th {        text-align: left;    }</style><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>city</th>      <th>inhabitants</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>Las Vegas</td>      <td>650000</td>    </tr>    <tr>      <th>1</th>      <td>Tokyo</td>      <td>13900000</td>    </tr>    <tr>      <th>2</th>      <td>Berlin</td>      <td>3800000</td>    </tr>  </tbody></table></div>
