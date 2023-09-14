@@ -4,6 +4,7 @@
     import { isPyodideReady, pyodideState, pyodideWorkerPromise, testResult } from "$lib/stores/pyodide-store";
     import CodeOutput from "./CodeOutput.svelte";
     import axios from "axios";
+    import { API_BASE_URL } from "../../../config";
     export let code: string;
     export let challengeName: string;
 
@@ -27,7 +28,7 @@
              const userId = $page.data?.session?.user.userId;
              const haveAllTestsPassed = outcome === "passed";
              testResult.set(res)
-             axios.post(`http://backend:5000/post_challenge_results/${challengeName}/`, {
+             axios.post(`${API_BASE_URL}/post_challenge_results/${challengeName}/`, {
                 session_id: $page.data?.session?.sessionId || null,
                 challenge_result: haveAllTestsPassed,
                 challenge_name: challengeName,
