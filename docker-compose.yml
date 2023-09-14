@@ -45,7 +45,7 @@ services:
     volumes:
       - ./backend/challenges:/challenges
       - ./database/sql_scripts:/sql_scripts
-      - sql:/var/lib/postgresql/data
+      - dataframetrainer_postgres:/var/lib/postgresql/data
     ports:
       - "${DB_PORT}:5432"
 
@@ -56,4 +56,4 @@ services:
       - 8081:8080
 
 volumes:
-  sql:
+  dataframetrainer_postgres:

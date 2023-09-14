@@ -12,3 +12,7 @@ services:
     ports:
       # The port of the website
       - 3000:3000
+
+volumes:
+  dataframetrainer_postgres:
+    external: true
