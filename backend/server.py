@@ -241,13 +241,14 @@ def post_next_challenge():
 
 if __name__ == "__main__":
     backend_port = os.environ["BACKEND_PORT"]
-    if os.environ["ENV"] == "prod":
-        from OpenSSL import SSL
+    # if os.environ["ENV"] == "prod":
+    #     from OpenSSL import SSL
 
-        context = SSL.Context(SSL.TLSv1_2_METHOD)
-        context.use_privatekey_file('/etc/letsencrypt/live/dataframetrainer.com/privkey.pem')
-        context.use_certificate_chain_file('/etc/letsencrypt/live/dataframetrainer.com/fullchain.pem')
-        context.use_certificate_file('/etc/letsencrypt/live/dataframetrainer.com/cert.pem')
-        app.run(host='0.0.0.0', port=backend_port, threaded=True, ssl_context=context)
-    else:
-        app.run(host="0.0.0.0", port=backend_port, threaded=True)
+    #     context = SSL.Context(SSL.TLSv1_2_METHOD)
+    #     context.use_privatekey_file('/etc/letsencrypt/live/dataframetrainer.com/privkey.pem')
+    #     context.use_certificate_chain_file('/etc/letsencrypt/live/dataframetrainer.com/fullchain.pem')
+    #     context.use_certificate_file('/etc/letsencrypt/live/dataframetrainer.com/cert.pem')
+    #     app.run(host='0.0.0.0', port=backend_port, threaded=True, ssl_context=context)
+    # else:
+    #     app.run(host="0.0.0.0", port=backend_port, threaded=True)
+    app.run(host="0.0.0.0", port=backend_port, threaded=True)
