@@ -3,7 +3,8 @@ version: "3.1"
 services:
   backend:
     ports:
-      - 5000:5000
+      # we use nginx to proxy port 4999 to https://www.dataframetrainer.com:5000
+      - 4999:5000
     environment:
       ENV: "prod"
       BACKEND_PORT: 5000
@@ -15,7 +16,7 @@ services:
       dockerfile: Dockerfile.prod
     environment:
       NODE_ENV: production
-      ORIGIN: "https://www.dataframetrainer.com:5000"
+      ORIGIN: "https://www.dataframetrainer.com"
     ports:
       # The port of the website
       - 3000:3000
