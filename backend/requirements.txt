@@ -5,3 +5,4 @@ pandas
 hypothesis
 numpy
 pydantic
+pyOpenSSL
