@@ -1,6 +1,11 @@
 version: "3.1"
 
 services:
+  backend:
+    environment:
+      ENV: "dev"
+      BACKEND_PORT: 5000
+
   frontend-prod:
     restart: on-failure
     build:
