@@ -10,6 +10,14 @@ cleanup_prod:
 	docker rm -f prod-db-fill-or-update-tables
 	docker image rm -f prod-db-fill-or-update-tables
 
+cleanup_test:
+	docker rm -f test-frontend-prod
+	docker image rm -f test-frontend-prod
+	docker rm -f test-backend
+	docker image rm -f test-backend
+	docker rm -f test-db-fill-or-update-tables
+	docker image rm -f test-db-fill-or-update-tables
+
 cleanup:
 	docker rm -f dataframetrainer-db-fill-or-update-tables-1
 	docker rm -f dataframetrainer-frontend-prod-1
@@ -34,6 +42,12 @@ prod:
 prod_detached:
 	docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
+test_detached:
+	docker compose -f docker-compose.yml -f docker-compose.test.yml up -d
+
+test_detached:
+	docker compose -f docker-compose.yml -f docker-compose.test.yml up -d
+
 dev:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
@@ -44,7 +58,7 @@ up:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 up_test:
-	docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.test.yml up
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.testing.yml up
 
 recreate:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up --force-recreate

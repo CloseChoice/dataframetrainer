@@ -16,6 +16,7 @@ services:
     environment:
       NODE_ENV: development
       ORIGIN: "http://localhost:3000"
+      API_BASE_URL: "http://localhost:5000"
     ports:
       # The port of the website
       - 5173:5173

@@ -1,0 +1,54 @@
+name: deploy-to-prod-server
+
+on:
+  workflow_run:
+    branches:
+      - 'test'
+    workflows: ["e2e-tests"]
+    types: 
+      - completed
+
+jobs:
+  deploy-to-prod-server:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      HOST: ${{ secrets.HOST }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_DATAFRAMETRAINER_KEY }}
+        known_hosts: 'just-a-placeholder-to-not-get-errors'
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H ${{ secrets.DATAFRAMETRAINER_SERVER_IP }} >> ~/.ssh/known_hosts
+    - name: Set .env file
+      run: |
+        sed -i "s/__DB_NAME__/$DB_NAME/g" .example.env
+        sed -i "s/__DB_USER__/$DB_USER/g" .example.env
+        sed -i "s/__PASSWORD__/$PASSWORD/g" .example.env
+        sed -i "s/__HOST__/$HOST/g" .example.env
+        sed -i "s/__DB_PORT__/$DB_PORT/g" .example.env
+
+        # todo: do we need both???
+        cp .example.env .env
+        # this is needed since vite/sveltekit rely on this file when running in production mode
+        cp .example.env ./frontend-svelte/.env
+      working-directory: ./
+    - name: Rsync to server
+      run: rsync -avz . dataframetrainer@${{ secrets.DATAFRAMETRAINER_SERVER_IP}}:/home/dataframetrainer/test/
+    - name: Run docker compose
+      run: |
+        ssh dataframetrainer@${{ secrets.DATAFRAMETRAINER_SERVER_IP}} "cd /home/dataframetrainer/test && make down && make cleanup_prod && make prod_detached"
+    
+    
+   
