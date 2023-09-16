@@ -26,3 +26,9 @@ services:
       - /frontend-svelte/node_modules
       - /frontend-svelte/.svelte-kit
     working_dir: /app
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080

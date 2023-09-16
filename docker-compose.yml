@@ -49,11 +49,5 @@ services:
     ports:
       - "${DB_PORT}:5432"
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8081:8080
-
 volumes:
   dataframetrainer_postgres:
