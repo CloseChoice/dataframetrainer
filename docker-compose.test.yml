@@ -3,21 +3,21 @@ version: "3.1"
 services:
   backend:
     ports:
-      # we use nginx to proxy port 4998 to the API_BASE_URL
-      - 4000:5000
+      # we use nginx to proxy port 3999 to the API_BASE_URL
+      - 3999:5000
     environment:
       ENV: "test"
       BACKEND_PORT: 5000
 
-  frontend-prod:
+  frontend-test:
     restart: on-failure
     build:
       context: ./frontend-svelte
       dockerfile: Dockerfile.prod
     environment:
       NODE_ENV: test
-      ORIGIN: "https://www.dataframetrainer.com"
-      API_BASE_URL: "https://www.dataframetrainer.com:4000"
+      ORIGIN: "https://www.test.dataframetrainer.com"
+      API_BASE_URL: "https://www.test.dataframetrainer.com:4000"
     ports:
       # The port of the website
       - 4444:3000

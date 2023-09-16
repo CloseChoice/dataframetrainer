@@ -38,6 +38,7 @@ jobs:
         sed -i "s/__PASSWORD__/$PASSWORD/g" .example.env
         sed -i "s/__HOST__/$HOST/g" .example.env
         sed -i "s/__DB_PORT__/$DB_PORT/g" .example.env
+        echo "VITE_API_BASE_URL=https://www.test.dataframetrainer.com:4000" >> .example.env
 
         # todo: do we need both???
         cp .example.env .env
