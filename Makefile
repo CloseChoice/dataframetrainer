@@ -42,8 +42,8 @@ prod:
 prod_detached:
 	docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
-test_detached:
-	docker compose -f docker-compose.yml -f docker-compose.test.yml up -d
+test:
+	docker compose -f docker-compose.yml -f docker-compose.test.yml up
 
 test_detached:
 	docker compose -f docker-compose.yml -f docker-compose.test.yml up -d
