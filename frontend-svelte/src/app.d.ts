@@ -39,6 +39,7 @@ declare module '$env/static/private' {
 	export const DB_USER: string;
 	export const DB_PORT: string;
 	export const DB_NAME: string;
+	export const API_BASE_URL: string;
 }
 
 interface UserProperties {

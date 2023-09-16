@@ -17,6 +17,7 @@ services:
     environment:
       NODE_ENV: production
       ORIGIN: "https://www.dataframetrainer.com"
+      API_BASE_URL: "https://www.dataframetrainer.com:5000"
     ports:
       # The port of the website
       - 3000:3000
