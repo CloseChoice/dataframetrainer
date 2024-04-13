@@ -2,7 +2,7 @@ import {pool} from '$lib/server/db'
 import {auth} from '$lib/server/lucia'
 import type { RequestEvent } from '@sveltejs/kit';
 
-export async function checkUserExists(username: string) {
+export async function checkUserExists(username: string | null) {
     console.log("in checkUserExists");
     try {
       const query = 'SELECT COUNT(*) AS count FROM users WHERE name = $1';
@@ -18,7 +18,7 @@ export async function checkUserExists(username: string) {
 
 
 export async function createUser(username: string, password: string, event: RequestEvent){
-  console.log("in createUser");
+  console.log("in createUser", password);
   const user = await auth.createUser({
     key: {
       providerId: "username", // auth method

@@ -1,6 +1,7 @@
 name: deploy-to-server
 
 on:
+  workflow_dispatch:
   workflow_run:
     branches:
       - 'main'
@@ -18,6 +19,7 @@ jobs:
       DB_PORT: ${{ secrets.DB_PORT }}
       PASSWORD: ${{ secrets.PASSWORD }}
       HOST: ${{ secrets.HOST }}
+      DATAFRAMETRAINER_SERVER_IP: ${{ secrets.DATAFRAMETRAINER_SERVER_IP }}
     steps:
     - uses: actions/checkout@v3
     - name: Setup Node.js
@@ -44,6 +46,8 @@ jobs:
         # this is needed since vite/sveltekit rely on this file when running in production mode
         cp .example.env ./frontend-svelte/.env
       working-directory: ./
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
     - name: Rsync to server
       run: rsync -avz . dataframetrainer@${{ secrets.DATAFRAMETRAINER_SERVER_IP}}:/home/dataframetrainer/prod/
     - name: Run docker compose

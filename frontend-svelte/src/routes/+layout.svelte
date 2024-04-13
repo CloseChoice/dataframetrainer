@@ -1,6 +1,5 @@
 <script>
-    import { onMount, setContext } from 'svelte';
-    import { writable } from 'svelte/store';
+    import { onMount } from 'svelte';
     import {page} from '$app/stores'
 
     import '@fortawesome/fontawesome-free/js/all'
@@ -8,10 +7,7 @@
 
     import {initPyodideStore} from '$lib/stores/pyodide-store'
     /** @type {import('./$types').LayoutData} */
-    export let data;
     // Create a store and update it when necessary...    
-    const user = writable(null);
-
     // ...and add it to the context for child components to access    setContext('user', user);
 
     onMount(initPyodideStore)

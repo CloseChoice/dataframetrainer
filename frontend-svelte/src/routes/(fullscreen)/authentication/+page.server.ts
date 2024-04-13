@@ -2,17 +2,6 @@ import { redirect, fail, type Actions } from '@sveltejs/kit';
 import { auth } from "$lib/server/lucia";
 import { createUser, checkUserExists } from '$lib/server/auth';
 
-function validateFormData(userData){
-    const isValid = {}
-
-    isValid.name = Boolean(userData.name)
-    isValid.email = Boolean(userData.email);
-    isValid.password = Boolean(userData.password);
-
-    return isValid
-}
-
-
 
 export const actions: Actions = {
     login: async (event) => {

@@ -9,4 +9,5 @@ COPY package-lock.json .
 RUN npm install
 # this is only used for debugging, so uncomment this once it is needed
 # RUN apk add --no-cache bash && apk add nmap && apk add curl
-CMD ["npm","run", "dev", "--host"]
+# we need the -- before the --host to pass the host to the vite server
+CMD ["npm","run", "dev", "--", "--host"]
